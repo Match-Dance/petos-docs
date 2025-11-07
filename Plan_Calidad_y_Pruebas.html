@@ -1,0 +1,3479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown: Rich Preview</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>
+        // Initialize highlight.js
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+
+        // Copy to clipboard function
+        function copyToClipboard(button) {
+            const codeBlock = button.closest('.code-block');
+            const code = codeBlock.querySelector('code').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.backgroundColor = '#4CAF50';
+                button.style.color = 'white';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.backgroundColor = '';
+                    button.style.color = '';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+    </script>
+    <style>
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            padding: 0 20px;
+        }
+        /* Twemoji emoji image style for inline, text-sized emojis */
+        img.emoji {
+            height: 1em;
+            width: 1em;
+            margin: 0 .05em 0 .1em;
+            vertical-align: -0.1em;
+            display: inline;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            margin-top: 24px;
+            margin-bottom: 16px;
+            line-height: 1.25;
+        }
+        
+        h1 { 
+            font-size: 2em; 
+            border-bottom: 1px solid #eaecef; 
+            padding-bottom: 0.3em;
+            margin-top: 0.67em 0;
+        }
+        
+        h2 { 
+            font-size: 1.5em; 
+            border-bottom: 1px solid #eaecef; 
+            padding-bottom: 0.3em;
+            margin-top: 1.5em;
+        }
+        
+        h3 { 
+            font-size: 1.25em; 
+            margin-top: 1.25em;
+        }
+        
+        h4 { 
+            font-size: 1em; 
+            margin-top: 1em;
+        }
+        
+        a { 
+            color: #0366d6; 
+            text-decoration: none; 
+        }
+        
+        a:hover { 
+            text-decoration: underline; 
+        }
+        
+        strong { 
+            font-weight: 600; 
+        }
+        
+        pre {
+            background-color:rgb(9, 7, 10);
+            overflow: auto;
+            margin: 0;
+        }
+        
+        code {
+            font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+            padding: 0.2em 0.4em;
+            font-size: 90%;
+        }
+        
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        .code-block {
+            position: relative;
+            background-color:rgb(9, 7, 10);
+            border-radius: 6px;
+            margin: 1em 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 10px;
+            background-color:rgb(32, 30, 43);
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+        }
+
+        .language {
+            color: #efe9e9;
+            font-size: 0.9em;
+            font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+        }
+
+        .copy-button {
+            padding: 4px 8px;
+            font-size: 0.9em;
+            color: #efe9e9;
+            background-color: transparent;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-button:hover {
+            background-color: #e9e9e9;
+            border-color: #ccc;
+        }
+        
+        blockquote {
+            margin: 0;
+            padding: 0 1em;
+            color: #6a737d;
+            border-left: 0.25em solid #dfe2e5;
+        }
+        
+        ul, ol {
+            padding-left: 2em;
+        }
+        
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            width: 100%;
+            overflow: auto;
+            margin-bottom: 16px;
+        }
+        
+        table th {
+            font-weight: 600;
+        }
+        
+        table th, table td {
+            padding: 6px 13px;
+            border: 1px solid #dfe2e5;
+        }
+        
+        table tr {
+            background-color: #fff;
+            border-top: 1px solid #c6cbd1;
+        }
+        
+        table tr:nth-child(2n) {
+            background-color: #f6f8fa;
+        }
+        
+        img {
+            max-width: 100%;
+            box-sizing: content-box;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 PLAN DE CALIDAD Y PRUEBAS - PETOS APP</h1>
+<p><strong>Fecha de creación</strong>: Enero 2025
+<strong>Versión</strong>: 1.0
+<strong>Tipo de pruebas</strong>: Funcionales Manuales + Automatización sugerida
+<strong>Alcance</strong>: Frontend (Flutter) + Validación de respuestas Backend (NestJS)</p>
+<hr>
+<h2>📋 TABLA DE CONTENIDOS</h2>
+<ol>
+<li><a href="#1-introducci%C3%B3n">Introducción</a></li>
+<li><a href="#2-metodolog%C3%ADa-de-pruebas">Metodología de Pruebas</a></li>
+<li><a href="#3-configuraci%C3%B3n-del-entorno-de-pruebas">Configuración del Entorno de Pruebas</a></li>
+<li><a href="#4-casos-de-prueba-por-m%C3%B3dulo">Casos de Prueba por Módulo</a></li>
+<li><a href="#5-matriz-de-pruebas">Matriz de Pruebas</a></li>
+<li><a href="#6-casos-extremos-y-pruebas-de-estr%C3%A9s">Casos Extremos y Pruebas de Estrés</a></li>
+<li><a href="#7-herramientas-de-automatizaci%C3%B3n">Herramientas de Automatización</a></li>
+<li><a href="#8-reporte-de-bugs">Reporte de Bugs</a></li>
+<li><a href="#9-checklist-final-de-calidad">Checklist Final de Calidad</a></li>
+<li><a href="#10-anexos">Anexos</a></li>
+</ol>
+<hr>
+<h2>1. INTRODUCCIÓN</h2>
+<h3>1.1 Objetivo del Documento</h3>
+<p>Este documento define el <strong>plan de pruebas funcionales</strong> para la aplicación Petos, una red social para amantes de mascotas. El objetivo es asegurar que todas las funcionalidades del frontend funcionan correctamente y que el backend responde adecuadamente a las peticiones.</p>
+<h3>1.2 Alcance</h3>
+<p><strong>Incluye</strong>:</p>
+<ul>
+<li>✅ Pruebas funcionales manuales del frontend (Flutter)</li>
+<li>✅ Validación de respuestas del backend (NestJS)</li>
+<li>✅ Casos de éxito (happy path)</li>
+<li>✅ Casos extremos (edge cases)</li>
+<li>✅ Manejo de errores</li>
+<li>✅ Validaciones de formularios</li>
+<li>✅ Flujos de navegación</li>
+<li>✅ Sugerencias de automatización</li>
+</ul>
+<p><strong>No incluye</strong>:</p>
+<ul>
+<li>❌ Pruebas unitarias del código backend</li>
+<li>❌ Pruebas unitarias del código frontend</li>
+<li>❌ Pruebas de rendimiento/carga</li>
+<li>❌ Pruebas de seguridad (pentesting)</li>
+</ul>
+<h3>1.3 Criterios de Aceptación</h3>
+<p>Una funcionalidad se considera <strong>APROBADA</strong> si:</p>
+<ul>
+<li>✅ Cumple con todos los casos de prueba definidos</li>
+<li>✅ Maneja correctamente los casos extremos</li>
+<li>✅ Muestra mensajes de error claros y útiles</li>
+<li>✅ No presenta crashes o errores no controlados</li>
+<li>✅ La UI responde correctamente en diferentes tamaños de pantalla</li>
+<li>✅ El backend responde con los códigos HTTP correctos</li>
+</ul>
+<p>Una funcionalidad se considera <strong>RECHAZADA</strong> si:</p>
+<ul>
+<li>❌ Falla al menos 1 caso de prueba crítico</li>
+<li>❌ Causa crash de la aplicación</li>
+<li>❌ No maneja errores de red correctamente</li>
+<li>❌ Permite datos inválidos en el backend</li>
+<li>❌ La UI se rompe visualmente</li>
+</ul>
+<hr>
+<h2>2. METODOLOGÍA DE PRUEBAS</h2>
+<h3>2.1 Tipos de Pruebas</h3>
+<h4>2.1.1 Pruebas Funcionales Manuales</h4>
+<ul>
+<li><strong>Propósito</strong>: Verificar que cada funcionalidad cumple con los requisitos</li>
+<li><strong>Ejecutor</strong>: QA Tester humano</li>
+<li><strong>Frecuencia</strong>: Antes de cada release</li>
+<li><strong>Cobertura</strong>: 100% de funcionalidades críticas</li>
+</ul>
+<h4>2.1.2 Pruebas de Casos Extremos (Edge Cases)</h4>
+<ul>
+<li><strong>Propósito</strong>: Verificar comportamiento en situaciones límite</li>
+<li><strong>Ejemplos</strong>: Campos vacíos, textos muy largos, caracteres especiales, sin conexión</li>
+<li><strong>Ejecutor</strong>: QA Tester humano</li>
+<li><strong>Frecuencia</strong>: Antes de cada release mayor</li>
+</ul>
+<h4>2.1.3 Pruebas de Regresión</h4>
+<ul>
+<li><strong>Propósito</strong>: Asegurar que nuevos cambios no rompan funcionalidades existentes</li>
+<li><strong>Ejecutor</strong>: QA Tester humano + Tests automatizados (sugerido)</li>
+<li><strong>Frecuencia</strong>: Después de cada cambio significativo</li>
+</ul>
+<h4>2.1.4 Pruebas de Aceptación de Usuario (UAT)</h4>
+<ul>
+<li><strong>Propósito</strong>: Validar que la app cumple expectativas del usuario final</li>
+<li><strong>Ejecutor</strong>: Usuarios beta</li>
+<li><strong>Frecuencia</strong>: Antes del lanzamiento MVP</li>
+</ul>
+<h3>2.2 Niveles de Prioridad</h3>
+<table>
+<thead>
+<tr>
+<th>Prioridad</th>
+<th>Descripción</th>
+<th>Impacto si falla</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>🔴 <strong>CRÍTICA</strong></td>
+<td>Funcionalidad core, sin ella la app no funciona</td>
+<td>Bloqueante de release</td>
+</tr>
+<tr>
+<td>🟡 <strong>ALTA</strong></td>
+<td>Funcionalidad importante, afecta UX significativamente</td>
+<td>Debe corregirse antes de release</td>
+</tr>
+<tr>
+<td>🟢 <strong>MEDIA</strong></td>
+<td>Funcionalidad secundaria, afecta UX moderadamente</td>
+<td>Puede ir en release si se documenta</td>
+</tr>
+<tr>
+<td>⚪ <strong>BAJA</strong></td>
+<td>Mejora estética o funcionalidad menor</td>
+<td>No bloqueante</td>
+</tr>
+</tbody></table>
+<h3>2.3 Estados de Prueba</h3>
+<table>
+<thead>
+<tr>
+<th>Estado</th>
+<th>Símbolo</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>No probado</td>
+<td>⬜</td>
+<td>Caso de prueba aún no ejecutado</td>
+</tr>
+<tr>
+<td>Aprobado</td>
+<td>✅</td>
+<td>Caso de prueba pasó correctamente</td>
+</tr>
+<tr>
+<td>Fallido</td>
+<td>❌</td>
+<td>Caso de prueba falló</td>
+</tr>
+<tr>
+<td>Bloqueado</td>
+<td>🚫</td>
+<td>No se puede probar (dependencia bloqueada)</td>
+</tr>
+<tr>
+<td>En revisión</td>
+<td>🔄</td>
+<td>Bug reportado, esperando fix</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. CONFIGURACIÓN DEL ENTORNO DE PRUEBAS</h2>
+<h3>3.1 Requisitos Previos</h3>
+<p><strong>Hardware</strong>:</p>
+<ul>
+<li>Dispositivo Android (real o emulador) - Android 8.0+</li>
+<li>Dispositivo iOS (real o simulador) - iOS 12.0+</li>
+<li>PC/Mac con Flutter SDK instalado</li>
+</ul>
+<p><strong>Software</strong>:</p>
+<ul>
+<li>Flutter SDK (versión estable latest)</li>
+<li>Android Studio / Xcode</li>
+<li>Postman (para pruebas de API)</li>
+<li>Herramienta de captura de pantalla/video</li>
+</ul>
+<p><strong>Backend</strong>:</p>
+<ul>
+<li>Servidor de desarrollo corriendo en <code>http://localhost:8080</code></li>
+<li>Base de datos PostgreSQL con datos de prueba</li>
+</ul>
+<h3>3.2 Datos de Prueba</h3>
+<h4>Usuario de Prueba Principal</h4>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">plaintext</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-plaintext">Email: qa.tester@petos.com
+Password: QA_Test123!
+Nombre: QA
+Apellido: Tester</code></pre>
+                </div>
+            <h4>Usuarios Adicionales (para pruebas sociales)</h4>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">plaintext</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-plaintext">Usuario 2:
+Email: user2@petos.com
+Password: User2_Test123!
+
+Usuario 3:
+Email: user3@petos.com
+Password: User3_Test123!</code></pre>
+                </div>
+            <h4>Mascotas de Prueba</h4>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">plaintext</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-plaintext">Mascota 1: &quot;Max&quot; - Perro - Golden Retriever - 3 años
+Mascota 2: &quot;Luna&quot; - Gato - Siamés - 2 años
+Mascota 3: &quot;Rocky&quot; - Perro - Bulldog - 5 años</code></pre>
+                </div>
+            <h3>3.3 Preparación del Entorno</h3>
+<p><strong>Pasos previos a las pruebas</strong>:</p>
+<ol>
+<li>✅ Verificar que el backend está corriendo (<code>GET http://localhost:8080/health</code>)</li>
+<li>✅ Limpiar base de datos o crear datos de prueba frescos</li>
+<li>✅ Instalar app en dispositivo de prueba (<code>flutter run</code>)</li>
+<li>✅ Verificar conexión a internet estable</li>
+<li>✅ Configurar herramienta de captura de pantalla</li>
+<li>✅ Limpiar caché de la app antes de cada sesión de pruebas</li>
+</ol>
+<hr>
+<h2>4. CASOS DE PRUEBA POR MÓDULO</h2>
+<h3>4.1 MÓDULO: AUTENTICACIÓN Y REGISTRO</h3>
+<h4>CP-AUTH-001: Login con Credenciales Válidas</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-AUTH-001</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Autenticación</td>
+</tr>
+<tr>
+<td><strong>Funcionalidad</strong></td>
+<td>Login</td>
+</tr>
+</tbody></table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario registrado existe en base de datos</li>
+<li>App instalada y abierta en pantalla de login</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Ingresar email: <code>qa.tester@petos.com</code></li>
+<li>Ingresar password: <code>QA_Test123!</code></li>
+<li>Tocar botón &quot;Iniciar Sesión&quot;</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Indicador de carga se muestra mientras se procesa</li>
+<li>✅ Backend responde con status 200 y token JWT</li>
+<li>✅ App guarda token en storage local</li>
+<li>✅ Usuario es redirigido a pantalla de Home Feed</li>
+<li>✅ Bottom navigation bar es visible</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+<ul>
+<li>Response status: <code>200 OK</code></li>
+<li>Response body contiene: <code>{ access_token: &quot;...&quot;, user: {...} }</code></li>
+</ul>
+<p><strong>Casos Extremos</strong>:</p>
+<ul>
+<li>⚠️ <strong>Sin conexión</strong>: Mostrar error &quot;Sin conexión a internet&quot;</li>
+<li>⚠️ <strong>Backend caído</strong>: Mostrar error &quot;Servidor no disponible, intenta más tarde&quot;</li>
+</ul>
+<hr>
+<h4>CP-AUTH-002: Login con Credenciales Inválidas</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-AUTH-002</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Autenticación</td>
+</tr>
+</tbody></table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Ingresar email: <code>qa.tester@petos.com</code></li>
+<li>Ingresar password: <code>PasswordIncorrecto</code></li>
+<li>Tocar botón &quot;Iniciar Sesión&quot;</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend responde con status 401 Unauthorized</li>
+<li>✅ App muestra mensaje de error: &quot;Credenciales incorrectas&quot;</li>
+<li>✅ Usuario permanece en pantalla de login</li>
+<li>✅ Campos de formulario no se limpian (mantener email)</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+<ul>
+<li>Response status: <code>401 Unauthorized</code></li>
+<li>Response body: <code>{ message: &quot;Invalid credentials&quot;, statusCode: 401 }</code></li>
+</ul>
+<hr>
+<h4>CP-AUTH-003: Validación de Formato de Email</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-AUTH-003</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🟡 ALTA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Autenticación</td>
+</tr>
+</tbody></table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Ingresar email inválido: <code>emailsinformato</code></li>
+<li>Tocar campo de password (blur del campo email)</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Campo email muestra error: &quot;Formato de email inválido&quot;</li>
+<li>✅ Botón &quot;Iniciar Sesión&quot; permanece deshabilitado</li>
+<li>✅ No se hace petición al backend</li>
+</ul>
+<p><strong>Casos a Probar</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Email Ingresado</th>
+<th>Debe Validar Como</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>emailsinformato</code></td>
+<td>❌ Inválido</td>
+</tr>
+<tr>
+<td><code>email@</code></td>
+<td>❌ Inválido</td>
+</tr>
+<tr>
+<td><code>@dominio.com</code></td>
+<td>❌ Inválido</td>
+</tr>
+<tr>
+<td><code>email@dominio</code></td>
+<td>❌ Inválido</td>
+</tr>
+<tr>
+<td><code>email@dominio.com</code></td>
+<td>✅ Válido</td>
+</tr>
+<tr>
+<td><code>email+tag@dominio.com</code></td>
+<td>✅ Válido</td>
+</tr>
+</tbody></table>
+<hr>
+<h4>CP-AUTH-004: Registro Multi-Paso - Paso 1 (Datos Usuario)</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-AUTH-004</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Registro</td>
+</tr>
+</tbody></table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>App abierta en pantalla de registro</li>
+<li>Paso 1 visible (Datos de Usuario)</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Ingresar nombre: <code>Nuevo</code></li>
+<li>Ingresar apellido: <code>Usuario</code></li>
+<li>Ingresar email: <code>nuevo.usuario@petos.com</code></li>
+<li>Ingresar password: <code>NuevoUser123!</code></li>
+<li>Confirmar password: <code>NuevoUser123!</code></li>
+<li>Tocar botón &quot;Siguiente&quot;</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Todos los campos validan correctamente</li>
+<li>✅ Indicador de progreso muestra &quot;1/3&quot;</li>
+<li>✅ Usuario es llevado a Paso 2 (Ubicación)</li>
+<li>✅ Datos del Paso 1 se mantienen en memoria (si vuelve atrás)</li>
+</ul>
+<p><strong>Validación de Contraseña</strong>:</p>
+<ul>
+<li>✅ Mínimo 8 caracteres</li>
+<li>✅ Al menos 1 mayúscula</li>
+<li>✅ Al menos 1 minúscula</li>
+<li>✅ Al menos 1 número</li>
+<li>✅ Opcional: 1 carácter especial</li>
+</ul>
+<p><strong>Casos Extremos</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Password</th>
+<th>Debe Validar Como</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>123456</code></td>
+<td>❌ Muy corta (&lt; 8)</td>
+</tr>
+<tr>
+<td><code>abcdefgh</code></td>
+<td>❌ Sin mayúsculas ni números</td>
+</tr>
+<tr>
+<td><code>ABCDEFGH</code></td>
+<td>❌ Sin minúsculas ni números</td>
+</tr>
+<tr>
+<td><code>Abcdefgh</code></td>
+<td>❌ Sin números</td>
+</tr>
+<tr>
+<td><code>Abcdefg1</code></td>
+<td>✅ Válida</td>
+</tr>
+<tr>
+<td><code>Abc123!@#</code></td>
+<td>✅ Válida</td>
+</tr>
+</tbody></table>
+<hr>
+<h4>CP-AUTH-005: Registro Multi-Paso - Paso 3 (Primera Mascota)</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-AUTH-005</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Registro</td>
+</tr>
+</tbody></table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario completó Paso 1 y Paso 2</li>
+<li>Paso 3 visible (Registrar Primera Mascota)</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Tocar avatar para agregar foto (opcional)</li>
+<li>Ingresar nombre: <code>Firulais</code></li>
+<li>Seleccionar tipo: <code>Perro</code></li>
+<li>Seleccionar raza: <code>Golden Retriever</code></li>
+<li>Seleccionar fecha de nacimiento: <code>01/01/2020</code></li>
+<li>Seleccionar sexo: <code>Macho</code></li>
+<li>Ingresar biografía (opcional): <code>Mi primer amigo peludo</code></li>
+<li>Tocar botón &quot;Finalizar Registro&quot;</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Loading indicator se muestra</li>
+<li>✅ Backend crea usuario nuevo (status 201 Created)</li>
+<li>✅ Backend crea mascota asociada al usuario</li>
+<li>✅ Backend genera JWT token</li>
+<li>✅ App guarda token en storage</li>
+<li>✅ Usuario es redirigido a Home Feed</li>
+<li>✅ Mensaje de bienvenida se muestra (opcional)</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">json</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-json">POST /auth/register
+Status<span class="hljs-punctuation">:</span> <span class="hljs-number">201</span> Created
+Response<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;user&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;email&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;...&quot;</span><span class="hljs-punctuation">,</span> ... <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;access_token&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;eyJhbGc...&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;pet&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Firulais&quot;</span><span class="hljs-punctuation">,</span> ... <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+                </div>
+            <p><strong>Casos Extremos</strong>:</p>
+<ul>
+<li>⚠️ <strong>Email ya existe</strong>: Backend responde 409 Conflict, mostrar &quot;Email ya registrado&quot;</li>
+<li>⚠️ <strong>Sin conexión durante registro</strong>: Mostrar error, no guardar datos localmente</li>
+<li>⚠️ <strong>Falla upload de foto</strong>: Continuar registro sin foto, reintentable después</li>
+</ul>
+<hr>
+<h3>4.2 MÓDULO: GESTIÓN DE PERFIL DE USUARIO</h3>
+<h4>CP-PROFILE-001: Ver Perfil Propio</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-PROFILE-001</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Perfil Usuario</td>
+</tr>
+</tbody></table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Bottom navigation visible</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Tocar tab &quot;Perfil&quot; en bottom navigation</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend es consultado: <code>GET /users/profile</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Perfil se muestra con:<ul>
+<li>Avatar del usuario</li>
+<li>Nombre completo</li>
+<li>Username</li>
+<li>Biografía (si existe)</li>
+<li>Ubicación</li>
+<li>Estadísticas: # Publicaciones, # Seguidores, # Seguidos</li>
+</ul>
+</li>
+<li>✅ Botón &quot;Editar perfil&quot; visible</li>
+<li>✅ Tabs visibles: Posts, Tagged, Likes</li>
+<li>✅ Menú (⋮) visible con opciones</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">json</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-json">GET /users/profile
+Status<span class="hljs-punctuation">:</span> <span class="hljs-number">200</span> OK
+Response<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;firstName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;QA&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;lastName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Tester&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;email&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;qa.tester@petos.com&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;avatarUrl&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;...&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;bio&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;...&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;location&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;...&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;stats&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;postsCount&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">5</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;followersCount&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">10</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;followingCount&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">8</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span></code></pre>
+                </div>
+            <hr>
+<h4>CP-PROFILE-002: Editar Perfil de Usuario</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-PROFILE-002</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🟡 ALTA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Perfil Usuario</td>
+</tr>
+</tbody></table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario en su perfil propio</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Tocar botón &quot;Editar perfil&quot;</li>
+<li>Esperar que modal/pantalla de edición se abra</li>
+<li>Modificar nombre: <code>QA Modificado</code></li>
+<li>Modificar biografía: <code>Nueva biografía de prueba</code></li>
+<li>Tocar botón &quot;Guardar cambios&quot;</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend es consultado: <code>PATCH /users/profile</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Loading indicator durante guardado</li>
+<li>✅ Modal se cierra automáticamente</li>
+<li>✅ Perfil se actualiza con nuevos datos</li>
+<li>✅ Mensaje de éxito: &quot;Perfil actualizado correctamente&quot;</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">json</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-json">PATCH /users/profile
+Body<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;firstName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;QA Modificado&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;bio&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Nueva biografía de prueba&quot;</span>
+<span class="hljs-punctuation">}</span>
+Status<span class="hljs-punctuation">:</span> <span class="hljs-number">200</span> OK
+Response<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> ...usuario actualizado... <span class="hljs-punctuation">}</span></code></pre>
+                </div>
+            <p><strong>Casos Extremos</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Valor</th>
+<th>Debe</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Biografía</td>
+<td>151 caracteres</td>
+<td>❌ Rechazar (máximo 150)</td>
+</tr>
+<tr>
+<td>Biografía</td>
+<td>Texto con emojis 🐶🐱</td>
+<td>✅ Aceptar</td>
+</tr>
+<tr>
+<td>Nombre</td>
+<td>Vacío</td>
+<td>❌ Rechazar (requerido)</td>
+</tr>
+<tr>
+<td>Nombre</td>
+<td><code>&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;</code></td>
+<td>✅ Sanitizar/escapar</td>
+</tr>
+</tbody></table>
+<hr>
+<h4>CP-PROFILE-003: Ver Perfil de Otro Usuario</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-PROFILE-003</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Perfil Usuario</td>
+</tr>
+</tbody></table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Existe otro usuario en la base de datos (ID: 2)</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde Home Feed, tocar avatar de otra persona</li>
+<li>Esperar carga del perfil</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend es consultado: <code>GET /users/:userId</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Perfil se muestra con datos del otro usuario</li>
+<li>✅ Botón &quot;Seguir&quot; o &quot;Siguiendo&quot; visible (según estado)</li>
+<li>✅ Botón &quot;Mensaje&quot; visible</li>
+<li>✅ Menú (⋮) con opciones: &quot;Reportar&quot;, &quot;Bloquear&quot;</li>
+<li>✅ Tabs visibles: Posts, Tagged (NO &quot;Likes&quot; - solo propio)</li>
+<li>✅ NO debe mostrar botón &quot;Editar perfil&quot;</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">json</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-json">GET /users/<span class="hljs-number">2</span>
+Status<span class="hljs-punctuation">:</span> <span class="hljs-number">200</span> OK
+Response<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">2</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;firstName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Usuario&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;lastName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Dos&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;isFollowing&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;isFollowedBy&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span>
+  ...
+<span class="hljs-punctuation">}</span></code></pre>
+                </div>
+            <hr>
+<h4>CP-PROFILE-004: Seguir/Dejar de Seguir Usuario</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-PROFILE-004</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Sistema Social</td>
+</tr>
+</tbody></table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado viendo perfil de otro usuario</li>
+<li>Usuario NO sigue al otro usuario actualmente</li>
+</ul>
+<p><strong>Pasos - Seguir</strong>:</p>
+<ol>
+<li>Tocar botón &quot;Seguir&quot;</li>
+</ol>
+<p><strong>Resultado Esperado - Seguir</strong>:</p>
+<ul>
+<li>✅ Backend: <code>POST /follows/:userId</code></li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Botón cambia a &quot;Siguiendo&quot; inmediatamente</li>
+<li>✅ Contador de &quot;Seguidos&quot; del usuario actual incrementa +1</li>
+<li>✅ Contador de &quot;Seguidores&quot; del otro usuario incrementa +1</li>
+<li>✅ Animación de botón (opcional)</li>
+</ul>
+<p><strong>Pasos - Dejar de Seguir</strong>:</p>
+<ol>
+<li>Tocar botón &quot;Siguiendo&quot;</li>
+<li>Confirmar acción (si hay confirmación)</li>
+</ol>
+<p><strong>Resultado Esperado - Dejar de Seguir</strong>:</p>
+<ul>
+<li>✅ Backend: <code>DELETE /follows/:userId</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Botón cambia a &quot;Seguir&quot; inmediatamente</li>
+<li>✅ Contadores se decrementan</li>
+<li>✅ Animación de botón</li>
+</ul>
+<p><strong>Casos Extremos</strong>:</p>
+<ul>
+<li>⚠️ <strong>Ya sigue al usuario</strong>: Backend responde 409 Conflict, app maneja sin crash</li>
+<li>⚠️ <strong>Usuario bloqueado</strong>: Backend responde 403 Forbidden, mostrar mensaje</li>
+<li>⚠️ <strong>Seguir/dejar de seguir rápidamente</strong>: Validar que solo última acción cuenta</li>
+</ul>
+<hr>
+<h3>4.3 MÓDULO: GESTIÓN DE MASCOTAS</h3>
+<h4>CP-PET-001: Listar Mascotas del Usuario</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-PET-001</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Mascotas</td>
+</tr>
+</tbody></table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Usuario tiene al menos 1 mascota registrada</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde perfil propio, tocar menú (⋮)</li>
+<li>Tocar opción &quot;Mis Mascotas&quot;</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>GET /pets/my-pets</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Lista de mascotas se muestra con cards</li>
+<li>✅ Cada card muestra:<ul>
+<li>Avatar de la mascota</li>
+<li>Nombre, tipo, raza</li>
+<li>Edad</li>
+<li>Botones: &quot;Ver perfil&quot;, &quot;Editar&quot;, &quot;Eliminar&quot;</li>
+</ul>
+</li>
+<li>✅ Botón flotante (+) para agregar nueva mascota</li>
+<li>✅ Pull-to-refresh funciona</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">json</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-json">GET /pets/my-pets
+Status<span class="hljs-punctuation">:</span> <span class="hljs-number">200</span> OK
+Response<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+  <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Max&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;dog&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;breed&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Golden Retriever&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;birthDate&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2020-01-01&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;avatarUrl&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;...&quot;</span><span class="hljs-punctuation">,</span>
+    ...
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">]</span></code></pre>
+                </div>
+            <p><strong>Estado Vacío</strong>:</p>
+<ul>
+<li>✅ Si no tiene mascotas: Mostrar EmptyState con mensaje &quot;Sin mascotas&quot; y botón &quot;Agregar Mascota&quot;</li>
+</ul>
+<hr>
+<h4>CP-PET-002: Agregar Nueva Mascota</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-PET-002</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Mascotas</td>
+</tr>
+</tbody></table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario en pantalla &quot;Mis Mascotas&quot;</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Tocar botón flotante (+)</li>
+<li>Esperar que modal se abra</li>
+<li>(Opcional) Tocar avatar para agregar foto</li>
+<li>Ingresar nombre: <code>Nuevo Perro</code></li>
+<li>Seleccionar tipo: <code>Perro</code></li>
+<li>Seleccionar raza: <code>Labrador</code></li>
+<li>Seleccionar fecha de nacimiento</li>
+<li>Seleccionar sexo: <code>Macho</code></li>
+<li>Ingresar biografía (opcional): <code>Un perro juguetón</code></li>
+<li>Tocar botón &quot;Guardar&quot;</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Formulario valida todos los campos requeridos</li>
+<li>✅ Backend: <code>POST /pets</code></li>
+<li>✅ Si hay foto: Backend recibe <code>multipart/form-data</code></li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Modal se cierra</li>
+<li>✅ Lista de mascotas se actualiza con nueva mascota</li>
+<li>✅ Mensaje de éxito: &quot;Mascota agregada correctamente&quot;</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">json</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-json">POST /pets
+Body<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Nuevo Perro&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;dog&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;breed&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Labrador&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;birthDate&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2022-05-15&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;sex&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;male&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;bio&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Un perro juguetón&quot;</span>
+<span class="hljs-punctuation">}</span>
+Status<span class="hljs-punctuation">:</span> <span class="hljs-number">201</span> Created
+Response<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">5</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Nuevo Perro&quot;</span><span class="hljs-punctuation">,</span> ... <span class="hljs-punctuation">}</span></code></pre>
+                </div>
+            <p><strong>Casos Extremos</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Valor</th>
+<th>Debe</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Nombre</td>
+<td>Vacío</td>
+<td>❌ Mostrar error &quot;Campo requerido&quot;</td>
+</tr>
+<tr>
+<td>Nombre</td>
+<td>51 caracteres</td>
+<td>❌ Rechazar (máximo 50)</td>
+</tr>
+<tr>
+<td>Biografía</td>
+<td>151 caracteres</td>
+<td>❌ Rechazar (máximo 150)</td>
+</tr>
+<tr>
+<td>Fecha nacimiento</td>
+<td>Fecha futura</td>
+<td>❌ Rechazar &quot;Fecha no puede ser futura&quot;</td>
+</tr>
+<tr>
+<td>Fecha nacimiento</td>
+<td>Hace 30 años</td>
+<td>⚠️ Advertencia &quot;¿Estás seguro?&quot;</td>
+</tr>
+<tr>
+<td>Foto</td>
+<td>Archivo &gt; 10MB</td>
+<td>❌ Rechazar &quot;Archivo muy grande&quot;</td>
+</tr>
+<tr>
+<td>Foto</td>
+<td>Formato .txt</td>
+<td>❌ Rechazar &quot;Solo imágenes&quot;</td>
+</tr>
+</tbody></table>
+<hr>
+<h4>CP-PET-003: Editar Mascota Existente</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-PET-003</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🟡 ALTA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Mascotas</td>
+</tr>
+</tbody></table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario tiene al menos 1 mascota</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde &quot;Mis Mascotas&quot;, tocar botón &quot;Editar&quot; en una mascota</li>
+<li>Modal se abre con datos precargados</li>
+<li>Modificar biografía: <code>Biografía actualizada</code></li>
+<li>(NO modificar foto)</li>
+<li>Tocar &quot;Guardar&quot;</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>PATCH /pets/:petId</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Modal se cierra</li>
+<li>✅ Card de mascota muestra datos actualizados</li>
+<li>✅ <strong>IMPORTANTE</strong>: Foto NO se borra (bug conocido, debe estar corregido)</li>
+</ul>
+<p><strong>Validación Crítica</strong>:</p>
+<ul>
+<li>🔴 <strong>Bug anterior</strong>: Al editar sin cambiar foto, se borraba el avatar</li>
+<li>✅ <strong>Debe corregirse</strong>: Si no se cambia foto, backend NO debe borrar la foto existente</li>
+</ul>
+<hr>
+<h4>CP-PET-004: Eliminar Mascota</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-PET-004</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🟡 ALTA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Mascotas</td>
+</tr>
+</tbody></table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario tiene al menos 2 mascotas (no puede eliminar la última)</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde &quot;Mis Mascotas&quot;, tocar botón &quot;Eliminar&quot; en una mascota</li>
+<li>Dialog de confirmación aparece</li>
+<li>Tocar &quot;Confirmar eliminación&quot;</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>DELETE /pets/:petId</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Mascota desaparece de la lista</li>
+<li>✅ Mensaje de éxito: &quot;Mascota eliminada&quot;</li>
+<li>✅ Contador de mascotas se actualiza</li>
+</ul>
+<p><strong>Caso Extremo</strong>:</p>
+<ul>
+<li>⚠️ <strong>Última mascota</strong>: Backend debe rechazar (409 Conflict) o app debe prevenir</li>
+<li>⚠️ <strong>Mascota con publicaciones</strong>: Verificar que no se borran las publicaciones (soft delete)</li>
+</ul>
+<hr>
+<h4>CP-PET-005: Ver Perfil de Mascota</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-PET-005</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Mascotas</td>
+</tr>
+</tbody></table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Mascota existe (ID conocido)</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde &quot;Mis Mascotas&quot; o desde publicación, tocar &quot;Ver perfil&quot; o avatar de mascota</li>
+<li>Esperar carga del perfil</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>GET /pets/:petId</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Header muestra:<ul>
+<li>Avatar grande</li>
+<li>Nombre, tipo, raza, edad, sexo, peso</li>
+<li>Biografía</li>
+<li>Chips de rasgos</li>
+<li>Estadísticas: # Fotos, # Posts</li>
+</ul>
+</li>
+<li>✅ Tabs visibles: Fotos, Posts, Salud (si es propia)</li>
+<li>✅ Botón &quot;Editar&quot; visible (si es mascota propia)</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">json</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-json">GET /pets/<span class="hljs-number">1</span>
+Status<span class="hljs-punctuation">:</span> <span class="hljs-number">200</span> OK
+Response<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Max&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;dog&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;breed&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Golden Retriever&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;age&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">4</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;sex&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;male&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;weight&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">30</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;bio&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;...&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;traits&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;Friendly&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;Playful&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;stats&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;photosCount&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">10</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;postsCount&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">5</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;isOwner&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span>
+<span class="hljs-punctuation">}</span></code></pre>
+                </div>
+            <hr>
+<h3>4.4 MÓDULO: PUBLICACIONES (POSTS)</h3>
+<h4>CP-POST-001: Ver Feed de Publicaciones</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-POST-001</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Publicaciones</td>
+</tr>
+</tbody></table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Usuario sigue al menos a 1 persona con publicaciones</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>App inicia, Home Feed es la pantalla principal</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>GET /posts/feed?page=1&amp;limit=10</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Lista de publicaciones se muestra</li>
+<li>✅ Cada post muestra:<ul>
+<li>Avatar y nombre del autor</li>
+<li>Carousel de imágenes (si múltiples) o video</li>
+<li>Descripción (con &quot;ver más&quot; si es larga)</li>
+<li>Mascotas etiquetadas</li>
+<li>Botones: Like, Comentar, Compartir</li>
+<li>Contador de likes y comentarios</li>
+<li>Fecha relativa (&quot;hace 2 horas&quot;)</li>
+</ul>
+</li>
+<li>✅ Pull-to-refresh funciona</li>
+<li>✅ Scroll infinito carga más publicaciones</li>
+</ul>
+<p><strong>Estado Vacío</strong>:</p>
+<ul>
+<li>✅ Si no sigue a nadie: EmptyState &quot;Sin publicaciones&quot; con botón &quot;Crear primera publicación&quot;</li>
+</ul>
+<hr>
+<h4>CP-POST-002: Crear Publicación con Imágenes</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-POST-002</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Publicaciones</td>
+</tr>
+</tbody></table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Usuario tiene al menos 1 mascota</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde Home Feed, tocar botón flotante (+)</li>
+<li>Pantalla &quot;Crear Publicación&quot; se abre</li>
+<li>Tocar &quot;Agregar medios&quot;</li>
+<li>Seleccionar 3 fotos de galería</li>
+<li>Escribir descripción: &quot;Día de paseo con mis amigos 🐶&quot;</li>
+<li>Seleccionar mascotas a etiquetar (checkbox de 2 mascotas)</li>
+<li>Tocar botón &quot;Publicar&quot;</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Validación: Entre 1-5 imágenes (cumple ✅)</li>
+<li>✅ Loading indicator durante upload</li>
+<li>✅ Backend: <code>POST /posts</code> con <code>multipart/form-data</code></li>
+<li>✅ Imágenes se suben a Cloudinary</li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Usuario vuelve a Home Feed</li>
+<li>✅ Publicación aparece en el feed</li>
+<li>✅ Mensaje de éxito: &quot;Publicación creada correctamente&quot;</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">json</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-json">POST /posts
+Body (multipart/form-data)<span class="hljs-punctuation">:</span>
+  - description<span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Día de paseo con mis amigos 🐶&quot;</span>
+  - images<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>File<span class="hljs-punctuation">,</span> File<span class="hljs-punctuation">,</span> File<span class="hljs-punctuation">]</span>
+  - petIds<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-number">1</span><span class="hljs-punctuation">,</span> <span class="hljs-number">2</span><span class="hljs-punctuation">]</span>
+
+Status<span class="hljs-punctuation">:</span> <span class="hljs-number">201</span> Created
+Response<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">10</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;description&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;...&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;images&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+    <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;url&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;https://cloudinary.../small.jpg&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;small&quot;</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;url&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;https://cloudinary.../medium.jpg&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;medium&quot;</span> <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;pets&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>...<span class="hljs-punctuation">]</span>
+<span class="hljs-punctuation">}</span></code></pre>
+                </div>
+            <p><strong>Casos Extremos</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Escenario</th>
+<th>Debe</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Intentar publicar 0 imágenes</td>
+<td>❌ Botón &quot;Publicar&quot; deshabilitado</td>
+</tr>
+<tr>
+<td>Intentar publicar 6 imágenes</td>
+<td>❌ Mostrar error &quot;Máximo 5 imágenes&quot;</td>
+</tr>
+<tr>
+<td>Imagen &gt; 10MB</td>
+<td>❌ Rechazar &quot;Archivo muy grande&quot;</td>
+</tr>
+<tr>
+<td>Sin descripción (solo imágenes)</td>
+<td>✅ Permitir (descripción opcional)</td>
+</tr>
+<tr>
+<td>Descripción &gt; 500 caracteres</td>
+<td>❌ Rechazar o truncar</td>
+</tr>
+<tr>
+<td>Sin conexión durante upload</td>
+<td>❌ Mostrar error, NO publicar</td>
+</tr>
+</tbody></table>
+<hr>
+<h4>CP-POST-003: Crear Publicación con Video</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-POST-003</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Publicaciones</td>
+</tr>
+</tbody></table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Tocar botón (+) en Home Feed</li>
+<li>Tocar &quot;Agregar medios&quot;</li>
+<li>Seleccionar 1 video de galería (duración: 30 segundos)</li>
+<li>Escribir descripción</li>
+<li>Tocar &quot;Publicar&quot;</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Validación: Solo 1 video permitido (excluyente con imágenes)</li>
+<li>✅ Backend: <code>POST /posts</code> con video</li>
+<li>✅ Video se sube a Cloudinary</li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Publicación aparece en feed con video reproducible</li>
+</ul>
+<p><strong>Casos Extremos</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Escenario</th>
+<th>Debe</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Video &gt; 2 minutos</td>
+<td>❌ Rechazar &quot;Máximo 2 minutos&quot;</td>
+</tr>
+<tr>
+<td>Video &gt; 50MB</td>
+<td>❌ Rechazar &quot;Archivo muy grande&quot;</td>
+</tr>
+<tr>
+<td>Intentar agregar imagen + video</td>
+<td>❌ Bloquear UI &quot;Solo imágenes O video&quot;</td>
+</tr>
+</tbody></table>
+<hr>
+<h4>CP-POST-004: Dar Like a Publicación</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-POST-004</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Sistema Social</td>
+</tr>
+</tbody></table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Publicación visible en feed</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Tocar botón de &quot;Me gusta&quot; (corazón) en una publicación</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Botón cambia a color rojo inmediatamente (optimistic update)</li>
+<li>✅ Contador de likes incrementa +1</li>
+<li>✅ Animación de corazón (opcional)</li>
+<li>✅ Backend: <code>POST /posts/:postId/like</code></li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Notificación creada para el autor del post (backend)</li>
+</ul>
+<p><strong>Pasos - Quitar Like</strong>:</p>
+<ol>
+<li>Tocar botón de &quot;Me gusta&quot; nuevamente</li>
+</ol>
+<p><strong>Resultado Esperado - Quitar Like</strong>:</p>
+<ul>
+<li>✅ Botón vuelve a color gris</li>
+<li>✅ Contador decrementa -1</li>
+<li>✅ Backend: <code>DELETE /posts/:postId/like</code></li>
+<li>✅ Response status: 200 OK</li>
+</ul>
+<p><strong>Casos Extremos</strong>:</p>
+<ul>
+<li>⚠️ <strong>Like/unlike rápidamente</strong>: Validar que última acción cuenta</li>
+<li>⚠️ <strong>Ya dio like</strong>: Backend responde 409 Conflict, app maneja sin crash</li>
+</ul>
+<hr>
+<h4>CP-POST-005: Comentar Publicación</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-POST-005</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Sistema Social</td>
+</tr>
+</tbody></table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Publicación visible en feed</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Tocar botón &quot;Comentar&quot; en una publicación</li>
+<li>Modal de comentarios se abre desde abajo</li>
+<li>Escribir comentario: &quot;¡Qué hermoso! 🐶&quot;</li>
+<li>Tocar botón &quot;Enviar&quot;</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>POST /posts/:postId/comments</code></li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Comentario aparece en la lista inmediatamente</li>
+<li>✅ Campo de texto se limpia</li>
+<li>✅ Contador de comentarios en el post incrementa +1</li>
+<li>✅ Notificación creada para el autor del post</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">json</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-json">POST /posts/<span class="hljs-number">10</span>/comments
+Body<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;content&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;¡Qué hermoso! 🐶&quot;</span>
+<span class="hljs-punctuation">}</span>
+Status<span class="hljs-punctuation">:</span> <span class="hljs-number">201</span> Created
+Response<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">50</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;content&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;¡Qué hermoso! 🐶&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;user&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;firstName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;QA&quot;</span><span class="hljs-punctuation">,</span> ... <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;createdAt&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2025-01-15T10:30:00Z&quot;</span>
+<span class="hljs-punctuation">}</span></code></pre>
+                </div>
+            <p><strong>Casos Extremos</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Escenario</th>
+<th>Debe</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Comentario vacío</td>
+<td>❌ Botón &quot;Enviar&quot; deshabilitado</td>
+</tr>
+<tr>
+<td>Comentario &gt; 500 caracteres</td>
+<td>❌ Rechazar o truncar</td>
+</tr>
+<tr>
+<td>Comentario solo con espacios</td>
+<td>❌ Rechazar &quot;Campo requerido&quot;</td>
+</tr>
+<tr>
+<td>Comentario con emojis</td>
+<td>✅ Permitir</td>
+</tr>
+</tbody></table>
+<hr>
+<h4>CP-POST-006: Eliminar Publicación Propia</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-POST-006</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🟡 ALTA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Publicaciones</td>
+</tr>
+</tbody></table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Usuario tiene al menos 1 publicación propia</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde perfil propio, tocar una publicación propia</li>
+<li>Tocar menú (⋮) en la publicación</li>
+<li>Tocar &quot;Eliminar publicación&quot;</li>
+<li>Confirmación aparece</li>
+<li>Tocar &quot;Confirmar&quot;</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>DELETE /posts/:postId</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Publicación desaparece del feed</li>
+<li>✅ Contador de publicaciones del usuario decrementa -1</li>
+<li>✅ Mensaje de éxito: &quot;Publicación eliminada&quot;</li>
+</ul>
+<p><strong>Validación</strong>:</p>
+<ul>
+<li>🔴 Solo el autor puede eliminar su publicación</li>
+<li>❌ Si otro usuario intenta eliminar: Backend responde 403 Forbidden</li>
+</ul>
+<hr>
+<h3>4.5 MÓDULO: HISTORIAS (STORIES)</h3>
+<h4>CP-STORY-001: Ver Historias de Usuarios Seguidos</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-STORY-001</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Historias</td>
+</tr>
+</tbody></table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Al menos 1 usuario seguido tiene historias activas (&lt; 24h)</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde Home Feed, ver barra superior de historias</li>
+<li>Tocar avatar de un usuario con historia</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>GET /stories/:userId</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Visor de historia abre en fullscreen</li>
+<li>✅ Historia se reproduce automáticamente</li>
+<li>✅ Controles superiores visibles:<ul>
+<li>Avatar y nombre del autor</li>
+<li>Barras de progreso (una por historia)</li>
+<li>Botón de cerrar (X)</li>
+<li>Tiempo de publicación</li>
+</ul>
+</li>
+<li>✅ Tap derecha: siguiente historia</li>
+<li>✅ Tap izquierda: historia anterior</li>
+<li>✅ Mantener tap: pausar</li>
+<li>✅ Deslizar abajo: cerrar</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">json</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-json">GET /stories/<span class="hljs-number">2</span>
+Status<span class="hljs-punctuation">:</span> <span class="hljs-number">200</span> OK
+Response<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+  <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;mediaUrl&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;https://cloudinary.../story1.jpg&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;mediaType&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;image&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;createdAt&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2025-01-15T10:00:00Z&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;expiresAt&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2025-01-16T10:00:00Z&quot;</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">]</span></code></pre>
+                </div>
+            <hr>
+<h4>CP-STORY-002: Crear Historia con Imagen</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-STORY-002</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Historias</td>
+</tr>
+</tbody></table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde Home Feed, tocar tu avatar en barra de historias (o botón +)</li>
+<li>Seleccionar foto de galería o tomar foto</li>
+<li>(Opcional) Agregar texto sobre la imagen</li>
+<li>(Opcional) Cambiar color de fondo del texto</li>
+<li>Tocar botón &quot;Publicar historia&quot;</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>POST /stories</code> con imagen</li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Historia se sube a Cloudinary</li>
+<li>✅ Historia aparece en tu perfil con indicador &quot;Tu historia&quot;</li>
+<li>✅ Historia visible para tus seguidores</li>
+<li>✅ Historia expira automáticamente en 24 horas</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">json</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-json">POST /stories
+Body (multipart/form-data)<span class="hljs-punctuation">:</span>
+  - media<span class="hljs-punctuation">:</span> File (imagen)
+  - text<span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Texto opcional&quot;</span>
+  - backgroundColor<span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;#FF5733&quot;</span>
+
+Status<span class="hljs-punctuation">:</span> <span class="hljs-number">201</span> Created
+Response<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">15</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;mediaUrl&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;https://cloudinary.../story15.jpg&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;mediaType&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;image&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;expiresAt&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2025-01-16T10:00:00Z&quot;</span>
+<span class="hljs-punctuation">}</span></code></pre>
+                </div>
+            <p><strong>Casos Extremos</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Escenario</th>
+<th>Debe</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Imagen &gt; 10MB</td>
+<td>❌ Rechazar &quot;Archivo muy grande&quot;</td>
+</tr>
+<tr>
+<td>Sin imagen</td>
+<td>❌ No permitir publicar (requerido)</td>
+</tr>
+<tr>
+<td>Video &gt; 30 segundos</td>
+<td>❌ Rechazar &quot;Máximo 30 segundos&quot;</td>
+</tr>
+</tbody></table>
+<hr>
+<h4>CP-STORY-003: Eliminar Historia Propia</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-STORY-003</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🟡 ALTA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Historias</td>
+</tr>
+</tbody></table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario tiene al menos 1 historia propia activa</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Ver tu propia historia</li>
+<li>Tocar menú (⋮)</li>
+<li>Tocar &quot;Eliminar historia&quot;</li>
+<li>Confirmar</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>DELETE /stories/:storyId</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Historia desaparece inmediatamente</li>
+<li>✅ Si es la última historia, avatar desaparece de la barra</li>
+</ul>
+<hr>
+<h3>4.6 MÓDULO: SISTEMA DE NOTIFICACIONES</h3>
+<h4>CP-NOTIF-001: Ver Lista de Notificaciones</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-NOTIF-001</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Notificaciones</td>
+</tr>
+</tbody></table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Usuario ha recibido al menos 3 notificaciones</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde Home Feed, tocar ícono de campana (notificaciones)</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>GET /activities?page=1&amp;limit=20</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Lista de notificaciones se muestra</li>
+<li>✅ Cada notificación muestra:<ul>
+<li>Avatar del usuario que generó la notificación</li>
+<li>Ícono según tipo (❤️ like, 💬 comentario, 👤 seguidor)</li>
+<li>Texto descriptivo</li>
+<li>Fecha relativa</li>
+<li>Thumbnail de publicación (si aplica)</li>
+<li>Indicador de no leída (punto azul o fondo)</li>
+</ul>
+</li>
+<li>✅ Filtros superiores visibles: Todas | No leídas | Me gusta | Comentarios | Seguidores</li>
+<li>✅ Pull-to-refresh funciona</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">json</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-json">GET /activities?page=<span class="hljs-number">1</span>&amp;limit=<span class="hljs-number">20</span>
+Status<span class="hljs-punctuation">:</span> <span class="hljs-number">200</span> OK
+Response<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+  <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;POST_LIKED&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;user&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">2</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;firstName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Usuario&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;avatarUrl&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;...&quot;</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;post&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">10</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;thumbnailUrl&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;...&quot;</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;isRead&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;createdAt&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2025-01-15T09:30:00Z&quot;</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">]</span></code></pre>
+                </div>
+            <hr>
+<h4>CP-NOTIF-002: Marcar Notificación como Leída</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-NOTIF-002</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🟡 ALTA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Notificaciones</td>
+</tr>
+</tbody></table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Tocar una notificación de tipo &quot;like&quot; o &quot;comentario&quot;</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>PATCH /activities/:activityId</code> (marcar como leída)</li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Notificación cambia visualmente (fondo blanco, sin punto azul)</li>
+<li>✅ Usuario es redirigido a la publicación correspondiente</li>
+<li>✅ Contador de notificaciones no leídas decrementa -1</li>
+</ul>
+<hr>
+<h4>CP-NOTIF-003: Filtrar Notificaciones por Tipo</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-NOTIF-003</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🟢 MEDIA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Notificaciones</td>
+</tr>
+</tbody></table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>En pantalla de notificaciones, tocar filtro &quot;Me gusta&quot;</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>GET /activities?type=POST_LIKED&amp;page=1&amp;limit=20</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Solo notificaciones de tipo &quot;like&quot; se muestran</li>
+<li>✅ Filtro &quot;Me gusta&quot; aparece activo visualmente</li>
+</ul>
+<p><strong>Casos a Probar</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Filtro</th>
+<th>Tipos de Notificación Mostrados</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Todas</td>
+<td>POST_LIKED, POST_COMMENTED, USER_FOLLOWED</td>
+</tr>
+<tr>
+<td>Me gusta</td>
+<td>POST_LIKED</td>
+</tr>
+<tr>
+<td>Comentarios</td>
+<td>POST_COMMENTED</td>
+</tr>
+<tr>
+<td>Seguidores</td>
+<td>USER_FOLLOWED</td>
+</tr>
+<tr>
+<td>No leídas</td>
+<td>Todas con <code>isRead: false</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h3>4.7 MÓDULO: SERVICIOS MARKETPLACE</h3>
+<h4>CP-SERVICE-001: Ver Mapa de Servicios</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-SERVICE-001</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Servicios</td>
+</tr>
+</tbody></table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Existen servicios creados en la base de datos</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Tocar tab &quot;Mapa&quot; en bottom navigation</li>
+<li>Tab &quot;Servicios&quot; seleccionado por defecto</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>GET /services</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Mapa se muestra con marcadores de servicios</li>
+<li>✅ Marcador de ubicación del usuario visible</li>
+<li>✅ Controles de zoom funcionan</li>
+<li>✅ Panel inferior de filtros visible</li>
+<li>✅ Contador de servicios encontrados visible</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">json</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-json">GET /services
+Status<span class="hljs-punctuation">:</span> <span class="hljs-number">200</span> OK
+Response<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+  <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;title&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Veterinaria Central&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;category&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;veterinary&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;price&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">50</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;location&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Calle 123&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;latitude&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">-34.603722</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;longitude&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">-58.381592</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;images&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>...<span class="hljs-punctuation">]</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">]</span></code></pre>
+                </div>
+            <p><strong>Caso Extremo</strong>:</p>
+<ul>
+<li>⚠️ <strong>Carga lenta</strong> (3-5 segundos): Verificar si es problema de backend (falta paginación/índices)</li>
+</ul>
+<hr>
+<h4>CP-SERVICE-002: Filtrar Servicios por Categoría</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-SERVICE-002</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🟡 ALTA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Servicios</td>
+</tr>
+</tbody></table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>En mapa de servicios, tocar panel de filtros</li>
+<li>Seleccionar categoría &quot;Veterinaria&quot;</li>
+<li>Tocar &quot;Aplicar filtros&quot;</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>GET /services?category=veterinary</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Solo marcadores de veterinarias visibles en mapa</li>
+<li>✅ Contador actualizado: &quot;5 servicios encontrados&quot;</li>
+</ul>
+<hr>
+<h4>CP-SERVICE-003: Crear Nuevo Servicio</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-SERVICE-003</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Servicios</td>
+</tr>
+</tbody></table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde mapa de servicios, tocar botón flotante (+)</li>
+<li>Completar formulario:<ul>
+<li>Título: &quot;Mi Veterinaria&quot;</li>
+<li>Descripción: &quot;Atención profesional para tu mascota&quot;</li>
+<li>Categoría: &quot;Veterinaria&quot;</li>
+<li>Precio: 100</li>
+<li>Ubicación: &quot;Calle Falsa 123&quot;</li>
+<li>Teléfono: &quot;+54 11 1234-5678&quot;</li>
+<li>Email: &quot;<a href="mailto:contacto@miveterinaria.com">contacto@miveterinaria.com</a>&quot;</li>
+</ul>
+</li>
+<li>Agregar 2 imágenes</li>
+<li>Tocar &quot;Guardar&quot;</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>POST /services</code></li>
+<li>✅ Imágenes se suben a Cloudinary</li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Usuario vuelve al mapa</li>
+<li>✅ Nuevo marcador aparece en el mapa</li>
+<li>✅ Mensaje de éxito</li>
+</ul>
+<p><strong>Casos Extremos</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Valor</th>
+<th>Debe</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Título</td>
+<td>Vacío</td>
+<td>❌ Error &quot;Campo requerido&quot;</td>
+</tr>
+<tr>
+<td>Precio</td>
+<td>Negativo</td>
+<td>❌ Error &quot;Precio inválido&quot;</td>
+</tr>
+<tr>
+<td>Email</td>
+<td>Formato inválido</td>
+<td>❌ Error &quot;Email inválido&quot;</td>
+</tr>
+<tr>
+<td>Imágenes</td>
+<td>6 imágenes</td>
+<td>❌ Error &quot;Máximo 5 imágenes&quot;</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>4.8 MÓDULO: EVENTOS</h3>
+<h4>CP-EVENT-001: Crear Nuevo Evento</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-EVENT-001</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Eventos</td>
+</tr>
+</tbody></table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde mapa, cambiar a tab &quot;Eventos&quot;</li>
+<li>Tocar botón (+)</li>
+<li>Completar formulario:<ul>
+<li>Título: &quot;Encuentro de Mascotas&quot;</li>
+<li>Descripción: &quot;Reunión mensual de dueños&quot;</li>
+<li>Ubicación: &quot;Parque Central&quot;</li>
+<li>Fecha: Mañana</li>
+<li>Hora: 15:00</li>
+<li>Capacidad: 20</li>
+</ul>
+</li>
+<li>Agregar 1 imagen</li>
+<li>Tocar &quot;Guardar Evento&quot;</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>POST /events</code></li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Evento aparece en mapa</li>
+<li>✅ Mensaje de éxito</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">json</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-json">POST /events
+Body<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;title&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Encuentro de Mascotas&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;description&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;...&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;location&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Parque Central&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;date&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2025-01-16T15:00:00Z&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;capacity&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">20</span>
+<span class="hljs-punctuation">}</span>
+Status<span class="hljs-punctuation">:</span> <span class="hljs-number">201</span> Created</code></pre>
+                </div>
+            <p><strong>Casos Extremos</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Escenario</th>
+<th>Debe</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Fecha pasada</td>
+<td>❌ Error &quot;Fecha debe ser futura&quot;</td>
+</tr>
+<tr>
+<td>Capacidad 0</td>
+<td>❌ Error &quot;Capacidad inválida&quot;</td>
+</tr>
+<tr>
+<td>Sin ubicación</td>
+<td>❌ Error &quot;Campo requerido&quot;</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>4.9 MÓDULO: CHAT/MENSAJERÍA</h3>
+<h4>CP-CHAT-001: Ver Lista de Conversaciones</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-CHAT-001</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Chat</td>
+</tr>
+</tbody></table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario tiene al menos 1 conversación activa</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Tocar tab &quot;Chats&quot; en bottom navigation</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>GET /conversations</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Lista de conversaciones ordenada por última actividad</li>
+<li>✅ Cada conversación muestra:<ul>
+<li>Avatar del otro usuario</li>
+<li>Nombre</li>
+<li>Último mensaje (preview)</li>
+<li>Fecha/hora</li>
+<li>Badge con contador de no leídos (si hay)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4>CP-CHAT-002: Enviar Mensaje</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-CHAT-002</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Chat</td>
+</tr>
+</tbody></table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Tocar una conversación</li>
+<li>Escribir mensaje: &quot;Hola, ¿cómo estás?&quot;</li>
+<li>Tocar botón &quot;Enviar&quot;</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>POST /messages</code></li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Mensaje aparece en la conversación</li>
+<li>✅ Campo de texto se limpia</li>
+<li>✅ Scroll automático al último mensaje</li>
+<li>✅ Estado de mensaje: ✓✓ (entregado)</li>
+</ul>
+<hr>
+<h3>4.10 MÓDULO: BLOQUEO Y REPORTES</h3>
+<h4>CP-BLOCK-001: Bloquear Usuario</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-BLOCK-001</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🟡 ALTA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Bloqueo</td>
+</tr>
+</tbody></table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Visitar perfil de otro usuario</li>
+<li>Tocar menú (⋮)</li>
+<li>Tocar &quot;Bloquear usuario&quot;</li>
+<li>Confirmar acción</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>POST /user-blocks/:userId</code></li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Usuario bloqueado desaparece del feed</li>
+<li>✅ Conversación con usuario bloqueado desaparece</li>
+<li>✅ No se pueden ver publicaciones del bloqueado</li>
+</ul>
+<hr>
+<h4>CP-REPORT-001: Reportar Publicación</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ID</strong></td>
+<td>CP-REPORT-001</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td>🟡 ALTA</td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Reportes</td>
+</tr>
+</tbody></table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>En una publicación, tocar menú (⋮)</li>
+<li>Tocar &quot;Denunciar publicación&quot;</li>
+<li>Seleccionar categoría: &quot;Spam&quot;</li>
+<li>Agregar descripción (opcional)</li>
+<li>Tocar &quot;Enviar reporte&quot;</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>POST /reports</code></li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Modal se cierra</li>
+<li>✅ Mensaje de éxito: &quot;Reporte enviado&quot;</li>
+</ul>
+<hr>
+<h2>5. MATRIZ DE PRUEBAS</h2>
+<h3>5.1 Resumen por Módulo</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>Total Casos</th>
+<th>Críticos</th>
+<th>Altos</th>
+<th>Medios</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Autenticación y Registro</td>
+<td>5</td>
+<td>4</td>
+<td>1</td>
+<td>0</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Perfil de Usuario</td>
+<td>4</td>
+<td>2</td>
+<td>2</td>
+<td>0</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Gestión de Mascotas</td>
+<td>5</td>
+<td>3</td>
+<td>2</td>
+<td>0</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Publicaciones (Posts)</td>
+<td>6</td>
+<td>4</td>
+<td>2</td>
+<td>0</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Historias (Stories)</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td>0</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Notificaciones</td>
+<td>3</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Servicios Marketplace</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td>0</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Chat/Mensajería</td>
+<td>2</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Bloqueo y Reportes</td>
+<td>2</td>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td><strong>34</strong></td>
+<td><strong>21</strong></td>
+<td><strong>12</strong></td>
+<td><strong>1</strong></td>
+<td><strong>0/34</strong></td>
+</tr>
+</tbody></table>
+<h3>5.2 Plantilla de Seguimiento</h3>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">plaintext</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-plaintext">Caso de Prueba: CP-AUTH-001
+Fecha: __/__/____
+Ejecutor: _________________
+Dispositivo: Android / iOS
+Versión App: _____________
+Resultado: ✅ Aprobado / ❌ Fallido / 🚫 Bloqueado
+Observaciones: ___________________________________________
+Bug ID (si aplica): ______________________________________</code></pre>
+                </div>
+            <hr>
+<h2>6. CASOS EXTREMOS Y PRUEBAS DE ESTRÉS</h2>
+<h3>6.1 Pruebas de Límites de Datos</h3>
+<h4>CE-001: Campos de Texto con Límites</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Límite</th>
+<th>Caso de Prueba</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Nombre usuario</td>
+<td>50 chars</td>
+<td>Ingresar 51 caracteres → Rechazar</td>
+</tr>
+<tr>
+<td>Biografía</td>
+<td>150 chars</td>
+<td>Ingresar 151 caracteres → Rechazar</td>
+</tr>
+<tr>
+<td>Descripción post</td>
+<td>500 chars</td>
+<td>Ingresar 501 caracteres → Rechazar</td>
+</tr>
+<tr>
+<td>Comentario</td>
+<td>500 chars</td>
+<td>Ingresar 501 caracteres → Rechazar</td>
+</tr>
+</tbody></table>
+<h4>CE-002: Caracteres Especiales</h4>
+<ul>
+<li>✅ Emojis en texto: Deben permitirse 🐶🐱❤️</li>
+<li>✅ Caracteres Unicode: Deben permitirse (ñ, á, ü, etc.)</li>
+<li>❌ Scripts HTML: <code>&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;</code> → Sanitizar</li>
+<li>❌ SQL Injection: <code>&#39;; DROP TABLE users; --</code> → Sanitizar</li>
+</ul>
+<h4>CE-003: Archivos de Medios</h4>
+<table>
+<thead>
+<tr>
+<th>Escenario</th>
+<th>Límite</th>
+<th>Resultado Esperado</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Imagen &gt; 10MB</td>
+<td>10MB</td>
+<td>❌ Rechazar &quot;Archivo muy grande&quot;</td>
+</tr>
+<tr>
+<td>Video &gt; 50MB</td>
+<td>50MB</td>
+<td>❌ Rechazar &quot;Archivo muy grande&quot;</td>
+</tr>
+<tr>
+<td>Video &gt; 2 min</td>
+<td>2 min</td>
+<td>❌ Rechazar &quot;Máximo 2 minutos&quot;</td>
+</tr>
+<tr>
+<td>Formato no soportado (.txt)</td>
+<td>jpg/png/mp4</td>
+<td>❌ Rechazar &quot;Formato no soportado&quot;</td>
+</tr>
+</tbody></table>
+<h3>6.2 Pruebas de Conectividad</h3>
+<h4>CE-004: Sin Conexión a Internet</h4>
+<p><strong>Escenarios a probar</strong>:</p>
+<ol>
+<li>Login sin conexión → Mostrar error &quot;Sin conexión&quot;</li>
+<li>Crear publicación sin conexión → Mostrar error, no publicar</li>
+<li>Cargar feed sin conexión → Mostrar error</li>
+<li>Enviar mensaje sin conexión → Mostrar indicador de espera</li>
+</ol>
+<p><strong>Resultado esperado</strong>:</p>
+<ul>
+<li>❌ Nunca crash de la app</li>
+<li>✅ Mensaje de error claro y útil</li>
+<li>✅ Posibilidad de reintentar</li>
+</ul>
+<h4>CE-005: Pérdida de Conexión Durante Operación</h4>
+<p><strong>Escenarios</strong>:</p>
+<ol>
+<li>Perder conexión mientras se sube una publicación</li>
+<li>Perder conexión durante login</li>
+<li>Perder conexión mientras se envía mensaje</li>
+</ol>
+<p><strong>Resultado esperado</strong>:</p>
+<ul>
+<li>✅ Operación se cancela o reintenta</li>
+<li>✅ Mensaje de error: &quot;Conexión perdida, intenta nuevamente&quot;</li>
+<li>❌ NO debe quedar en estado inconsistente</li>
+</ul>
+<h3>6.3 Pruebas de Concurrencia</h3>
+<h4>CE-006: Múltiples Acciones Simultáneas</h4>
+<table>
+<thead>
+<tr>
+<th>Escenario</th>
+<th>Acción</th>
+<th>Resultado Esperado</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Dar like rápidamente múltiples veces</td>
+<td>Tocar botón like 5 veces seguidas</td>
+<td>Solo cuenta última acción</td>
+</tr>
+<tr>
+<td>Seguir/dejar de seguir rápidamente</td>
+<td>Alternar 10 veces en 2 segundos</td>
+<td>Solo cuenta última acción, sin crash</td>
+</tr>
+<tr>
+<td>Enviar múltiples mensajes simultáneamente</td>
+<td>Tocar &quot;Enviar&quot; 5 veces rápido</td>
+<td>Todos los mensajes se envían (no duplicar)</td>
+</tr>
+</tbody></table>
+<h3>6.4 Pruebas de Sesión</h3>
+<h4>CE-007: Token Expirado</h4>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Usuario autenticado</li>
+<li>Esperar que token JWT expire (backend configurable, ej: 1 hora)</li>
+<li>Intentar realizar acción (like, comentar, etc.)</li>
+</ol>
+<p><strong>Resultado esperado</strong>:</p>
+<ul>
+<li>✅ Backend responde 401 Unauthorized</li>
+<li>✅ App redirige a login automáticamente</li>
+<li>✅ Mensaje: &quot;Tu sesión ha expirado, inicia sesión nuevamente&quot;</li>
+</ul>
+<h4>CE-008: Cerrar Sesión en Múltiples Dispositivos</h4>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Login en dispositivo A</li>
+<li>Login en dispositivo B con misma cuenta</li>
+<li>Cerrar sesión en dispositivo A</li>
+<li>Intentar acción en dispositivo A</li>
+</ol>
+<p><strong>Resultado esperado</strong>:</p>
+<ul>
+<li>✅ Dispositivo A redirige a login</li>
+<li>✅ Dispositivo B sigue funcionando (si se permite sesiones múltiples)</li>
+</ul>
+<h3>6.5 Pruebas de Validaciones Backend</h3>
+<h4>CE-009: Manipulación Directa de API</h4>
+<p><strong>Escenario</strong>: Usuario malicioso intenta enviar peticiones directamente al backend saltándose validaciones del frontend</p>
+<p><strong>Casos a probar</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Petición</th>
+<th>Dato Malicioso</th>
+<th>Backend Debe</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST /posts</td>
+<td>descripción: 1000 caracteres</td>
+<td>❌ 400 Bad Request</td>
+</tr>
+<tr>
+<td>POST /pets</td>
+<td>birthDate: fecha futura</td>
+<td>❌ 400 Bad Request</td>
+</tr>
+<tr>
+<td>POST /posts/:id/like</td>
+<td>Ya dio like</td>
+<td>❌ 409 Conflict</td>
+</tr>
+<tr>
+<td>DELETE /posts/:id</td>
+<td>Post de otro usuario</td>
+<td>❌ 403 Forbidden</td>
+</tr>
+<tr>
+<td>PATCH /users/profile</td>
+<td>email: formato inválido</td>
+<td>❌ 400 Bad Request</td>
+</tr>
+</tbody></table>
+<p><strong>Herramienta recomendada</strong>: Postman o curl para hacer peticiones directas</p>
+<hr>
+<h2>7. HERRAMIENTAS DE AUTOMATIZACIÓN</h2>
+<h3>7.1 Testing Frontend (Flutter)</h3>
+<h4>7.1.1 Flutter Integration Tests</h4>
+<p><strong>Propósito</strong>: Automatizar casos de prueba funcionales del frontend</p>
+<p><strong>Configuración</strong>:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">yaml</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-yaml"><span class="hljs-comment"># pubspec.yaml</span>
+<span class="hljs-attr">dev_dependencies:</span>
+  <span class="hljs-attr">integration_test:</span>
+    <span class="hljs-attr">sdk:</span> <span class="hljs-string">flutter</span>
+  <span class="hljs-attr">flutter_test:</span>
+    <span class="hljs-attr">sdk:</span> <span class="hljs-string">flutter</span></code></pre>
+                </div>
+            <p><strong>Ejemplo de test automatizado</strong> (referencia):</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">dart</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-dart"><span class="hljs-comment">// test_driver/app_test.dart</span>
+<span class="hljs-keyword">void</span> main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  group(<span class="hljs-string">&#x27;Login Tests&#x27;</span>, () {
+    testWidgets(<span class="hljs-string">&#x27;CP-AUTH-001: Login con credenciales válidas&#x27;</span>, (tester) <span class="hljs-keyword">async</span> {
+      <span class="hljs-comment">// Iniciar app</span>
+      <span class="hljs-keyword">await</span> tester.pumpWidget(MyApp());
+
+      <span class="hljs-comment">// Ingresar credenciales</span>
+      <span class="hljs-keyword">await</span> tester.enterText(find.byKey(Key(<span class="hljs-string">&#x27;emailField&#x27;</span>)), <span class="hljs-string">&#x27;qa.tester@petos.com&#x27;</span>);
+      <span class="hljs-keyword">await</span> tester.enterText(find.byKey(Key(<span class="hljs-string">&#x27;passwordField&#x27;</span>)), <span class="hljs-string">&#x27;QA_Test123!&#x27;</span>);
+
+      <span class="hljs-comment">// Tocar botón login</span>
+      <span class="hljs-keyword">await</span> tester.tap(find.byKey(Key(<span class="hljs-string">&#x27;loginButton&#x27;</span>)));
+      <span class="hljs-keyword">await</span> tester.pumpAndSettle();
+
+      <span class="hljs-comment">// Verificar navegación a Home Feed</span>
+      expect(find.byKey(Key(<span class="hljs-string">&#x27;homeFeed&#x27;</span>)), findsOneWidget);
+    });
+  });
+}</code></pre>
+                </div>
+            <p><strong>Cobertura sugerida</strong>:</p>
+<ul>
+<li>✅ Flujo de login/registro completo</li>
+<li>✅ Creación de publicación</li>
+<li>✅ Interacciones sociales (like, comentar, seguir)</li>
+<li>✅ Navegación entre pantallas principales</li>
+</ul>
+<h4>7.1.2 Flutter Widget Tests</h4>
+<p><strong>Propósito</strong>: Probar componentes individuales de UI</p>
+<p><strong>Casos sugeridos</strong>:</p>
+<ul>
+<li>Validaciones de formularios</li>
+<li>Comportamiento de botones</li>
+<li>Estados de loading/error</li>
+</ul>
+<h3>7.2 Testing Backend API</h3>
+<h4>7.2.1 Postman Collections</h4>
+<p><strong>Propósito</strong>: Automatizar pruebas de API del backend</p>
+<p><strong>Configuración</strong>:</p>
+<ol>
+<li>Crear colección &quot;Petos API Tests&quot;</li>
+<li>Organizar por módulos (Auth, Posts, Users, etc.)</li>
+<li>Agregar tests en cada request</li>
+</ol>
+<p><strong>Ejemplo de test en Postman</strong>:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">javascript</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-javascript"><span class="hljs-comment">// POST /auth/login - Test</span>
+pm.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;Status code is 200&quot;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    pm.<span class="hljs-property">response</span>.<span class="hljs-property">to</span>.<span class="hljs-property">have</span>.<span class="hljs-title function_">status</span>(<span class="hljs-number">200</span>);
+});
+
+pm.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;Response has access_token&quot;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">var</span> jsonData = pm.<span class="hljs-property">response</span>.<span class="hljs-title function_">json</span>();
+    pm.<span class="hljs-title function_">expect</span>(jsonData).<span class="hljs-property">to</span>.<span class="hljs-property">have</span>.<span class="hljs-title function_">property</span>(<span class="hljs-string">&#x27;access_token&#x27;</span>);
+});
+
+pm.<span class="hljs-title function_">test</span>(<span class="hljs-string">&quot;Token is valid JWT&quot;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">var</span> jsonData = pm.<span class="hljs-property">response</span>.<span class="hljs-title function_">json</span>();
+    pm.<span class="hljs-title function_">expect</span>(jsonData.<span class="hljs-property">access_token</span>).<span class="hljs-property">to</span>.<span class="hljs-title function_">match</span>(<span class="hljs-regexp">/^eyJ/</span>);
+});</code></pre>
+                </div>
+            <p><strong>Colecciones sugeridas</strong>:</p>
+<ul>
+<li>✅ <strong>Auth Flow</strong>: Login, Register, Token refresh</li>
+<li>✅ <strong>Posts CRUD</strong>: Create, Read, Update, Delete</li>
+<li>✅ <strong>Social Actions</strong>: Like, Comment, Follow</li>
+<li>✅ <strong>Validations</strong>: Edge cases, invalid data</li>
+<li>✅ <strong>Permissions</strong>: Unauthorized access attempts</li>
+</ul>
+<p><strong>Runner de Postman</strong>:</p>
+<ul>
+<li>Ejecutar colección completa con <code>Newman</code> (CLI de Postman)</li>
+<li>Integrar en CI/CD para pruebas automáticas pre-deploy</li>
+</ul>
+<h4>7.2.2 Bruno o Insomnia (Alternativas)</h4>
+<ul>
+<li>Alternativas open-source a Postman</li>
+<li>Misma funcionalidad de testing de API</li>
+</ul>
+<h3>7.3 Testing de Performance</h3>
+<h4>7.3.1 Flutter DevTools</h4>
+<p><strong>Propósito</strong>: Analizar rendimiento de la app</p>
+<p><strong>Métricas a monitorear</strong>:</p>
+<ul>
+<li>FPS (frames per second) - objetivo: 60 FPS</li>
+<li>Tiempo de carga de pantallas - objetivo: &lt; 2 segundos</li>
+<li>Uso de memoria</li>
+<li>Rebuild de widgets innecesarios</li>
+</ul>
+<h4>7.3.2 Lighthouse (Web - si aplica)</h4>
+<p>Si hay versión web de Petos:</p>
+<ul>
+<li>Performance score &gt; 90</li>
+<li>Accessibility score &gt; 90</li>
+</ul>
+<h3>7.4 Testing de Regresión Visual</h3>
+<h4>7.4.1 Percy o Chromatic (sugerido)</h4>
+<p><strong>Propósito</strong>: Detectar cambios visuales no intencionales</p>
+<p><strong>Cómo funciona</strong>:</p>
+<ol>
+<li>Captura screenshots de referencia (baseline)</li>
+<li>En cada PR, captura nuevos screenshots</li>
+<li>Compara pixel por pixel</li>
+<li>Alerta si hay diferencias visuales</li>
+</ol>
+<p><strong>Pantallas a incluir</strong>:</p>
+<ul>
+<li>Login, Registro</li>
+<li>Home Feed</li>
+<li>Perfil de usuario</li>
+<li>Crear publicación</li>
+<li>Formularios (agregar mascota, editar perfil)</li>
+</ul>
+<h3>7.5 Testing de Accesibilidad</h3>
+<h4>7.5.1 Flutter Semantics Test</h4>
+<p><strong>Propósito</strong>: Verificar que la app es accesible para screen readers</p>
+<p><strong>Ejemplo</strong>:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">dart</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-dart">testWidgets(<span class="hljs-string">&#x27;Botón de login tiene semantic label&#x27;</span>, (tester) <span class="hljs-keyword">async</span> {
+  <span class="hljs-keyword">await</span> tester.pumpWidget(LoginView());
+
+  <span class="hljs-keyword">final</span> loginButton = find.byKey(Key(<span class="hljs-string">&#x27;loginButton&#x27;</span>));
+  expect(tester.getSemantics(loginButton), matchesSemantics(
+    label: <span class="hljs-string">&#x27;Iniciar Sesión&#x27;</span>,
+    isButton: <span class="hljs-keyword">true</span>,
+  ));
+});</code></pre>
+                </div>
+            <hr>
+<h2>8. REPORTE DE BUGS</h2>
+<h3>8.1 Formato de Reporte</h3>
+<p><strong>Plantilla estándar</strong>:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">markdown</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-markdown"><span class="hljs-section"># BUG-001: [Título descriptivo del bug]</span>
+
+<span class="hljs-section">## 📋 Información General</span>
+<span class="hljs-bullet">-</span> <span class="hljs-strong">**ID**</span>: BUG-001
+<span class="hljs-bullet">-</span> <span class="hljs-strong">**Severidad**</span>: 🔴 Crítica / 🟡 Alta / 🟢 Media / ⚪ Baja
+<span class="hljs-bullet">-</span> <span class="hljs-strong">**Prioridad**</span>: P1 (Urgente) / P2 (Alta) / P3 (Media) / P4 (Baja)
+<span class="hljs-bullet">-</span> <span class="hljs-strong">**Módulo**</span>: [Autenticación / Perfil / Posts / etc.]
+<span class="hljs-bullet">-</span> <span class="hljs-strong">**Estado**</span>: Abierto / En progreso / Resuelto / Cerrado
+<span class="hljs-bullet">-</span> <span class="hljs-strong">**Reportado por**</span>: [Nombre del QA]
+<span class="hljs-bullet">-</span> <span class="hljs-strong">**Fecha**</span>: [DD/MM/YYYY]
+<span class="hljs-bullet">-</span> <span class="hljs-strong">**Versión de la app**</span>: [1.0.0]
+<span class="hljs-bullet">-</span> <span class="hljs-strong">**Dispositivo**</span>: [Android 12 / iOS 16]
+
+<span class="hljs-section">## 🐛 Descripción</span>
+Descripción clara y concisa del problema.
+
+<span class="hljs-section">## 📝 Pasos para Reproducir</span>
+<span class="hljs-bullet">1.</span> Abrir la app
+<span class="hljs-bullet">2.</span> Navegar a pantalla X
+<span class="hljs-bullet">3.</span> Tocar botón Y
+<span class="hljs-bullet">4.</span> Observar el error
+
+<span class="hljs-section">## ✅ Resultado Esperado</span>
+Qué debería suceder correctamente.
+
+<span class="hljs-section">## ❌ Resultado Actual</span>
+Qué sucede en realidad (el bug).
+
+<span class="hljs-section">## 📸 Evidencia</span>
+<span class="hljs-bullet">-</span> Screenshot: [Adjuntar imagen]
+<span class="hljs-bullet">-</span> Video: [Adjuntar video si aplica]
+<span class="hljs-bullet">-</span> Logs: [Adjuntar logs de consola si aplica]
+
+<span class="hljs-section">## 🔄 Frecuencia</span>
+<span class="hljs-bullet">-</span> ✅ Siempre reproducible (100%)
+<span class="hljs-bullet">-</span> ⚠️ Frecuente (&gt;50%)
+<span class="hljs-bullet">-</span> 🔸 Ocasional (&lt;50%)
+<span class="hljs-bullet">-</span> ⚪ Rara vez (&lt;10%)
+
+<span class="hljs-section">## 🌐 Entorno</span>
+<span class="hljs-bullet">-</span> Backend: http://localhost:8080
+<span class="hljs-bullet">-</span> Usuario de prueba: qa.tester@petos.com
+<span class="hljs-bullet">-</span> Datos de prueba: [Especificar si aplica]
+
+<span class="hljs-section">## 🔍 Información Adicional</span>
+Cualquier información relevante que ayude a reproducir o resolver el bug.</code></pre>
+                </div>
+            <h3>8.2 Clasificación de Severidad</h3>
+<table>
+<thead>
+<tr>
+<th>Severidad</th>
+<th>Descripción</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>🔴 <strong>Crítica</strong></td>
+<td>Bloquea funcionalidad core, app crash, pérdida de datos</td>
+<td>Login no funciona, app crashea al crear post</td>
+</tr>
+<tr>
+<td>🟡 <strong>Alta</strong></td>
+<td>Afecta funcionalidad importante pero hay workaround</td>
+<td>Like no funciona, pero se puede comentar</td>
+</tr>
+<tr>
+<td>🟢 <strong>Media</strong></td>
+<td>Afecta UX pero no bloquea funcionalidades</td>
+<td>Animación incorrecta, texto mal alineado</td>
+</tr>
+<tr>
+<td>⚪ <strong>Baja</strong></td>
+<td>Problema cosmético o mejora sugerida</td>
+<td>Color de botón no ideal, typo en texto</td>
+</tr>
+</tbody></table>
+<h3>8.3 Flujo de Manejo de Bugs</h3>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">plaintext</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-plaintext">[Bug Reportado] → [Triaje] → [Asignado a Desarrollador]
+                                       ↓
+[QA Verifica Fix] ← [Desarrollador Corrige] ← [En Desarrollo]
+       ↓
+[Bug Cerrado] ✅</code></pre>
+                </div>
+            <hr>
+<h2>9. CHECKLIST FINAL DE CALIDAD</h2>
+<h3>9.1 Pre-Release Checklist</h3>
+<p>Antes de cada lanzamiento, verificar:</p>
+<h4>✅ Funcionalidades Core</h4>
+<ul>
+<li><input disabled="" type="checkbox"> Login funciona correctamente</li>
+<li><input disabled="" type="checkbox"> Registro multi-paso completo funciona</li>
+<li><input disabled="" type="checkbox"> Crear publicación con imágenes funciona</li>
+<li><input disabled="" type="checkbox"> Crear publicación con video funciona</li>
+<li><input disabled="" type="checkbox"> Feed carga y muestra publicaciones</li>
+<li><input disabled="" type="checkbox"> Like, comentar, compartir funcionan</li>
+<li><input disabled="" type="checkbox"> Seguir/dejar de seguir funciona</li>
+<li><input disabled="" type="checkbox"> Crear/ver historias funciona</li>
+<li><input disabled="" type="checkbox"> Notificaciones se reciben correctamente</li>
+<li><input disabled="" type="checkbox"> Chat/mensajería funciona</li>
+<li><input disabled="" type="checkbox"> Crear/ver mascotas funciona</li>
+<li><input disabled="" type="checkbox"> Registros de salud funcionan</li>
+<li><input disabled="" type="checkbox"> Mapa de servicios carga correctamente</li>
+<li><input disabled="" type="checkbox"> Crear/editar servicios funciona</li>
+<li><input disabled="" type="checkbox"> Crear/editar eventos funciona</li>
+</ul>
+<h4>✅ Validaciones y Seguridad</h4>
+<ul>
+<li><input disabled="" type="checkbox"> Campos de formulario validan correctamente</li>
+<li><input disabled="" type="checkbox"> Backend rechaza datos inválidos</li>
+<li><input disabled="" type="checkbox"> Sesión expira correctamente</li>
+<li><input disabled="" type="checkbox"> Tokens JWT se manejan correctamente</li>
+<li><input disabled="" type="checkbox"> No hay XSS ni SQL Injection posible</li>
+<li><input disabled="" type="checkbox"> Usuarios bloqueados no pueden interactuar</li>
+</ul>
+<h4>✅ UX y Navegación</h4>
+<ul>
+<li><input disabled="" type="checkbox"> Todas las pantallas cargan en &lt; 2 segundos</li>
+<li><input disabled="" type="checkbox"> Pull-to-refresh funciona en todas las listas</li>
+<li><input disabled="" type="checkbox"> Animaciones son fluidas (60 FPS)</li>
+<li><input disabled="" type="checkbox"> Botón back funciona correctamente</li>
+<li><input disabled="" type="checkbox"> Estados vacíos se muestran correctamente</li>
+<li><input disabled="" type="checkbox"> Loading indicators se muestran durante operaciones largas</li>
+<li><input disabled="" type="checkbox"> Mensajes de error son claros y útiles</li>
+</ul>
+<h4>✅ Manejo de Errores</h4>
+<ul>
+<li><input disabled="" type="checkbox"> Sin conexión: Muestra error claro</li>
+<li><input disabled="" type="checkbox"> Backend caído: Muestra error claro</li>
+<li><input disabled="" type="checkbox"> Token expirado: Redirige a login</li>
+<li><input disabled="" type="checkbox"> Operaciones fallidas: Permiten reintentar</li>
+<li><input disabled="" type="checkbox"> No hay crashes no controlados</li>
+</ul>
+<h4>✅ Dispositivos y Plataformas</h4>
+<ul>
+<li><input disabled="" type="checkbox"> Probado en Android (versión mínima: 8.0)</li>
+<li><input disabled="" type="checkbox"> Probado en iOS (versión mínima: 12.0)</li>
+<li><input disabled="" type="checkbox"> Probado en diferentes tamaños de pantalla</li>
+<li><input disabled="" type="checkbox"> Probado en orientación portrait y landscape (si aplica)</li>
+</ul>
+<h4>✅ Performance</h4>
+<ul>
+<li><input disabled="" type="checkbox"> App inicia en &lt; 3 segundos</li>
+<li><input disabled="" type="checkbox"> Feed carga en &lt; 2 segundos</li>
+<li><input disabled="" type="checkbox"> Imágenes se cargan progresivamente (caché funciona)</li>
+<li><input disabled="" type="checkbox"> No hay memory leaks evidentes</li>
+<li><input disabled="" type="checkbox"> Scroll es fluido sin lag</li>
+</ul>
+<h4>✅ Accesibilidad</h4>
+<ul>
+<li><input disabled="" type="checkbox"> Todos los botones tienen semantic labels</li>
+<li><input disabled="" type="checkbox"> Contraste de colores cumple WCAG AA</li>
+<li><input disabled="" type="checkbox"> Tamaño de elementos táctiles &gt; 44x44 puntos</li>
+<li><input disabled="" type="checkbox"> Screen reader puede navegar la app</li>
+</ul>
+<h3>9.2 Sign-Off de Release</h3>
+<p><strong>Checklist de aprobación</strong>:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">plaintext</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-plaintext">Versión: ___________
+Fecha: __/__/____
+
+✅ Todos los casos de prueba críticos aprobados
+✅ Bugs críticos resueltos (0 abiertos)
+✅ Bugs altos resueltos o documentados
+✅ Performance aceptable (&lt; 2s carga pantallas)
+✅ Sin crashes en testing manual extensivo
+✅ Aprobado por Product Owner: _________________
+✅ Aprobado por QA Lead: _____________________
+
+🚀 RELEASE APROBADA PARA PRODUCCIÓN</code></pre>
+                </div>
+            <hr>
+<h2>10. ANEXOS</h2>
+<h3>10.1 Comandos Útiles</h3>
+<p><strong>Flutter</strong>:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">bash</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-bash"><span class="hljs-comment"># Ejecutar app en dispositivo</span>
+flutter run
+
+<span class="hljs-comment"># Ejecutar tests de integración</span>
+flutter <span class="hljs-built_in">test</span> integration_test/app_test.dart
+
+<span class="hljs-comment"># Generar coverage report</span>
+flutter <span class="hljs-built_in">test</span> --coverage
+
+<span class="hljs-comment"># Analizar código</span>
+flutter analyze
+
+<span class="hljs-comment"># Limpiar build</span>
+flutter clean</code></pre>
+                </div>
+            <p><strong>Backend</strong>:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">bash</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-bash"><span class="hljs-comment"># Iniciar servidor de desarrollo</span>
+<span class="hljs-built_in">cd</span> petos-backend
+yarn dev
+
+<span class="hljs-comment"># Ejecutar tests (cuando existan)</span>
+yarn <span class="hljs-built_in">test</span>
+
+<span class="hljs-comment"># Verificar health endpoint</span>
+curl http://localhost:8080/health</code></pre>
+                </div>
+            <h3>10.2 URLs de Referencia</h3>
+<p><strong>Documentación del proyecto</strong>:</p>
+<ul>
+<li><a href="./Analisis%20Funcional.md">Análisis Funcional</a></li>
+<li><a href="./Analisis_Diseno_UI_UX.md">Análisis de Diseño UI/UX</a></li>
+<li><a href="../CLAUDE.md">CLAUDE.md (Reglas de Desarrollo)</a></li>
+</ul>
+<p><strong>Herramientas</strong>:</p>
+<ul>
+<li>Flutter: <a href="https://flutter.dev">https://flutter.dev</a></li>
+<li>Postman: <a href="https://www.postman.com">https://www.postman.com</a></li>
+<li>Percy (Visual testing): <a href="https://percy.io">https://percy.io</a></li>
+</ul>
+<h3>10.3 Glosario</h3>
+<table>
+<thead>
+<tr>
+<th>Término</th>
+<th>Definición</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Happy Path</strong></td>
+<td>Flujo de uso normal sin errores</td>
+</tr>
+<tr>
+<td><strong>Edge Case</strong></td>
+<td>Caso extremo o límite de uso</td>
+</tr>
+<tr>
+<td><strong>Regression</strong></td>
+<td>Bug que reaparece después de haber sido corregido</td>
+</tr>
+<tr>
+<td><strong>Smoke Test</strong></td>
+<td>Prueba rápida de funcionalidades básicas</td>
+</tr>
+<tr>
+<td><strong>Sanity Test</strong></td>
+<td>Prueba rápida después de un cambio menor</td>
+</tr>
+<tr>
+<td><strong>Flaky Test</strong></td>
+<td>Test que a veces pasa y a veces falla</td>
+</tr>
+<tr>
+<td><strong>Mock</strong></td>
+<td>Simulación de datos o servicios para testing</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>CONCLUSIÓN</h2>
+<p>Este plan de calidad y pruebas proporciona una guía completa para asegurar que <strong>Petos App</strong> cumple con los estándares de calidad necesarios para su lanzamiento.</p>
+<h3>Próximos Pasos Recomendados:</h3>
+<ol>
+<li><strong>Ejecutar todos los casos de prueba manuales</strong> (34 casos totales)</li>
+<li><strong>Reportar y trackear todos los bugs</strong> encontrados</li>
+<li><strong>Implementar tests automatizados</strong> de casos críticos (Flutter Integration Tests)</li>
+<li><strong>Crear colección de Postman</strong> con tests de API</li>
+<li><strong>Realizar UAT</strong> con usuarios beta antes del lanzamiento</li>
+<li><strong>Aprobar release</strong> solo si 100% de casos críticos pasan</li>
+</ol>
+<h3>Contacto</h3>
+<p>Para dudas o reporte de bugs:</p>
+<ul>
+<li>QA Lead: [Nombre]</li>
+<li>Email: [email]</li>
+<li>Herramienta de tracking: [Jira / Trello / GitHub Issues]</li>
+</ul>
+<hr>
+<p><strong>Documento creado por</strong>: Claude AI
+<strong>Última actualización</strong>: Enero 2025
+<strong>Versión</strong>: 1.0</p>
+
+</body>
+</html>

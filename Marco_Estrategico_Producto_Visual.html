@@ -1,0 +1,2444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PETOS - Marco Estratégico del Producto</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    /* Paleta de colores simplificada */
+    --primary-color: #4A90E2;
+    --primary-dark: #2E5C8A;
+    --secondary-color: #7ED321;
+    --accent-color: #FFD700;
+    --success-color: #51CF66;
+    --text-primary: #2C3E50;
+    --text-secondary: #7F8C8D;
+    --bg-light: #F8F9FA;
+    --bg-white: #FFFFFF;
+    --border-color: #E9ECEF;
+    --shadow: 0 2px 8px rgba(0,0,0,0.1);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', 'Segoe UI', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.8;
+    color: var(--text-primary);
+    background: #f0f2f5;
+    padding: 0;
+    margin: 0;
+    font-size: 16px;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 60px;
+  }
+
+  /* ============================================
+     HEADER Y PORTADA
+     ============================================ */
+
+  .header {
+    background: white;
+    color: var(--text-primary);
+    padding: 80px 60px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+  }
+
+  .header h1 {
+    font-size: 3em;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+    position: relative;
+    color: var(--text-primary);
+  }
+
+  .header .subtitle {
+    font-size: 1.2em;
+    font-weight: 400;
+    margin-top: 15px;
+    color: var(--text-secondary);
+    position: relative;
+    letter-spacing: 0;
+  }
+
+  .header-meta {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+  }
+
+  .header-meta-item {
+    background: #f8f9fa;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+    color: var(--text-secondary);
+  }
+
+  .header-meta-item strong {
+    font-weight: 700;
+  }
+
+  /* ============================================
+     ÍNDICE
+     ============================================ */
+
+  .toc {
+    background: white;
+    padding: 40px 50px;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 40px;
+    border: none;
+  }
+
+  .toc h2 {
+    color: var(--text-primary);
+    font-size: 1.8em;
+    font-weight: 700;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e9ecef;
+    letter-spacing: -0.5px;
+  }
+
+  .toc ul {
+    list-style: none;
+    counter-reset: toc-counter;
+  }
+
+  .toc li {
+    counter-increment: toc-counter;
+    margin: 18px 0;
+    padding-left: 50px;
+    position: relative;
+    font-size: 1.1em;
+  }
+
+  .toc li::before {
+    content: counter(toc-counter);
+    position: absolute;
+    left: 0;
+    background: var(--primary-color);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85em;
+    font-weight: 600;
+  }
+
+  .toc a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+
+  .toc a:hover {
+    color: var(--primary-color);
+  }
+
+  /* ============================================
+     SECCIONES COLAPSABLES
+     ============================================ */
+
+  details {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 30px;
+    overflow: hidden;
+    border: none;
+    transition: all 0.3s ease;
+  }
+
+  details:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  summary {
+    background: white;
+    color: var(--text-primary);
+    padding: 25px 40px;
+    cursor: pointer;
+    font-size: 1.5em;
+    font-weight: 600;
+    list-style: none;
+    user-select: none;
+    position: relative;
+    transition: all 0.3s ease;
+    letter-spacing: -0.5px;
+    border-bottom: 1px solid #f0f2f5;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::after {
+    content: '▼';
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%) rotate(0deg);
+    transition: transform 0.3s;
+    font-size: 0.6em;
+    color: var(--text-secondary);
+  }
+
+  details[open] summary::after {
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  summary:hover {
+    background: #f8f9fa;
+  }
+
+  .section-content {
+    padding: 40px;
+  }
+
+  .section-separator {
+    height: 1px;
+    background: #e9ecef;
+    margin: 30px 0;
+  }
+
+  /* ============================================
+     TÍTULOS
+     ============================================ */
+
+  h2 {
+    color: var(--text-primary);
+    font-size: 1.8em;
+    font-weight: 600;
+    margin-top: 40px;
+    margin-bottom: 25px;
+    padding-bottom: 0;
+    border-bottom: none;
+    letter-spacing: -0.5px;
+  }
+
+  h3 {
+    color: var(--text-primary);
+    font-size: 1.4em;
+    font-weight: 600;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    padding-left: 0;
+    border-left: none;
+    letter-spacing: -0.3px;
+  }
+
+  h4 {
+    color: var(--text-primary);
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-top: 25px;
+    margin-bottom: 15px;
+  }
+
+  /* ============================================
+     TABLAS
+     ============================================ */
+
+  table {
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin: 30px 0;
+    border-collapse: collapse;
+    border: none;
+  }
+
+  thead {
+    background: #f8f9fa;
+  }
+
+  th {
+    padding: 16px 20px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.9em;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--text-secondary) !important;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f2f5;
+    font-size: 0.95em;
+    color: var(--text-primary);
+  }
+
+  /* Ancho de columnas solo para la primera tabla (Funcionalidades Implementadas) */
+  .table-funcionalidades th:nth-child(1),
+  .table-funcionalidades td:nth-child(1) {
+    width: 20%;
+  }
+
+  .table-funcionalidades th:nth-child(2),
+  .table-funcionalidades td:nth-child(2) {
+    width: 55%;
+  }
+
+  .table-funcionalidades th:nth-child(3),
+  .table-funcionalidades td:nth-child(3) {
+    width: 25%;
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    transition: all 0.2s ease;
+  }
+
+  tbody tr:hover {
+    background-color: #f8f9fa;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* ============================================
+     BLOCKQUOTES Y CALLOUTS
+     ============================================ */
+
+  blockquote {
+    background: #f8f9fa;
+    border-left: 4px solid var(--primary-color);
+    padding: 25px 30px;
+    margin: 25px 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 1em;
+    color: var(--text-secondary);
+    position: relative;
+    line-height: 1.7;
+  }
+
+  .callout {
+    background: #e3f2fd;
+    border-left: 4px solid var(--primary-color);
+    padding: 20px 25px;
+    margin: 25px 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.95em;
+    line-height: 1.7;
+  }
+
+  .callout-warning {
+    border-left-color: var(--primary-color);
+    background: #e3f2fd;
+  }
+
+  .callout-success {
+    border-left-color: var(--success-color);
+    background: #f0f9ff;
+  }
+
+  /* ============================================
+     BADGES Y ETIQUETAS
+     ============================================ */
+
+  /* Opción 3 - Solo borde (limpio y minimalista) */
+  .badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.85em;
+    margin: 2px 4px;
+    transition: all 0.2s ease;
+    background: transparent;
+    border: 1.5px solid #e1e4e8;
+    color: #586069;
+  }
+
+  .badge-implementado {
+    /* ✅ Implementado */
+  }
+
+  .badge-pendiente {
+    /* 📋 V2.0 */
+  }
+
+  .badge-progress {
+    /* ⏳ En Desarrollo */
+  }
+
+  /* ============================================
+     GRÁFICOS
+     ============================================ */
+
+  .chart-container {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin: 30px 0;
+    border: none;
+  }
+
+  .chart-container h3 {
+    border-left: none;
+    padding-left: 0;
+    margin-top: 0;
+    text-align: left;
+    color: var(--text-primary);
+    margin-bottom: 30px;
+    font-size: 1.4em;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+
+  .chart-wrapper {
+    position: relative;
+    height: 400px;
+    margin-top: 20px;
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+  }
+
+  .chart-wrapper-small {
+    position: relative;
+    height: 300px;
+    margin-top: 20px;
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+  }
+
+  /* Layout de gráfica + tabla dentro del mismo card */
+  .chart-table-card {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin: 30px 0;
+    display: flex;
+    gap: 40px;
+    align-items: stretch;
+  }
+
+  .chart-table-card .chart-column {
+    flex: 0 0 35%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chart-table-card .table-column {
+    flex: 1;
+  }
+
+  .chart-table-card .chart-column h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+  }
+
+  .chart-table-card .chart-wrapper {
+    height: auto;
+    flex: 1;
+    min-height: 250px;
+    margin-top: 0;
+  }
+
+  .chart-table-card table {
+    margin: 0;
+    box-shadow: none;
+  }
+
+  .chart-table-card .chart-source {
+    font-size: 0.85em;
+    margin-top: 20px;
+    color: var(--text-secondary);
+    text-align: left;
+  }
+
+  /* ============================================
+     LISTAS
+     ============================================ */
+
+  ul, ol {
+    padding-left: 30px;
+    margin: 20px 0;
+  }
+
+  li {
+    margin: 12px 0;
+    line-height: 1.7;
+    font-size: 0.95em;
+  }
+
+  ul li::marker {
+    color: var(--primary-color);
+  }
+
+  ol li::marker {
+    color: var(--primary-color);
+    font-weight: 600;
+  }
+
+  /* ============================================
+     SEPARADORES
+     ============================================ */
+
+  hr {
+    border: none;
+    height: 1px;
+    background: #e9ecef;
+    margin: 30px 0;
+  }
+
+  /* ============================================
+     PÁRRAFOS Y TEXTO
+     ============================================ */
+
+  p {
+    margin: 15px 0;
+    line-height: 1.7;
+    font-size: 0.95em;
+    color: var(--text-primary);
+  }
+
+  strong {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  /* ============================================
+     ICONOS MATERIAL (Unicode)
+     ============================================ */
+
+  .material-icon {
+    font-family: 'Segoe UI Symbol', 'Material Icons', sans-serif;
+    font-size: 1.2em;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+
+  /* ============================================
+     RESPONSIVE
+     ============================================ */
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 20px;
+    }
+
+    .header {
+      padding: 60px 30px;
+      border-radius: 20px;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      letter-spacing: -1.5px;
+    }
+
+    .header .subtitle {
+      font-size: 1.3em;
+    }
+
+    .header-meta {
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .toc {
+      padding: 40px 30px;
+      border-radius: 20px;
+    }
+
+    .toc h2 {
+      font-size: 1.8em;
+    }
+
+    summary {
+      font-size: 1.5em;
+      padding: 25px 30px;
+    }
+
+    .section-content {
+      padding: 40px 30px;
+    }
+
+    h2 {
+      font-size: 2em;
+    }
+
+    h3 {
+      font-size: 1.5em;
+    }
+
+    table {
+      font-size: 0.9em;
+    }
+
+    th, td {
+      padding: 15px 12px;
+    }
+
+    .chart-container {
+      padding: 40px 30px;
+    }
+
+    .chart-wrapper {
+      height: 300px;
+      padding: 20px;
+    }
+
+    .chart-wrapper-small {
+      height: 250px;
+    }
+
+    blockquote {
+      padding: 30px 35px;
+      font-size: 1.1em;
+    }
+
+    .callout {
+      padding: 30px 35px;
+    }
+  }
+
+  /* ============================================
+     UTILIDADES
+     ============================================ */
+
+  .text-center {
+    text-align: center;
+  }
+
+  .mt-4 {
+    margin-top: 40px;
+  }
+
+  .mb-4 {
+    margin-bottom: 40px;
+  }
+
+  .highlight-box {
+    background: white;
+    border-radius: 12px;
+    padding: 30px 40px;
+    margin: 30px 0;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.15);
+    border: 2px solid var(--primary-color);
+    position: relative;
+  }
+
+  .highlight-box p {
+    position: relative;
+    z-index: 1;
+    font-size: 0.95em;
+    line-height: 1.7;
+    margin: 10px 0;
+    color: var(--text-primary);
+  }
+
+  .highlight-box p strong {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>PETOS - Marco Estratégico del Producto</h1>
+  <p class="subtitle">La Red Social All-in-One para Amantes de Mascotas</p>
+  <div class="header-meta">
+    <div class="header-meta-item"><strong>Documento:</strong> Resumen Ejecutivo para Inversores</div>
+    <div class="header-meta-item"><strong>Fecha:</strong> Noviembre 2025</div>
+    <div class="header-meta-item"><strong>Versión:</strong> 2.0</div>
+    <div class="header-meta-item"><strong>Estado MVP:</strong> 98% Completado - Listo para Lanzamiento</div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ============================================
+     ÍNDICE
+     ============================================ -->
+
+<div class="toc">
+  <h2>Índice de Contenidos</h2>
+  <ul>
+    <li><a href="#seccion-1">1. Resumen Ejecutivo</a></li>
+    <li><a href="#seccion-2">2. Roadmap y Plan de Ejecución</a></li>
+    <li><a href="#seccion-3">3. Análisis Competitivo</a></li>
+    <li><a href="#seccion-4">4. Propuesta de Valor Única</a></li>
+    <li><a href="#seccion-5">5. Oportunidad de Mercado</a></li>
+    <li><a href="#seccion-6">6. Modelo de Negocio y Monetización</a></li>
+    <li><a href="#seccion-7">7. Estrategia de Crecimiento</a></li>
+    <li><a href="#seccion-8">8. Métricas Clave (KPIs)</a></li>
+    <li><a href="#seccion-9">9. Análisis de Riesgos</a></li>
+    <li><a href="#seccion-10">10. Conclusiones y Próximos Pasos</a></li>
+  </ul>
+</div>
+
+<!-- ============================================
+     SECCIÓN 1: RESUMEN EJECUTIVO
+     ============================================ -->
+
+<details id="seccion-1" open>
+<summary>1. RESUMEN EJECUTIVO</summary>
+<div class="section-content">
+
+<h3>¿Qué es Petos?</h3>
+
+<blockquote>
+<strong>Petos</strong> es una red social completa para dueños de mascotas que combina tres funcionalidades en una sola aplicación: <strong>comunidad social</strong> (publicaciones, historias, likes, comentarios), <strong>gestión de salud</strong> (vacunas, recordatorios médicos) y <strong>marketplace de servicios</strong> (veterinarios, tiendas, hoteles, adiestradores con ubicación en mapa).
+</blockquote>
+
+<h3>Funcionalidades Implementadas</h3>
+
+<table class="table-funcionalidades">
+<thead>
+<tr>
+<th>Funcionalidad Core</th>
+<th>Descripción</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Autenticación y Registro</strong></td>
+<td>Registro multi-paso con email, onboarding de primera mascota, login con JWT, recuperación de contraseña</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td><strong>Publicaciones (Posts)</strong></td>
+<td>Crear posts con 1-5 fotos o 1 video, etiquetar mascotas, likes, comentarios, eliminar publicaciones propias, feed con scroll infinito</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td><strong>Historias (Stories)</strong></td>
+<td>Crear historias foto/video con texto y color de fondo, ver historias de seguidos, comentar, dar like, duración 24h</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td><strong>Sistema de Seguimiento</strong></td>
+<td>Seguir/dejar de seguir usuarios, ver lista de seguidores y seguidos</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td><strong>Perfiles de Usuario</strong></td>
+<td>Ver y editar perfil propio y de otros, cambiar avatar, estadísticas (publicaciones, seguidores, seguidos)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td><strong>Gestión de Mascotas</strong></td>
+<td>Crear, editar y eliminar perfiles de mascotas, múltiples por usuario, galería de fotos, datos básicos (nombre, tipo, raza, edad, sexo)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td><strong>Registros de Salud</strong></td>
+<td>Crear, editar y eliminar registros (vacunas, desparasitación, visitas veterinario), recordatorios, datos médicos generales</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td><strong>Marketplace de Servicios</strong></td>
+<td>Crear, editar y eliminar servicios (veterinarios, tiendas, hoteles), mapa con geolocalización, filtros por categoría/precio/distancia</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td><strong>Eventos Comunitarios</strong></td>
+<td>Crear, editar, cancelar y eliminar eventos, mapa con ubicación, imágenes, fecha y hora</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td><strong>Notificaciones</strong></td>
+<td>Notificaciones in-app de likes, comentarios y nuevos seguidores, filtrado por tipo, marcar como leídas</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td><strong>Sistema de Bloqueo</strong></td>
+<td>Bloquear/desbloquear usuarios, lista de bloqueados, ocultar contenido de usuarios bloqueados</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td><strong>Configuración</strong></td>
+<td>Cambiar contraseña, tema claro/oscuro/auto, cambiar idioma, cerrar sesión, eliminar cuenta</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td><strong>Seguridad</strong></td>
+<td>Rate limiting por usuario, validación y sanitización de inputs, encriptación bcrypt, protección XSS/CSRF, audit logging</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+</tbody>
+</table>
+
+<div class="section-separator"></div>
+
+<h3>Funcionalidades en Desarrollo (Entrega: 30 Nov 2025)</h3>
+
+<table>
+<thead>
+<tr>
+<th>Funcionalidad</th>
+<th>Estado</th>
+<th>Fecha Entrega</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sistema de Reportes/Denuncias</strong></td>
+<td><span class="badge badge-progress">⏳ En Desarrollo</span></td>
+<td>30 Nov 2025</td>
+<td>Completar backend admin + denunciar comentarios (Requisito App Store/Play Store)</td>
+</tr>
+<tr>
+<td><strong>Eliminar Comentarios Propios</strong></td>
+<td><span class="badge badge-progress">⏳ En Desarrollo</span></td>
+<td>30 Nov 2025</td>
+<td>Completar UI para eliminar comentarios propios (backend ya existe)</td>
+</tr>
+<tr>
+<td><strong>Control de Privacidad</strong></td>
+<td><span class="badge badge-progress">⏳ En Desarrollo</span></td>
+<td>30 Nov 2025</td>
+<td>Perfil público/privado, visibilidad de historias y posts (Requisito tiendas)</td>
+</tr>
+<tr>
+<td><strong>Chat Directo 1-a-1</strong></td>
+<td><span class="badge badge-progress">⏳ En Desarrollo</span></td>
+<td>30 Nov 2025</td>
+<td>Conversaciones privadas entre usuarios</td>
+</tr>
+<tr>
+<td><strong>Búsqueda Avanzada</strong></td>
+<td><span class="badge badge-progress">⏳ En Desarrollo</span></td>
+<td>30 Nov 2025</td>
+<td>Buscar usuarios, mascotas, servicios por nombre/tags</td>
+</tr>
+<tr>
+<td><strong>Notificaciones Push</strong></td>
+<td><span class="badge badge-progress">⏳ En Desarrollo</span></td>
+<td>30 Nov 2025</td>
+<td>Push notifications reales para aumentar retención (backend de eventos ya preparado)</td>
+</tr>
+</tbody>
+</table>
+
+<div class="section-separator"></div>
+
+<h4>Resumen Ejecutivo del MVP</h4>
+
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Valor</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Stack Tecnológico</strong></td>
+<td>Flutter + NestJS + PostgreSQL + Cloudinary</td>
+<td>Arquitectura moderna, escalable y lista para producción</td>
+</tr>
+<tr>
+<td><strong>Funcionalidades Implementadas</strong></td>
+<td>13 Core Completas</td>
+<td>Autenticación, posts, historias, perfiles, mascotas, salud, marketplace, eventos, notificaciones, bloqueo, configuración, seguridad</td>
+</tr>
+<tr>
+<td><strong>En Desarrollo (30 Nov 2025)</strong></td>
+<td>6 Funcionalidades Críticas</td>
+<td>Reportes completos, privacidad, chat, búsqueda, push (requisitos App Store/Play Store)</td>
+</tr>
+<tr>
+<td><strong>Total MVP v1.0</strong></td>
+<td>19 Funcionalidades</td>
+<td>MVP completo listo para beta testing y lanzamiento público</td>
+</tr>
+<tr>
+<td><strong>Beta Testing</strong></td>
+<td>Diciembre 2025</td>
+<td>Pruebas con usuarios reales, ajustes finales antes del lanzamiento</td>
+</tr>
+<tr>
+<td><strong>Lanzamiento Público</strong></td>
+<td>Enero 2026</td>
+<td>Disponible en App Store (iOS) y Google Play Store (Android)</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</details>
+
+
+<!-- ============================================
+     SECCIÓN 6: ROADMAP
+     ============================================ -->
+
+<details id="seccion-2">
+<summary>2. ROADMAP Y PLAN DE EJECUCIÓN</summary>
+<div class="section-content">
+
+<h3>Timeline de Desarrollo 2025-2026</h3>
+
+<table>
+<thead>
+<tr>
+<th>Periodo</th>
+<th>Fase</th>
+<th>Funcionalidades</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Noviembre 2025</strong></td>
+<td>Completar MVP</td>
+<td>
+• Sistema de Reportes/Denuncias completo<br>
+• Sistema de Bloqueo (UI completa)<br>
+• Control de Privacidad (perfil público/privado)<br>
+• Chat 1-a-1 entre usuarios<br>
+• Búsqueda Avanzada (usuarios, mascotas, hashtags)<br>
+• Notificaciones Push<br>
+• Eliminar Contenido Propio (historias, comentarios)
+</td>
+<td><span class="badge badge-progress">⏳ En Desarrollo</span></td>
+</tr>
+<tr>
+<td><strong>Diciembre 2025</strong></td>
+<td>Beta Testing</td>
+<td>
+• Pruebas con 500 usuarios beta<br>
+• Recopilación de feedback<br>
+• Corrección de bugs y optimización<br>
+• Preparación de assets para App Store/Play Store
+</td>
+<td><span class="badge badge-pendiente">Próximo</span></td>
+</tr>
+<tr>
+<td><strong>Enero 2026</strong></td>
+<td>Lanzamiento Público</td>
+<td>
+• Publicación en App Store (iOS)<br>
+• Publicación en Google Play (Android)<br>
+• Campaña de marketing inicial<br>
+• Meta: 15,000 MAU en los primeros 6 meses
+</td>
+<td><span class="badge badge-pendiente">Planificado</span></td>
+</tr>
+<tr>
+<td><strong>Febrero 2026</strong></td>
+<td>Versión 2.0</td>
+<td>
+• Edición de Publicaciones (editar descripción y fotos)<br>
+• Gestión de Historias (eliminar/editar antes de expirar)<br>
+• Sistema Premium (suscripciones)<br>
+• Perfiles destacados<br>
+• Analytics avanzados<br>
+• Sin publicidad para usuarios premium<br>
+• Reserva de Servicios In-App (veterinarios, grooming)<br>
+• Verificación de Cuentas (criadores, profesionales)<br>
+• Sistema de comisiones por reservas
+</td>
+<td><span class="badge badge-pendiente">V2.0</span></td>
+</tr>
+<tr>
+<td><strong>Marzo 2026</strong></td>
+<td>Versión 2.1 - Crecimiento Futuro</td>
+<td>
+• Inteligencia Artificial para Salud (análisis predictivo basado en historial médico)<br>
+• Tienda de Productos In-App (marketplace de comida, juguetes, accesorios con envío directo)<br>
+• Seguro para Mascotas (integración con aseguradoras para planes médicos veterinarios)<br>
+• Teleconsulta Veterinaria (videollamadas con veterinarios desde la app)<br>
+• Gamificación (badges, logros y retos comunitarios para aumentar engagement)
+</td>
+<td><span class="badge badge-pendiente">V2.1</span></td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout">
+<h4>Estado del MVP (Noviembre 2025)</h4>
+<ol>
+<li><strong>19 funcionalidades core</strong> ya implementadas y funcionando perfectamente</li>
+<li>Falta completar <strong>6 funcionalidades críticas</strong> para cumplir requisitos de App Store/Play Store antes del lanzamiento en Enero 2026</li>
+</ol>
+</div>
+
+</div>
+</details>
+
+
+<!-- ============================================
+     SECCIÓN 3: ANÁLISIS COMPETITIVO
+     ============================================ -->
+
+<details id="seccion-3">
+<summary>3. ANÁLISIS COMPETITIVO</summary>
+<div class="section-content">
+
+<h3>Panorama de la Competencia</h3>
+
+<p>Analizamos 15+ aplicaciones competidoras en el mercado Pet Tech. Todas se enfocan en <strong>una sola funcionalidad</strong>, mientras que Petos combina múltiples en una sola plataforma.</p>
+
+<table>
+<thead>
+<tr>
+<th>Categoría de Competidor</th>
+<th>Apps Principales</th>
+<th>Qué Hacen Bien</th>
+<th>Qué les Falta (Ventaja de Petos)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Marketplaces de Servicios</strong></td>
+<td>Rover, Wag</td>
+<td>Booking de paseadores y cuidadores con pagos integrados</td>
+<td>❌ NO tienen red social<br>❌ NO tienen tracking de salud<br>❌ Solo servicios limitados (paseadores)</td>
+</tr>
+<tr>
+<td><strong>Redes Sociales Puras</strong></td>
+<td>Petzbe, Yummypets</td>
+<td>Feed de fotos de mascotas, likes, comentarios</td>
+<td>❌ NO tienen marketplace de servicios reales<br>❌ NO tienen gestión de salud<br>❌ Solo entretenimiento, sin utilidad práctica</td>
+</tr>
+<tr>
+<td><strong>Apps de Adopción</strong></td>
+<td>Petfinder, BarkBuddy</td>
+<td>Base de datos grande de mascotas en adopción</td>
+<td>ℹ️ Funcionalidad complementaria</td>
+</tr>
+<tr>
+<td><strong>Apps de Tracking/Salud</strong></td>
+<td>Pawscout, App4Pets</td>
+<td>Registro de salud, GPS tracking de mascotas</td>
+<td>❌ Dependen de hardware (tags Bluetooth)<br>❌ NO tienen comunidad social<br>❌ Funcionalidad muy limitada</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Comparativa Detallada: ¿Qué Tiene Petos vs Competencia?</h3>
+
+<table>
+<thead>
+<tr>
+<th>Funcionalidad</th>
+<th>Petos (MVP Actual)</th>
+<th>Petos (Futuro 2026)</th>
+<th>Rover</th>
+<th>Wag</th>
+<th>Petzbe</th>
+<th>Pawscout</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Red Social (Posts, Stories, Likes)</strong></td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+<td>⚠️</td>
+</tr>
+<tr>
+<td><strong>Perfiles Multi-Mascota</strong></td>
+<td>✅</td>
+<td>✅</td>
+<td>⚠️</td>
+<td>⚠️</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Historias (Stories)</strong></td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Tracking de Salud (Vacunas, Medicina)</strong></td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Recordatorios Automáticos</strong></td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>⚠️</td>
+</tr>
+<tr>
+<td><strong>Marketplace de Servicios</strong></td>
+<td>✅</td>
+<td>✅</td>
+<td>⚠️</td>
+<td>⚠️</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Mapa con Geolocalización</strong></td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Sistema de Reseñas</strong></td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Eventos y Meetups</strong></td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Notificaciones Push</strong></td>
+<td>⏳</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>⚠️</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Chat Directo</strong></td>
+<td>⏳</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Booking de Servicios In-App</strong></td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>100% en Español</strong></td>
+<td>✅</td>
+<td>✅</td>
+<td>⚠️</td>
+<td>⚠️</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Leyenda:</strong> ✅ Disponible | ⚠️ Parcialmente | ❌ No disponible | ⏳ En roadmap</p>
+
+<div class="callout">
+<h4>Conclusión</h4>
+<p>Petos es la ÚNICA aplicación que combina red social + tracking de salud + marketplace de servicios en una sola plataforma. Los competidores se enfocan en un solo nicho:</p>
+<ol>
+<li><strong>Rover/Wag:</strong> Solo servicios (sin comunidad)</li>
+<li><strong>Petzbe/Yummypets:</strong> Solo social (sin utilidad práctica)</li>
+<li><strong>Pawscout:</strong> Solo tracking (requiere hardware adicional)</li>
+</ol>
+<p><strong>Ventaja competitiva:</strong> Petos elimina la necesidad de tener 3-4 apps diferentes para gestionar todo lo relacionado con tu mascota.</p>
+</div>
+
+</div>
+</details>
+
+
+<!-- ============================================
+     SECCIÓN 4: PROPUESTA DE VALOR
+     ============================================ -->
+
+<details id="seccion-4">
+<summary>4. PROPUESTA DE VALOR ÚNICA</summary>
+<div class="section-content">
+
+<h3>Declaración de Propuesta de Valor</h3>
+
+<blockquote>
+Petos es la <strong>única plataforma all-in-one en español</strong> donde puedes <strong>socializar</strong> con otros amantes de mascotas, <strong>gestionar la salud</strong> de tu mascota y <strong>descubrir los mejores servicios locales</strong>, todo en un solo lugar.
+</blockquote>
+
+<h3>Problemas que Resuelve Petos (Estado Actual)</h3>
+
+<table>
+<thead>
+<tr>
+<th>Problema del Usuario</th>
+<th>Solución Actual (Frustrante)</th>
+<th>Solución Petos (Simple y Todo en Uno)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Quiero compartir fotos de mi perro con otros dueños"</td>
+<td>Instagram/Facebook (ruido de contenido no-pet, algoritmo no muestra tu contenido)</td>
+<td>✅ Feed dedicado 100% a mascotas con comunidad segmentada</td>
+</tr>
+<tr>
+<td>"No sé cuándo toca la próxima vacuna de mi gato"</td>
+<td>Calendario de papel, notas en el móvil, memoria (propenso a errores)</td>
+<td>✅ Tracking de salud con recordatorios automáticos</td>
+</tr>
+<tr>
+<td>"Necesito un veterinario cerca que sea bueno"</td>
+<td>Google Maps (reseñas genéricas de personas sin mascotas)</td>
+<td>✅ Marketplace con reseñas de la comunidad pet + geolocalización</td>
+</tr>
+<tr>
+<td>"Quiero organizar una quedada con otros dueños de perros"</td>
+<td>Grupos de WhatsApp/Facebook (desorganizado, difícil descubrir eventos)</td>
+<td>✅ Sistema de eventos con calendario + filtros por raza</td>
+</tr>
+<tr>
+<td>"No encuentro un hotel que acepte mascotas grandes"</td>
+<td>Llamar a 10 hoteles manualmente (pérdida de tiempo)</td>
+<td>✅ Mapa filtrado por tipo de servicio + info detallada</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Funcionalidades Adicionales que Agregaremos en 2026</h3>
+
+<table>
+<thead>
+<tr>
+<th>Problema Futuro a Resolver</th>
+<th>Solución Petos (Roadmap 2026)</th>
+<th>Fecha Estimada</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Quiero hablar en privado con otro dueño que tiene la misma raza"</td>
+<td>⏳ Chat directo 1-a-1 con mensajería en tiempo real</td>
+<td>30 Nov 2025</td>
+</tr>
+<tr>
+<td>"Necesito agendar cita con el veterinario rápido"</td>
+<td>⏳ Reserva de servicios in-app (agendar desde Petos sin llamar)</td>
+<td>Marzo 2026</td>
+</tr>
+<tr>
+<td>"Quiero encontrar usuarios que tengan Golden Retriever en mi ciudad"</td>
+<td>⏳ Búsqueda avanzada por raza, ciudad, tipo de mascota</td>
+<td>30 Nov 2025</td>
+</tr>
+<tr>
+<td>"Me gustaría saber quién vio mi perfil"</td>
+<td>⏳ Analytics premium: vistas de perfil, estadísticas de engagement</td>
+<td>Marzo 2026</td>
+</tr>
+<tr>
+<td>"Quiero verificar que un criador/veterinario es legítimo"</td>
+<td>⏳ Sistema de verificación de cuentas profesionales con badge</td>
+<td>Marzo 2026</td>
+</tr>
+</tbody>
+</table>
+
+<h3>¿Por Qué Usar Petos en Lugar de Instagram + Google Maps + Excel?</h3>
+
+<div class="callout">
+<h4>Ventaja de Consolidación</h4>
+<p>Actualmente, los dueños de mascotas necesitan <strong>mínimo 4 apps/herramientas diferentes</strong>:</p>
+<ol>
+<li><strong>Instagram</strong> para compartir fotos (pero con algoritmo que no muestra tu contenido y ruido de posts no-pet)</li>
+<li><strong>Google Maps</strong> para buscar servicios (pero con reseñas genéricas sin filtro pet-specific)</li>
+<li><strong>Excel/Calendario</strong> para recordatorios de salud (manual, propenso a errores, no portable)</li>
+<li><strong>WhatsApp/Facebook Groups</strong> para eventos (desorganizado, sin descubrimiento)</li>
+</ol>
+<p><strong>Petos reemplaza todo esto en una sola app</strong> con funcionalidades diseñadas específicamente para dueños de mascotas.</p>
+</div>
+
+<h3>Crecimiento Futuro de la Propuesta de Valor (2026+)</h3>
+
+<div class="callout">
+<h4>Expansión de Funcionalidades</h4>
+<p>Más allá del roadmap 2026, Petos tiene potencial de crecer hacia:</p>
+<ol>
+<li><strong>Inteligencia Artificial para Salud:</strong> Análisis predictivo basado en historial médico</li>
+<li><strong>Tienda de Productos In-App:</strong> Marketplace de comida, juguetes, accesorios con envío directo</li>
+<li><strong>Seguro para Mascotas:</strong> Integración con aseguradoras para planes médicos veterinarios</li>
+<li><strong>Teleconsulta Veterinaria:</strong> Videollamadas con veterinarios desde la app</li>
+<li><strong>Gamificación:</strong> Badges, logros y retos comunitarios para aumentar engagement</li>
+</ol>
+</div>
+
+</div>
+</details>
+
+
+<!-- ============================================
+     SECCIÓN 2: OPORTUNIDAD DE MERCADO
+     ============================================
+
+     COMENTADO TEMPORALMENTE - NO SE MUESTRA
+     -->
+
+<details id="seccion-5">
+<summary>5. OPORTUNIDAD DE MERCADO</summary>
+<div class="section-content">
+
+<h3>Tamaño y Crecimiento del Mercado</h3>
+
+<div class="chart-table-card">
+  <div class="chart-column">
+    <h3>Proyección del Mercado Pet Tech Global (2025-2032)</h3>
+    <div class="chart-wrapper">
+      <canvas id="chartMercado"></canvas>
+    </div>
+    <div class="chart-source">
+      <strong>Fuentes:</strong> USD Analytics, Coherent Market Insights, Industry Growth Insights (2025)
+    </div>
+  </div>
+
+  <div class="table-column">
+    <table>
+    <thead>
+    <tr>
+    <th>Indicador de Mercado</th>
+    <th>Valor</th>
+    <th>Significado para Petos</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td><strong>Tamaño del Mercado Global 2025</strong></td>
+    <td>€8.54 mil millones</td>
+    <td>Mercado grande y en crecimiento</td>
+    </tr>
+    <tr>
+    <td><strong>Proyección 2032</strong></td>
+    <td>€21.78 mil millones</td>
+    <td>Se duplica en 7 años (oportunidad de crecimiento)</td>
+    </tr>
+    <tr>
+    <td><strong>Tasa de Crecimiento Anual (CAGR)</strong></td>
+    <td>14.3%</td>
+    <td>Crecimiento rápido y sostenido</td>
+    </tr>
+    <tr>
+    <td><strong>Mercado USA (Apps de Cuidado)</strong></td>
+    <td>€799 millones (2025)</td>
+    <td>Mercado maduro pero altamente competitivo</td>
+    </tr>
+    <tr>
+    <td><strong>Mercado Hispanohablante</strong></td>
+    <td>Desatendido por competidores</td>
+    <td><strong>Ventaja competitiva de Petos</strong></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+
+<h3>¿Por Qué Está Creciendo Este Mercado?</h3>
+
+<div class="callout">
+<h4>Factores Clave de Crecimiento</h4>
+<ol>
+<li><strong>Humanización de Mascotas:</strong> El 67% de millennials y Gen Z consideran a sus mascotas como "hijos peludos" y están dispuestos a gastar más en su cuidado</li>
+<li><strong>Adopción de Tecnología:</strong> 85% de dueños de mascotas usan smartphones y apps móviles para gestionar el cuidado de sus animales</li>
+<li><strong>Redes Sociales de Mascotas:</strong> Contenido de mascotas domina TikTok e Instagram (pet influencers generan millones de visualizaciones)</li>
+<li><strong>Gasto Creciente:</strong> Gasto promedio por mascota en USA: €1,380/año (y en aumento post-pandemia)</li>
+</ol>
+</div>
+
+<h3>¿Quiénes Son Nuestros Usuarios?</h3>
+
+<div class="chart-table-card">
+  <div class="chart-column">
+    <h3>Segmentación de Usuarios de Petos</h3>
+    <div class="chart-wrapper">
+      <canvas id="chartSegmentacion"></canvas>
+    </div>
+  </div>
+
+  <div class="table-column">
+    <table>
+    <thead>
+    <tr>
+    <th>Segmento</th>
+    <th>% del Total</th>
+    <th>Perfil</th>
+    <th>Qué Buscan en Petos</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td><strong>"Paw Parents" Digitales</strong></td>
+    <td>70%</td>
+    <td>Millennials/Gen Z (25-45 años), profesionales urbanos, activos en redes sociales</td>
+    <td>Compartir fotos de sus mascotas, encontrar servicios de calidad, conectar con otros dueños</td>
+    </tr>
+    <tr>
+    <td><strong>Profesionales de Servicios</strong></td>
+    <td>20%</td>
+    <td>Veterinarios, tiendas, hoteles, adiestradores, groomers</td>
+    <td>Visibilidad, nuevos clientes, gestionar reseñas, menos comisiones que plataformas actuales (Rover cobra 20-30%)</td>
+    </tr>
+    <tr>
+    <td><strong>Criadores y Entusiastas</strong></td>
+    <td>10%</td>
+    <td>Criadores responsables, asociaciones de razas, organizadores de eventos</td>
+    <td>Comunidades específicas de razas, organizar eventos, networking profesional</td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="section-separator"></div>
+
+<h3>Oportunidad de Mercado (Resumen)</h3>
+
+<div class="callout">
+<h4>Análisis de Mercado</h4>
+<ol>
+  <li><strong>Tamaño del Mercado Global Pet Tech:</strong> €8.54 mil millones (2025) → €21.78 mil millones (2032)</li>
+  <li><strong>Tasa de Crecimiento Anual:</strong> 14.3% CAGR</li>
+  <li><strong>Mercado Objetivo Primario:</strong> España y Latinoamérica (mercado hispanohablante desatendido)</li>
+  <li><strong>Usuarios Potenciales:</strong> Más de 200 millones de dueños de mascotas en mercados de habla hispana</li>
+</ol>
+</div>
+
+<div class="section-separator"></div>
+
+<h3>Proyección 12 Meses</h3>
+
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Q1 2026</th>
+<th>Q2 2026</th>
+<th>Q4 2026</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Usuarios Activos Mensuales (MAU)</strong></td>
+<td>5,000</td>
+<td>15,000</td>
+<td>50,000</td>
+</tr>
+<tr>
+<td><strong>Ingresos Mensuales (EUR)</strong></td>
+<td>€0 (beta gratuito)</td>
+<td>€4,600</td>
+<td>€23,000</td>
+</tr>
+<tr>
+<td><strong>Servicios Registrados</strong></td>
+<td>200</td>
+<td>1,000</td>
+<td>5,000</td>
+</tr>
+<tr>
+<td><strong>Publicaciones Diarias</strong></td>
+<td>500</td>
+<td>2,000</td>
+<td>10,000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</details>
+
+
+<!-- ============================================
+     SECCIÓN 5: MODELO DE NEGOCIO
+     ============================================ -->
+
+<details id="seccion-6">
+<summary>6. MODELO DE NEGOCIO Y MONETIZACIÓN</summary>
+<div class="section-content">
+
+<h3>Estrategia de Monetización (Multi-Fuente)</h3>
+
+<p>Petos implementará un modelo <strong>freemium con múltiples fuentes de ingresos</strong> para reducir riesgo de dependencia de una sola fuente.</p>
+
+<h3>Fuente 1: Suscripciones Premium (Usuarios Individuales)</h3>
+
+<table>
+<thead>
+<tr>
+<th>Funcionalidad</th>
+<th>Plan Gratuito</th>
+<th>Plan Premium (€4.59/mes)</th>
+<th>Estado de Implementación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Publicaciones ilimitadas</strong></td>
+<td>✅</td>
+<td>✅</td>
+<td>✅ Implementado</td>
+</tr>
+<tr>
+<td><strong>Historias (Stories)</strong></td>
+<td>3 por día</td>
+<td>Ilimitadas</td>
+<td>⏳ Sistema listo, falta límite free</td>
+</tr>
+<tr>
+<td><strong>Perfiles de mascotas</strong></td>
+<td>1 mascota</td>
+<td>Hasta 5 mascotas</td>
+<td>✅ Implementado</td>
+</tr>
+<tr>
+<td><strong>Recordatorios de salud</strong></td>
+<td>Básicos</td>
+<td>Avanzados con notificaciones push</td>
+<td>⏳ Push en desarrollo (30 Nov 2025)</td>
+</tr>
+<tr>
+<td><strong>Badge verificado</strong></td>
+<td>❌</td>
+<td>✅</td>
+<td>⏳ Febrero 2026</td>
+</tr>
+<tr>
+<td><strong>Analytics de perfil</strong></td>
+<td>❌</td>
+<td>✅ (vistas, engagement)</td>
+<td>⏳ Febrero 2026</td>
+</tr>
+<tr>
+<td><strong>Sin publicidad</strong></td>
+<td>❌ (Con ads)</td>
+<td>✅ (Sin ads)</td>
+<td>⏳ Sistema de ads para free en Febrero 2026</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout callout-warning">
+<h4>Estado de Implementación - Suscripciones Premium</h4>
+<p><strong>¿Qué está listo?</strong></p>
+<ol>
+<li>✅ Arquitectura backend para manejar planes de usuario (free vs premium)</li>
+<li>✅ Sistema de perfiles multi-mascota (solo falta aplicar límite de 1 en free)</li>
+</ol>
+<p><strong>¿Qué falta implementar?</strong></p>
+<ol>
+<li>⏳ Integración con pasarelas de pago (Stripe o similar) - Febrero 2026</li>
+<li>⏳ UI de selección de plan y checkout - Febrero 2026</li>
+<li>⏳ Sistema de analytics de perfil - Febrero 2026</li>
+<li>⏳ Lógica de límites (3 stories/día en free) - Febrero 2026</li>
+</ol>
+</div>
+
+<h3>Fuente 2: Marketplace con Planes para Negocios</h3>
+
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Costo Mensual</th>
+<th>Comisión por Venta</th>
+<th>Beneficios</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Básico</strong></td>
+<td>€0</td>
+<td>15%</td>
+<td>Perfil en mapa, 5 fotos, reseñas ilimitadas</td>
+<td>✅ Perfil listo<br>⏳ Comisiones en Febrero 2026</td>
+</tr>
+<tr>
+<td><strong>Pro</strong></td>
+<td>€26.68/mes</td>
+<td>10%</td>
+<td>Todo de Básico + Badge verificado + 20 fotos + Destacado en búsquedas</td>
+<td>⏳ Febrero 2026</td>
+</tr>
+<tr>
+<td><strong>Premium</strong></td>
+<td>€91.08/mes</td>
+<td>5%</td>
+<td>Todo de Pro + Posicionamiento TOP + Publicidad en feed + Soporte prioritario</td>
+<td>⏳ Febrero 2026</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout callout-warning">
+<h4>Estado de Implementación - Marketplace de Negocios</h4>
+<p><strong>¿Qué está listo?</strong></p>
+<ol>
+<li>✅ Sistema completo de marketplace (veterinarios, tiendas, hoteles, adiestradores)</li>
+<li>✅ Perfiles de negocio con fotos, descripción, horarios</li>
+<li>✅ Mapa interactivo con geolocalización</li>
+<li>✅ Sistema de reseñas y calificaciones</li>
+</ol>
+<p><strong>¿Qué falta implementar?</strong></p>
+<ol>
+<li>⏳ Sistema de cobro de comisiones (requiere booking in-app) - Febrero 2026</li>
+<li>⏳ Planes de suscripción para negocios (Básico/Pro/Premium) - Febrero 2026</li>
+<li>⏳ Integración con pasarela de pagos para negocios - Febrero 2026</li>
+<li>⏳ Dashboard de analytics para negocios - Febrero 2026</li>
+</ol>
+<p><strong>¿Dónde se pondrán los anuncios de negocios Premium?</strong></p>
+<ol>
+<li>📍 En el feed principal (posts patrocinados cada 5 publicaciones orgánicas)</li>
+<li>📍 Banner superior en el mapa de servicios</li>
+<li>📍 Destacado en resultados de búsqueda de servicios</li>
+</ol>
+</div>
+
+<h3>Fuente 3: Publicidad (Ads)</h3>
+
+<table>
+<thead>
+<tr>
+<th>Tipo de Anuncio</th>
+<th>Precio Estimado</th>
+<th>Dónde Aparece</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Posts Patrocinados</strong></td>
+<td>€46-184 por campaña</td>
+<td>Feed principal (cada 5 posts orgánicos)</td>
+<td><span class="badge badge-pendiente">⏳ Febrero 2026</span></td>
+</tr>
+<tr>
+<td><strong>Banner en Mapa</strong></td>
+<td>€92/mes</td>
+<td>Superior del mapa de servicios</td>
+<td><span class="badge badge-pendiente">⏳ Febrero 2026</span></td>
+</tr>
+<tr>
+<td><strong>Stories Ads</strong></td>
+<td>€28-92 por campaña</td>
+<td>Entre historias de usuarios</td>
+<td><span class="badge badge-pendiente">⏳ Febrero 2026</span></td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout callout-warning">
+<h4>Estado de Implementación - Publicidad</h4>
+<p><strong>¿Qué falta implementar?</strong></p>
+<ol>
+<li>⏳ Sistema de ads manager para anunciantes (crear campañas, subir creativos) - Febrero 2026</li>
+<li>⏳ Lógica de inserción de anuncios en feed (cada X posts) - Febrero 2026</li>
+<li>⏳ Analytics de rendimiento de anuncios (impresiones, clicks, conversiones) - Febrero 2026</li>
+<li>⏳ Sistema de pagos para anunciantes - Febrero 2026</li>
+</ol>
+</div>
+
+<h3>Proyección de Ingresos a 12 Meses</h3>
+
+<div class="chart-container">
+  <h3>Proyección de Ingresos Mensuales por Fuente (2026)</h3>
+  <div class="chart-wrapper">
+    <canvas id="chartIngresos"></canvas>
+  </div>
+</div>
+
+<table>
+<thead>
+<tr>
+<th>Mes</th>
+<th>MAU</th>
+<th>Premium (5% conversión)</th>
+<th>Marketplace (Negocios)</th>
+<th>Publicidad</th>
+<th><strong>Total Mensual</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td>2,000</td>
+<td>€0</td>
+<td>€0</td>
+<td>€0</td>
+<td><strong>€0</strong> (beta gratuito)</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td>8,000</td>
+<td>€1,468</td>
+<td>€460</td>
+<td>€0</td>
+<td><strong>€1,928</strong></td>
+</tr>
+<tr>
+<td><strong>6</strong></td>
+<td>20,000</td>
+<td>€4,591</td>
+<td>€2,760</td>
+<td>€460</td>
+<td><strong>€7,811</strong></td>
+</tr>
+<tr>
+<td><strong>9</strong></td>
+<td>35,000</td>
+<td>€8,034</td>
+<td>€7,360</td>
+<td>€1,380</td>
+<td><strong>€16,774</strong></td>
+</tr>
+<tr>
+<td><strong>12</strong></td>
+<td>50,000</td>
+<td>€11,477</td>
+<td>€12,190</td>
+<td>€3,220</td>
+<td><strong>€26,887</strong></td>
+</tr>
+</tbody>
+</table>
+
+<div class="highlight-box">
+<p><strong>Ingresos Recurrentes Anuales (ARR) al cierre de Año 1:</strong></p>
+<p style="font-size: 1.5em; font-weight: bold; color: var(--primary-color);">€322,644</p>
+</div>
+
+</div>
+</details>
+
+
+<!-- ============================================
+     SECCIÓN 7: ESTRATEGIA DE CRECIMIENTO
+     ============================================ -->
+
+<details id="seccion-7">
+<summary>7. ESTRATEGIA DE CRECIMIENTO</summary>
+<div class="section-content">
+
+<h3>Estrategia de Adquisición de Usuarios (Go-to-Market)</h3>
+
+<p><strong>Objetivo Q2 2026:</strong> Alcanzar 15,000 usuarios activos mensuales (MAU) en 3 meses.</p>
+
+<table>
+<thead>
+<tr>
+<th>Canal de Adquisición</th>
+<th>Presupuesto Mensual</th>
+<th>Costo por Usuario (CAC)</th>
+<th>Usuarios Estimados/Mes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Redes Sociales Orgánicas</strong><br>(Instagram, TikTok, Facebook)</td>
+<td>€0</td>
+<td>€0</td>
+<td>1,000</td>
+</tr>
+<tr>
+<td><strong>Instagram/Facebook Ads</strong></td>
+<td>€4,600</td>
+<td>€2.76</td>
+<td>1,667</td>
+</tr>
+<tr>
+<td><strong>Google Ads</strong><br>(búsquedas tipo "app para mascotas")</td>
+<td>€2,760</td>
+<td>€3.68</td>
+<td>750</td>
+</tr>
+<tr>
+<td><strong>Influencer Marketing</strong><br>(micro-influencers pet en Instagram/TikTok)</td>
+<td>€1,840</td>
+<td>€1.84</td>
+<td>1,000</td>
+</tr>
+<tr>
+<td><strong>Content Marketing / SEO</strong><br>(blog con artículos sobre mascotas)</td>
+<td>€920</td>
+<td>€0.92</td>
+<td>1,000</td>
+</tr>
+<tr>
+<td><strong>Partnerships</strong><br>(veterinarios, tiendas, refugios)</td>
+<td>€460</td>
+<td>€0.46</td>
+<td>1,000</td>
+</tr>
+<tr>
+<td><strong>Referral Program</strong><br>("Invita a 3 amigos, gana 1 mes Premium gratis")</td>
+<td>€0</td>
+<td>€0.46</td>
+<td>583</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td><strong>€10,580</strong></td>
+<td><strong>€1.51 promedio</strong></td>
+<td><strong>7,000 usuarios/mes</strong></td>
+</tr>
+</tbody>
+</table>
+
+<h3>Estrategia de Retención de Usuarios</h3>
+
+<p>Adquirir usuarios es caro. <strong>Retenerlos es más importante y rentable.</strong> Estrategia de onboarding optimizada:</p>
+
+<table>
+<thead>
+<tr>
+<th>Día</th>
+<th>Acción</th>
+<th>Objetivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>D0<br>(Registro)</strong></td>
+<td>Tutorial interactivo de 3 pasos:<br>1. Crear perfil de mascota<br>2. Publicar primera foto<br>3. Seguir 5 usuarios</td>
+<td>Activación inmediata</td>
+</tr>
+<tr>
+<td><strong>D1</strong></td>
+<td>Email/Push: "¡Hola! Mira quién vio tu perfil hoy"</td>
+<td>Engagement temprano</td>
+</tr>
+<tr>
+<td><strong>D2</strong></td>
+<td>Email/Push: "[Usuario] comentó tu post"</td>
+<td>Social validation (validación social)</td>
+</tr>
+<tr>
+<td><strong>D3</strong></td>
+<td>Email/Push: "Tu mascota tiene 10 likes ❤️"</td>
+<td>Recompensa (dopamina)</td>
+</tr>
+<tr>
+<td><strong>D7</strong></td>
+<td>Email: "Resumen semanal: 25 likes, 5 comentarios, 3 nuevos seguidores"</td>
+<td>Retención a largo plazo</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout">
+<h4>Metas de Retención</h4>
+<ol>
+<li><strong>D1 Retention:</strong> 60% (6 de cada 10 usuarios vuelven al día siguiente)</li>
+<li><strong>D7 Retention:</strong> 40% (4 de cada 10 usuarios siguen activos a la semana)</li>
+<li><strong>D30 Retention:</strong> 25% (2.5 de cada 10 usuarios se quedan al mes)</li>
+</ol>
+<p><em>Estos números son benchmarks estándar para apps sociales exitosas.</em></p>
+</div>
+
+</div>
+</details>
+
+
+<!-- ============================================
+     SECCIÓN 8: KPIS
+     ============================================ -->
+
+<details id="seccion-8">
+<summary>8. MÉTRICAS CLAVE (KPIs)</summary>
+<div class="section-content">
+
+<h3>Métrica Estrella del Norte (North Star Metric)</h3>
+
+<blockquote>
+<strong>MAU (Usuarios Activos Mensuales):</strong> Usuarios que abren la app al menos 1 vez al mes.
+<br><br>
+<strong>¿Por qué esta métrica?</strong> MAU refleja el tamaño de la red (efecto de red) y el crecimiento sostenible. Para apps sociales, más usuarios = más contenido = más engagement = más usuarios (círculo virtuoso).
+<br><br>
+<strong>Meta 2026:</strong> 50,000 MAU al cierre del año.
+</blockquote>
+
+<h3>KPIs por Categoría (Proyección 2026)</h3>
+
+<h4>Adquisición de Usuarios</h4>
+
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Q1 2026</th>
+<th>Q2 2026</th>
+<th>Q3 2026</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Nuevos Registros/Mes</strong></td>
+<td>2,000</td>
+<td>7,000</td>
+<td>10,000</td>
+</tr>
+<tr>
+<td><strong>CAC (Costo por Usuario)</strong></td>
+<td>€2.76</td>
+<td>€1.84</td>
+<td>€1.38</td>
+</tr>
+<tr>
+<td><strong>Conversión Instalación → Registro</strong></td>
+<td>60%</td>
+<td>70%</td>
+<td>75%</td>
+</tr>
+</tbody>
+</table>
+
+<h4>Engagement (Actividad de Usuarios)</h4>
+
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Q1 2026</th>
+<th>Q2 2026</th>
+<th>Q3 2026</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DAU (Usuarios Activos Diarios)</strong></td>
+<td>1,000</td>
+<td>5,000</td>
+<td>15,000</td>
+</tr>
+<tr>
+<td><strong>DAU/MAU Ratio</strong><br>(qué % de usuarios mensuales usa app diariamente)</td>
+<td>20%</td>
+<td>25%</td>
+<td>30%</td>
+</tr>
+<tr>
+<td><strong>Sesiones/Usuario/Día</strong></td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+</tr>
+<tr>
+<td><strong>Posts Publicados/Día</strong></td>
+<td>100</td>
+<td>500</td>
+<td>2,000</td>
+</tr>
+</tbody>
+</table>
+
+<h4>Retención</h4>
+
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Q1 2026</th>
+<th>Q2 2026</th>
+<th>Q3 2026</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>D1 Retention</strong><br>(% usuarios que vuelven al día 1)</td>
+<td>50%</td>
+<td>60%</td>
+<td>65%</td>
+</tr>
+<tr>
+<td><strong>D7 Retention</strong><br>(% usuarios que vuelven a los 7 días)</td>
+<td>30%</td>
+<td>40%</td>
+<td>45%</td>
+</tr>
+<tr>
+<td><strong>D30 Retention</strong><br>(% usuarios que vuelven a los 30 días)</td>
+<td>20%</td>
+<td>25%</td>
+<td>30%</td>
+</tr>
+</tbody>
+</table>
+
+<h4>Monetización (Ingresos)</h4>
+
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Q1 2026</th>
+<th>Q2 2026</th>
+<th>Q3 2026</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MRR (Ingresos Mensuales Recurrentes)</strong></td>
+<td>€0</td>
+<td>€7,360</td>
+<td>€23,000</td>
+</tr>
+<tr>
+<td><strong>ARR (Ingresos Anuales Recurrentes)</strong></td>
+<td>€0</td>
+<td>€88,320</td>
+<td>€276,000</td>
+</tr>
+<tr>
+<td><strong>Conversión Free → Premium</strong></td>
+<td>0%</td>
+<td>5%</td>
+<td>7%</td>
+</tr>
+<tr>
+<td><strong>Servicios Registrados (Negocios)</strong></td>
+<td>50</td>
+<td>200</td>
+<td>1,000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</details>
+
+
+<!-- ============================================
+     SECCIÓN 9: RIESGOS
+     ============================================ -->
+
+<details id="seccion-9">
+<summary>9. ANÁLISIS DE RIESGOS</summary>
+<div class="section-content">
+
+<h3>Principales Riesgos Identificados y Plan de Mitigación</h3>
+
+<table>
+<thead>
+<tr>
+<th>Riesgo</th>
+<th>Probabilidad</th>
+<th>Impacto</th>
+<th>Plan de Mitigación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Baja Adopción de Usuarios</strong><br>(no alcanzar 15,000 MAU en Q2)</td>
+<td>Media</td>
+<td>Crítico</td>
+<td>• Validar product-market fit en beta (NPS >50)<br>• Marketing agresivo (€10,580/mes)<br>• Programa de referidos<br>• Partnerships con veterinarios/tiendas</td>
+</tr>
+<tr>
+<td><strong>Problemas de Escalabilidad Backend</strong><br>(app lenta con 50,000+ usuarios)</td>
+<td>Media</td>
+<td>Alto</td>
+<td>• Optimización de queries (indexar DB, caché con Redis)<br>• Horizontal scaling (load balancer)<br>• CDN para imágenes (Cloudinary ya implementado)<br>• Monitoring con alertas (New Relic o similar)</td>
+</tr>
+<tr>
+<td><strong>Contenido Inapropiado</strong><br>(spam, acoso, contenido ofensivo)</td>
+<td>Media</td>
+<td>Alto</td>
+<td>• Sistema de reportes/denuncias (Q1)<br>• Moderadores humanos<br>• IA de detección de contenido (futuro)<br>• Sistema de bloqueo de usuarios</td>
+</tr>
+<tr>
+<td><strong>Chicken-and-Egg Marketplace</strong><br>(sin negocios no hay usuarios, sin usuarios no hay negocios)</td>
+<td>Alta</td>
+<td>Medio</td>
+<td>• Supply-first: registrar 200 negocios ANTES de lanzamiento<br>• Subsidios iniciales (6 meses gratis para primeros 500 negocios)<br>• Outreach directo a veterinarios/tiendas</td>
+</tr>
+<tr>
+<td><strong>Competencia de Gigantes</strong><br>(Instagram/Facebook copian features)</td>
+<td>Baja</td>
+<td>Alto</td>
+<td>• Velocidad de ejecución (lanzar rápido)<br>• Enfoque en nicho (mascotas + hispanohablante)<br>• Network effects (más usuarios = más difícil copiar)<br>• Features específicas que gigantes no tendrán (salud, marketplace local)</td>
+</tr>
+<tr>
+<td><strong>Burn Rate Alto</strong><br>(gastar mucho dinero antes de generar ingresos)</td>
+<td>Media</td>
+<td>Crítico</td>
+<td>• Diversificación de ingresos (premium + marketplace + ads)<br>• Fundraising en Q2 2026 (€184-460K seed round)<br>• Control estricto de gastos (marketing ROI-driven)</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</details>
+
+
+<!-- ============================================
+     SECCIÓN 10: CONCLUSIONES
+     ============================================ -->
+
+<details id="seccion-10">
+<summary>10. CONCLUSIONES Y PRÓXIMOS PASOS</summary>
+<div class="section-content">
+
+<h3>Resumen Ejecutivo Final</h3>
+
+<div class="callout">
+<p><strong>Petos</strong> tiene la oportunidad de capturar un mercado global de <strong>€8.54 mil millones</strong> (creciendo a €21.78 mil millones en 2032) en un segmento desatendido: <strong>apps all-in-one en español</strong> para amantes de mascotas.</p>
+</div>
+
+<h3>Ventajas Competitivas Clave (Por Qué Petos Ganará)</h3>
+
+<table>
+<thead>
+<tr>
+<th>Ventaja</th>
+<th>Impacto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. Único ecosistema completo:</strong> Social + Servicios + Salud (ningún competidor tiene las 3)</td>
+<td>Diferenciación clara, menos apps = mejor experiencia de usuario</td>
+</tr>
+<tr>
+<td><strong>2. Mercado hispanohablante:</strong> 100% en español desde día 1</td>
+<td>Competidores débiles en Latam y España (200M+ usuarios potenciales)</td>
+</tr>
+<tr>
+<td><strong>3. MVP casi completo:</strong> 98% funcionalidades core listas</td>
+<td>Time-to-market rápido (lanzamiento Q1 2026), ventaja de first-mover</td>
+</tr>
+<tr>
+<td><strong>4. Modelo diversificado:</strong> Freemium + Marketplace + Ads</td>
+<td>Reduce riesgo de dependencia de una sola fuente de ingresos</td>
+</tr>
+<tr>
+<td><strong>5. Network effects:</strong> Más usuarios = más valioso</td>
+<td>Barrera de entrada alta una vez alcanzado masa crítica (20-30K MAU)</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Estado Actual vs Proyección 12 Meses</h3>
+
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Estado Actual<br>(Noviembre 2025)</th>
+<th>Proyección<br>(Diciembre 2026)</th>
+<th>Crecimiento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Producto</strong></td>
+<td>98% completado</td>
+<td>100% + features adicionales</td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>Usuarios (MAU)</strong></td>
+<td>0 (pre-lanzamiento)</td>
+<td>50,000</td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>Ingresos Mensuales</strong></td>
+<td>€0</td>
+<td>€26,887</td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>ARR (Ingresos Anuales)</strong></td>
+<td>€0</td>
+<td>€322,644</td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>Servicios Registrados</strong></td>
+<td>0</td>
+<td>1,000 negocios</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Factores Críticos de Éxito (Lo Que DEBE Pasar)</h3>
+
+<div class="callout callout-warning">
+<ol>
+<li><strong>Lanzamiento en Q1 2026</strong> (antes del 31 de Marzo) - sin retrasos</li>
+<li><strong>Product-Market Fit en Beta</strong> (NPS >50) - validar que usuarios aman el producto</li>
+<li><strong>Marketing Agresivo Q2 2026</strong> (€10,580/mes) - alcanzar 15,000 MAU rápido</li>
+<li><strong>Monetización Q3-Q4 2026</strong> (>5% conversión a premium) - generar ingresos sostenibles</li>
+<li><strong>Retención Sostenible</strong> (D30 >30%) - usuarios que se quedan, no churn alto</li>
+</ol>
+</div>
+
+<h3>Decisiones Estratégicas Pendientes</h3>
+
+<h4>Decisión 1: Lanzamiento Geo-Focalizado</h4>
+
+<div class="callout">
+<p><strong>Recomendación:</strong> Lanzar primero en <strong>España</strong> (mercado desarrollado, alto poder adquisitivo, competencia baja en español). Una vez alcanzados 20,000 MAU en España (Q3 2026), expandir a México y luego resto de Latam.</p>
+<p><strong>Por qué España primero:</strong> CAC más bajo, usuarios premium (mayor conversión), infraestructura de servicios mejor (más veterinarios/tiendas registrados).</p>
+</div>
+
+<h4>Decisión 2: Fundraising en 2025</h4>
+
+<div class="callout">
+<p><strong>Recomendación:</strong> Buscar <strong>€184,000-460,000</strong> en Q2 2025 (seed round) para acelerar crecimiento con marketing.</p>
+<p><strong>Uso de fondos:</strong></p>
+<ol>
+<li>60% Marketing y adquisición de usuarios</li>
+<li>30% Desarrollo de producto (contratar 2 developers más)</li>
+<li>10% Operaciones y legal</li>
+</ol>
+<p><strong>Por qué ahora:</strong> Mercado crece rápido (CAGR 14.3%), ventana de oportunidad antes de que competidores entren al mercado hispanohablante.</p>
+</div>
+
+<h3>Cierre</h3>
+
+<div class="callout">
+<h4>El Momento es Ahora</h4>
+<p>La industria Pet Tech está en auge, la adopción de mascotas post-pandemia es alta, y los usuarios buscan soluciones integradas (no apps fragmentadas).</p>
+
+<p><strong>Los próximos 3-4 meses son críticos:</strong></p>
+<ol>
+<li><strong>Completar features faltantes</strong> (reportes, bloqueo, privacidad) - Diciembre 2025-Enero 2026</li>
+<li><strong>Lanzar beta privada</strong> y validar product-market fit (NPS >50) - Enero 2026</li>
+<li><strong>Lanzamiento público</strong> con marketing agresivo - Febrero 2026</li>
+</ol>
+
+<p><strong>Si ejecutamos este plan correctamente, Petos puede alcanzar 50,000 MAU y €322,644 ARR para fin de 2026, posicionándonos como el líder de apps pet-friendly en español.</strong></p>
+</div>
+
+<h2 class="text-center" style="color: var(--primary-color); margin-top: 50px;">¡Vamos a construir la comunidad pet-friendly más grande de Latinoamérica y España!</h2>
+
+<hr>
+
+<h3>Contacto</h3>
+
+<table>
+<thead>
+<tr>
+<th>Información</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Email</strong></td>
+<td>info@inventatec.com</td>
+</tr>
+<tr>
+<td><strong>Website</strong></td>
+<td>[En desarrollo]</td>
+</tr>
+<tr>
+<td><strong>LinkedIn</strong></td>
+<td>[En desarrollo]</td>
+</tr>
+</tbody>
+</table>
+
+<hr>
+
+<p class="text-center" style="margin-top: 40px; color: var(--text-secondary);"><strong>FIN DEL DOCUMENTO</strong><br>Versión 2.0 - Noviembre 2025</p>
+
+</div>
+</details>
+
+
+</div>
+
+<!-- ============================================
+     CHARTS.JS SCRIPTS
+     ============================================ -->
+
+<script>
+// Chart 1: Tamaño del Mercado
+const ctx1 = document.getElementById('chartMercado');
+if (ctx1) {
+  new Chart(ctx1, {
+    type: 'bar',
+    data: {
+      labels: ['USA 2025', 'Europa 2025', 'Global 2025', 'Global 2032'],
+      datasets: [{
+        label: 'Millones EUR',
+        data: [799, 721, 8538, 21776],
+        backgroundColor: ['#4A90E2', '#4A90E2', '#7ED321', '#7ED321'],
+        borderColor: ['#2E5C8A', '#2E5C8A', '#6BC418', '#6BC418'],
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        title: { display: false }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: function(value) {
+              return '$' + value.toLocaleString() + 'M';
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+// Chart 2: Segmentación de Usuarios
+const ctx3 = document.getElementById('chartSegmentacion');
+if (ctx3) {
+  new Chart(ctx3, {
+    type: 'pie',
+    data: {
+      labels: ['"Paw Parents" Digitales (70%)', 'Profesionales de Servicios (20%)', 'Criadores y Entusiastas (10%)'],
+      datasets: [{
+        data: [70, 20, 10],
+        backgroundColor: ['#4A90E2', '#7ED321', '#FFD700'],
+        borderColor: ['#2E5C8A', '#6BC418', '#E6C200'],
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom'
+        }
+      }
+    }
+  });
+}
+
+// Chart 3: Proyección de Ingresos
+const ctx4 = document.getElementById('chartIngresos');
+if (ctx4) {
+  new Chart(ctx4, {
+    type: 'bar',
+    data: {
+      labels: ['Mes 1', 'Mes 3', 'Mes 6', 'Mes 9', 'Mes 12'],
+      datasets: [
+        {
+          label: 'Premium',
+          data: [0, 1596, 4990, 8733, 12475],
+          backgroundColor: '#4A90E2'
+        },
+        {
+          label: 'Marketplace',
+          data: [0, 500, 3000, 8000, 13250],
+          backgroundColor: '#7ED321'
+        },
+        {
+          label: 'Publicidad',
+          data: [0, 0, 500, 1500, 3500],
+          backgroundColor: '#FFD700'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom' }
+      },
+      scales: {
+        x: { stacked: true },
+        y: {
+          stacked: true,
+          beginAtZero: true,
+          ticks: {
+            callback: function(value) {
+              return '$' + value.toLocaleString();
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+// Smooth scroll para links del índice
+document.querySelectorAll('.toc a').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    const targetId = this.getAttribute('href').substring(1);
+    const target = document.getElementById(targetId);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Abrir el details si está cerrado
+      if (target.tagName === 'DETAILS' && !target.open) {
+        target.open = true;
+      }
+    }
+  });
+});
+</script>
+
+</body>
+</html>
