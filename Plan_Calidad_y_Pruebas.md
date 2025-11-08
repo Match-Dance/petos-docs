@@ -1,148 +1,946 @@
-# 🧪 PLAN DE CALIDAD Y PRUEBAS - PETOS APP
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PETOS - Plan de Calidad y Pruebas</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    /* Paleta de colores simplificada */
+    --primary-color: #4A90E2;
+    --primary-dark: #2E5C8A;
+    --secondary-color: #7ED321;
+    --accent-color: #FFD700;
+    --success-color: #51CF66;
+    --text-primary: #2C3E50;
+    --text-secondary: #7F8C8D;
+    --bg-light: #F8F9FA;
+    --bg-white: #FFFFFF;
+    --border-color: #E9ECEF;
+    --shadow: 0 2px 8px rgba(0,0,0,0.1);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.15);
+  }
 
-**Fecha de creación**: Enero 2025
-**Versión**: 1.0
-**Tipo de pruebas**: Funcionales Manuales + Automatización sugerida
-**Alcance**: Frontend (Flutter) + Validación de respuestas Backend (NestJS)
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
----
+  body {
+    font-family: 'Inter', 'Segoe UI', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.8;
+    color: var(--text-primary);
+    background: #f0f2f5;
+    padding: 0;
+    margin: 0;
+    font-size: 16px;
+    min-height: 100vh;
+  }
 
-## 📋 TABLA DE CONTENIDOS
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 60px;
+  }
 
-1. [Introducción](#1-introducción)
-2. [Metodología de Pruebas](#2-metodología-de-pruebas)
-3. [Configuración del Entorno de Pruebas](#3-configuración-del-entorno-de-pruebas)
-4. [Casos de Prueba por Módulo](#4-casos-de-prueba-por-módulo)
-5. [Matriz de Pruebas](#5-matriz-de-pruebas)
-6. [Casos Extremos y Pruebas de Estrés](#6-casos-extremos-y-pruebas-de-estrés)
-7. [Herramientas de Automatización](#7-herramientas-de-automatización)
-8. [Reporte de Bugs](#8-reporte-de-bugs)
-9. [Checklist Final de Calidad](#9-checklist-final-de-calidad)
-10. [Anexos](#10-anexos)
+  /* ============================================
+     HEADER Y PORTADA
+     ============================================ */
 
----
+  .header {
+    background: white;
+    color: var(--text-primary);
+    padding: 80px 60px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+  }
 
-## 1. INTRODUCCIÓN
+  .header h1 {
+    font-size: 3em;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+    position: relative;
+    color: var(--text-primary);
+  }
 
-### 1.1 Objetivo del Documento
+  .header .subtitle {
+    font-size: 1.2em;
+    font-weight: 400;
+    margin-top: 15px;
+    color: var(--text-secondary);
+    position: relative;
+    letter-spacing: 0;
+  }
 
-Este documento define el **plan de pruebas funcionales** para la aplicación Petos, una red social para amantes de mascotas. El objetivo es asegurar que todas las funcionalidades del frontend funcionan correctamente y que el backend responde adecuadamente a las peticiones.
+  .header-meta {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+  }
 
-### 1.2 Alcance
+  .header-meta-item {
+    background: #f8f9fa;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+    color: var(--text-secondary);
+  }
 
-**Incluye**:
-- ✅ Pruebas funcionales manuales del frontend (Flutter)
-- ✅ Validación de respuestas del backend (NestJS)
-- ✅ Casos de éxito (happy path)
-- ✅ Casos extremos (edge cases)
-- ✅ Manejo de errores
-- ✅ Validaciones de formularios
-- ✅ Flujos de navegación
-- ✅ Sugerencias de automatización
+  .header-meta-item strong {
+    font-weight: 700;
+  }
 
-**No incluye**:
-- ❌ Pruebas unitarias del código backend
-- ❌ Pruebas unitarias del código frontend
-- ❌ Pruebas de rendimiento/carga
-- ❌ Pruebas de seguridad (pentesting)
+  /* ============================================
+     ÍNDICE
+     ============================================ */
 
-### 1.3 Criterios de Aceptación
+  .toc {
+    background: white;
+    padding: 40px 50px;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 40px;
+    border: none;
+  }
 
-Una funcionalidad se considera **APROBADA** si:
-- ✅ Cumple con todos los casos de prueba definidos
-- ✅ Maneja correctamente los casos extremos
-- ✅ Muestra mensajes de error claros y útiles
-- ✅ No presenta crashes o errores no controlados
-- ✅ La UI responde correctamente en diferentes tamaños de pantalla
-- ✅ El backend responde con los códigos HTTP correctos
+  .toc h2 {
+    color: var(--text-primary);
+    font-size: 1.8em;
+    font-weight: 700;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e9ecef;
+    letter-spacing: -0.5px;
+  }
 
-Una funcionalidad se considera **RECHAZADA** si:
-- ❌ Falla al menos 1 caso de prueba crítico
-- ❌ Causa crash de la aplicación
-- ❌ No maneja errores de red correctamente
-- ❌ Permite datos inválidos en el backend
-- ❌ La UI se rompe visualmente
+  .toc ul {
+    list-style: none;
+    counter-reset: toc-counter;
+  }
 
----
+  .toc li {
+    counter-increment: toc-counter;
+    margin: 18px 0;
+    padding-left: 50px;
+    position: relative;
+    font-size: 1.1em;
+  }
 
-## 2. METODOLOGÍA DE PRUEBAS
+  .toc li::before {
+    content: counter(toc-counter);
+    position: absolute;
+    left: 0;
+    background: var(--primary-color);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85em;
+    font-weight: 600;
+  }
 
-### 2.1 Tipos de Pruebas
+  .toc a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
 
-#### 2.1.1 Pruebas Funcionales Manuales
-- **Propósito**: Verificar que cada funcionalidad cumple con los requisitos
-- **Ejecutor**: QA Tester humano
-- **Frecuencia**: Antes de cada release
-- **Cobertura**: 100% de funcionalidades críticas
+  .toc a:hover {
+    color: var(--primary-color);
+  }
 
-#### 2.1.2 Pruebas de Casos Extremos (Edge Cases)
-- **Propósito**: Verificar comportamiento en situaciones límite
-- **Ejemplos**: Campos vacíos, textos muy largos, caracteres especiales, sin conexión
-- **Ejecutor**: QA Tester humano
-- **Frecuencia**: Antes de cada release mayor
+  /* ============================================
+     SECCIONES COLAPSABLES
+     ============================================ */
 
-#### 2.1.3 Pruebas de Regresión
-- **Propósito**: Asegurar que nuevos cambios no rompan funcionalidades existentes
-- **Ejecutor**: QA Tester humano + Tests automatizados (sugerido)
-- **Frecuencia**: Después de cada cambio significativo
+  details {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 30px;
+    overflow: hidden;
+    border: none;
+    transition: all 0.3s ease;
+  }
 
-#### 2.1.4 Pruebas de Aceptación de Usuario (UAT)
-- **Propósito**: Validar que la app cumple expectativas del usuario final
-- **Ejecutor**: Usuarios beta
-- **Frecuencia**: Antes del lanzamiento MVP
+  details:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
 
-### 2.2 Niveles de Prioridad
+  summary {
+    background: white;
+    color: var(--text-primary);
+    padding: 25px 40px;
+    cursor: pointer;
+    font-size: 1.5em;
+    font-weight: 600;
+    list-style: none;
+    user-select: none;
+    position: relative;
+    transition: all 0.3s ease;
+    letter-spacing: -0.5px;
+    border-bottom: 1px solid #f0f2f5;
+  }
 
-| Prioridad | Descripción | Impacto si falla |
-|-----------|-------------|------------------|
-| 🔴 **CRÍTICA** | Funcionalidad core, sin ella la app no funciona | Bloqueante de release |
-| 🟡 **ALTA** | Funcionalidad importante, afecta UX significativamente | Debe corregirse antes de release |
-| 🟢 **MEDIA** | Funcionalidad secundaria, afecta UX moderadamente | Puede ir en release si se documenta |
-| ⚪ **BAJA** | Mejora estética o funcionalidad menor | No bloqueante |
+  summary::-webkit-details-marker {
+    display: none;
+  }
 
-### 2.3 Estados de Prueba
+  summary::after {
+    content: '▼';
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%) rotate(0deg);
+    transition: transform 0.3s;
+    font-size: 0.6em;
+    color: var(--text-secondary);
+  }
 
-| Estado | Símbolo | Descripción |
-|--------|---------|-------------|
-| No probado | ⬜ | Caso de prueba aún no ejecutado |
-| Aprobado | ✅ | Caso de prueba pasó correctamente |
-| Fallido | ❌ | Caso de prueba falló |
-| Bloqueado | 🚫 | No se puede probar (dependencia bloqueada) |
-| En revisión | 🔄 | Bug reportado, esperando fix |
+  details[open] summary::after {
+    transform: translateY(-50%) rotate(180deg);
+  }
 
----
+  summary:hover {
+    background: #f8f9fa;
+  }
 
-## 3. CONFIGURACIÓN DEL ENTORNO DE PRUEBAS
+  .section-content {
+    padding: 40px;
+  }
 
-### 3.1 Requisitos Previos
+  .section-separator {
+    height: 1px;
+    background: #e9ecef;
+    margin: 30px 0;
+  }
 
-**Hardware**:
-- Dispositivo Android (real o emulador) - Android 8.0+
-- Dispositivo iOS (real o simulador) - iOS 12.0+
-- PC/Mac con Flutter SDK instalado
+  /* ============================================
+     TÍTULOS
+     ============================================ */
 
-**Software**:
-- Flutter SDK (versión estable latest)
-- Android Studio / Xcode
-- Postman (para pruebas de API)
-- Herramienta de captura de pantalla/video
+  h2 {
+    color: var(--text-primary);
+    font-size: 1.8em;
+    font-weight: 600;
+    margin-top: 40px;
+    margin-bottom: 25px;
+    padding-bottom: 0;
+    border-bottom: none;
+    letter-spacing: -0.5px;
+  }
 
-**Backend**:
-- Servidor de desarrollo corriendo en `http://localhost:8080`
-- Base de datos PostgreSQL con datos de prueba
+  h3 {
+    color: var(--text-primary);
+    font-size: 1.4em;
+    font-weight: 600;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    padding-left: 0;
+    border-left: none;
+    letter-spacing: -0.3px;
+  }
 
-### 3.2 Datos de Prueba
+  h4 {
+    color: var(--text-primary);
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-top: 25px;
+    margin-bottom: 15px;
+  }
 
-#### Usuario de Prueba Principal
-```
+  /* ============================================
+     TABLAS
+     ============================================ */
+
+  table {
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin: 30px 0;
+    border-collapse: collapse;
+    border: none;
+  }
+
+  thead {
+    background: #f8f9fa;
+  }
+
+  th {
+    padding: 16px 20px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.9em;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--text-secondary) !important;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f2f5;
+    font-size: 0.95em;
+    color: var(--text-primary);
+  }
+
+  /* Ancho de columnas solo para la primera tabla (Funcionalidades Implementadas) */
+  .table-funcionalidades th:nth-child(1),
+  .table-funcionalidades td:nth-child(1) {
+    width: 20%;
+  }
+
+  .table-funcionalidades th:nth-child(2),
+  .table-funcionalidades td:nth-child(2) {
+    width: 55%;
+  }
+
+  .table-funcionalidades th:nth-child(3),
+  .table-funcionalidades td:nth-child(3) {
+    width: 25%;
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    transition: all 0.2s ease;
+  }
+
+  tbody tr:hover {
+    background-color: #f8f9fa;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* ============================================
+     BLOCKQUOTES Y CALLOUTS
+     ============================================ */
+
+  blockquote {
+    background: #f8f9fa;
+    border-left: 4px solid var(--primary-color);
+    padding: 25px 30px;
+    margin: 25px 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 1em;
+    color: var(--text-secondary);
+    position: relative;
+    line-height: 1.7;
+  }
+
+  .callout {
+    background: #e3f2fd;
+    border-left: 4px solid var(--primary-color);
+    padding: 20px 25px;
+    margin: 25px 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.95em;
+    line-height: 1.7;
+  }
+
+  .callout-warning {
+    border-left-color: var(--primary-color);
+    background: #e3f2fd;
+  }
+
+  .callout-success {
+    border-left-color: var(--success-color);
+    background: #f0f9ff;
+  }
+
+  /* ============================================
+     BADGES Y ETIQUETAS
+     ============================================ */
+
+  /* Opción 3 - Solo borde (limpio y minimalista) */
+  .badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.85em;
+    margin: 2px 4px;
+    transition: all 0.2s ease;
+    background: transparent;
+    border: 1.5px solid #e1e4e8;
+    color: #586069;
+  }
+
+  .badge-implementado {
+    /* ✅ Implementado */
+  }
+
+  .badge-pendiente {
+    /* 📋 V2.0 */
+  }
+
+  .badge-progress {
+    /* ⏳ En Desarrollo */
+  }
+
+  /* ============================================
+     GRÁFICOS
+     ============================================ */
+
+  .chart-container {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin: 30px 0;
+    border: none;
+  }
+
+  .chart-container h3 {
+    border-left: none;
+    padding-left: 0;
+    margin-top: 0;
+    text-align: left;
+    color: var(--text-primary);
+    margin-bottom: 30px;
+    font-size: 1.4em;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+
+  .chart-wrapper {
+    position: relative;
+    height: 400px;
+    margin-top: 20px;
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+  }
+
+  .chart-wrapper-small {
+    position: relative;
+    height: 300px;
+    margin-top: 20px;
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+  }
+
+  /* Layout de gráfica + tabla dentro del mismo card */
+  .chart-table-card {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin: 30px 0;
+    display: flex;
+    gap: 40px;
+    align-items: stretch;
+  }
+
+  .chart-table-card .chart-column {
+    flex: 0 0 35%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chart-table-card .table-column {
+    flex: 1;
+  }
+
+  .chart-table-card .chart-column h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+  }
+
+  .chart-table-card .chart-wrapper {
+    height: auto;
+    flex: 1;
+    min-height: 250px;
+    margin-top: 0;
+  }
+
+  .chart-table-card table {
+    margin: 0;
+    box-shadow: none;
+  }
+
+  .chart-table-card .chart-source {
+    font-size: 0.85em;
+    margin-top: 20px;
+    color: var(--text-secondary);
+    text-align: left;
+  }
+
+  /* ============================================
+     LISTAS
+     ============================================ */
+
+  ul, ol {
+    padding-left: 30px;
+    margin: 20px 0;
+  }
+
+  li {
+    margin: 12px 0;
+    line-height: 1.7;
+    font-size: 0.95em;
+  }
+
+  ul li::marker {
+    color: var(--primary-color);
+  }
+
+  ol li::marker {
+    color: var(--primary-color);
+    font-weight: 600;
+  }
+
+  /* ============================================
+     SEPARADORES
+     ============================================ */
+
+  hr {
+    border: none;
+    height: 1px;
+    background: #e9ecef;
+    margin: 30px 0;
+  }
+
+  /* ============================================
+     PÁRRAFOS Y TEXTO
+     ============================================ */
+
+  p {
+    margin: 15px 0;
+    line-height: 1.7;
+    font-size: 0.95em;
+    color: var(--text-primary);
+  }
+
+  strong {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  /* ============================================
+     ICONOS MATERIAL (Unicode)
+     ============================================ */
+
+  .material-icon {
+    font-family: 'Segoe UI Symbol', 'Material Icons', sans-serif;
+    font-size: 1.2em;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+
+  /* ============================================
+     RESPONSIVE
+     ============================================ */
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 20px;
+    }
+
+    .header {
+      padding: 60px 30px;
+      border-radius: 20px;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      letter-spacing: -1.5px;
+    }
+
+    .header .subtitle {
+      font-size: 1.3em;
+    }
+
+    .header-meta {
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .toc {
+      padding: 40px 30px;
+      border-radius: 20px;
+    }
+
+    .toc h2 {
+      font-size: 1.8em;
+    }
+
+    summary {
+      font-size: 1.5em;
+      padding: 25px 30px;
+    }
+
+    .section-content {
+      padding: 40px 30px;
+    }
+
+    h2 {
+      font-size: 2em;
+    }
+
+    h3 {
+      font-size: 1.5em;
+    }
+
+    table {
+      font-size: 0.9em;
+    }
+
+    th, td {
+      padding: 15px 12px;
+    }
+
+    .chart-container {
+      padding: 40px 30px;
+    }
+
+    .chart-wrapper {
+      height: 300px;
+      padding: 20px;
+    }
+
+    .chart-wrapper-small {
+      height: 250px;
+    }
+
+    blockquote {
+      padding: 30px 35px;
+      font-size: 1.1em;
+    }
+
+    .callout {
+      padding: 30px 35px;
+    }
+  }
+
+  /* ============================================
+     UTILIDADES
+     ============================================ */
+
+  .text-center {
+    text-align: center;
+  }
+
+  .mt-4 {
+    margin-top: 40px;
+  }
+
+  .mb-4 {
+    margin-bottom: 40px;
+  }
+
+  .highlight-box {
+    background: white;
+    border-radius: 12px;
+    padding: 30px 40px;
+    margin: 30px 0;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.15);
+    border: 2px solid var(--primary-color);
+    position: relative;
+  }
+
+  .highlight-box p {
+    position: relative;
+    z-index: 1;
+    font-size: 0.95em;
+    line-height: 1.7;
+    margin: 10px 0;
+    color: var(--text-primary);
+  }
+
+  .highlight-box p strong {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  /* Estilos adicionales para código */
+  pre {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    overflow-x: auto;
+    margin: 20px 0;
+    border: 1px solid #e9ecef;
+  }
+
+  code {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9em;
+    color: var(--text-primary);
+  }
+
+  p code {
+    background: #f8f9fa;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #e83e8c;
+    font-size: 0.85em;
+  }
+
+  /* Clase section para secciones principales */
+  .section {
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER CON PORTADA -->
+<div class="header">
+  <h1>🧪 PLAN DE CALIDAD Y PRUEBAS - PETOS APP</h1>
+  <p class="subtitle">Plan integral de pruebas funcionales para la red social de mascotas</p>
+  <div class="header-meta">
+    <div class="header-meta-item"><strong>Fecha:</strong> Enero 2025</div>
+    <div class="header-meta-item"><strong>Versión:</strong> 1.0</div>
+    <div class="header-meta-item"><strong>Tipo:</strong> Funcionales Manuales + Automatización</div>
+    <div class="header-meta-item"><strong>Alcance:</strong> Frontend Flutter + Backend NestJS</div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ÍNDICE DE CONTENIDOS -->
+<div class="toc">
+  <h2>📋 Tabla de Contenidos</h2>
+  <ul>
+    <li><a href="#seccion-1">1. Introducción</a></li>
+    <li><a href="#seccion-2">2. Metodología de Pruebas</a></li>
+    <li><a href="#seccion-3">3. Configuración del Entorno de Pruebas</a></li>
+    <li><a href="#seccion-4">4. Casos de Prueba por Módulo</a></li>
+    <li><a href="#seccion-5">5. Matriz de Pruebas</a></li>
+    <li><a href="#seccion-6">6. Casos Extremos y Pruebas de Estrés</a></li>
+    <li><a href="#seccion-7">7. Herramientas de Automatización</a></li>
+    <li><a href="#seccion-8">8. Reporte de Bugs</a></li>
+    <li><a href="#seccion-9">9. Checklist Final de Calidad</a></li>
+    <li><a href="#seccion-10">10. Anexos</a></li>
+    <li><a href="#seccion-11">11. Conclusión</a></li>
+  </ul>
+</div>
+
+<!-- ============================================
+     SECCIÓN 1: INTRODUCCIÓN
+     ============================================ -->
+
+<details id="seccion-1" open>
+<summary>1. INTRODUCCIÓN</summary>
+<div class="section-content">
+
+
+<h3>1.1 Objetivo del Documento</h3>
+<p>Este documento define el <strong>plan de pruebas funcionales</strong> para la aplicación Petos, una red social para amantes de mascotas. El objetivo es asegurar que todas las funcionalidades del frontend funcionan correctamente y que el backend responde adecuadamente a las peticiones.</p>
+<h3>1.2 Alcance</h3>
+<p><strong>Incluye</strong>:</p>
+<ul>
+<li>✅ Pruebas funcionales manuales del frontend (Flutter)</li>
+<li>✅ Validación de respuestas del backend (NestJS)</li>
+<li>✅ Casos de éxito (happy path)</li>
+<li>✅ Casos extremos (edge cases)</li>
+<li>✅ Manejo de errores</li>
+<li>✅ Validaciones de formularios</li>
+<li>✅ Flujos de navegación</li>
+<li>✅ Sugerencias de automatización</li>
+</ul>
+<p><strong>No incluye</strong>:</p>
+<ul>
+<li>❌ Pruebas unitarias del código backend</li>
+<li>❌ Pruebas unitarias del código frontend</li>
+<li>❌ Pruebas de rendimiento/carga</li>
+<li>❌ Pruebas de seguridad (pentesting)</li>
+</ul>
+<h3>1.3 Criterios de Aceptación</h3>
+<p>Una funcionalidad se considera <strong>APROBADA</strong> si:</p>
+<ul>
+<li>✅ Cumple con todos los casos de prueba definidos</li>
+<li>✅ Maneja correctamente los casos extremos</li>
+<li>✅ Muestra mensajes de error claros y útiles</li>
+<li>✅ No presenta crashes o errores no controlados</li>
+<li>✅ La UI responde correctamente en diferentes tamaños de pantalla</li>
+<li>✅ El backend responde con los códigos HTTP correctos</li>
+</ul>
+<p>Una funcionalidad se considera <strong>RECHAZADA</strong> si:</p>
+<ul>
+<li>❌ Falla al menos 1 caso de prueba crítico</li>
+<li>❌ Causa crash de la aplicación</li>
+<li>❌ No maneja errores de red correctamente</li>
+<li>❌ Permite datos inválidos en el backend</li>
+<li>❌ La UI se rompe visualmente</li>
+</ul>
+<hr>
+
+</div>
+</details>
+
+
+<!-- ============================================
+     SECCIÓN 2: METODOLOGÍA DE PRUEBAS
+     ============================================ -->
+
+<details id="seccion-2">
+<summary>2. METODOLOGÍA DE PRUEBAS</summary>
+<div class="section-content">
+
+
+<h3>2.1 Tipos de Pruebas</h3>
+<h4>2.1.1 Pruebas Funcionales Manuales</h4>
+<ul>
+<li><strong>Propósito</strong>: Verificar que cada funcionalidad cumple con los requisitos</li>
+<li><strong>Ejecutor</strong>: QA Tester humano</li>
+<li><strong>Frecuencia</strong>: Antes de cada release</li>
+<li><strong>Cobertura</strong>: 100% de funcionalidades críticas</li>
+</ul>
+<h4>2.1.2 Pruebas de Casos Extremos (Edge Cases)</h4>
+<ul>
+<li><strong>Propósito</strong>: Verificar comportamiento en situaciones límite</li>
+<li><strong>Ejemplos</strong>: Campos vacíos, textos muy largos, caracteres especiales, sin conexión</li>
+<li><strong>Ejecutor</strong>: QA Tester humano</li>
+<li><strong>Frecuencia</strong>: Antes de cada release mayor</li>
+</ul>
+<h4>2.1.3 Pruebas de Regresión</h4>
+<ul>
+<li><strong>Propósito</strong>: Asegurar que nuevos cambios no rompan funcionalidades existentes</li>
+<li><strong>Ejecutor</strong>: QA Tester humano + Tests automatizados (sugerido)</li>
+<li><strong>Frecuencia</strong>: Después de cada cambio significativo</li>
+</ul>
+<h4>2.1.4 Pruebas de Aceptación de Usuario (UAT)</h4>
+<ul>
+<li><strong>Propósito</strong>: Validar que la app cumple expectativas del usuario final</li>
+<li><strong>Ejecutor</strong>: Usuarios beta</li>
+<li><strong>Frecuencia</strong>: Antes del lanzamiento MVP</li>
+</ul>
+<h3>2.2 Niveles de Prioridad</h3>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Prioridad</th>
+<th>Descripción</th>
+<th>Impacto si falla</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🔴 <strong>CRÍTICA</strong></td>
+<td>Funcionalidad core, sin ella la app no funciona</td>
+<td>Bloqueante de release</td>
+</tr>
+<tr>
+<td>🟡 <strong>ALTA</strong></td>
+<td>Funcionalidad importante, afecta UX significativamente</td>
+<td>Debe corregirse antes de release</td>
+</tr>
+<tr>
+<td>🟢 <strong>MEDIA</strong></td>
+<td>Funcionalidad secundaria, afecta UX moderadamente</td>
+<td>Puede ir en release si se documenta</td>
+</tr>
+<tr>
+<td>⚪ <strong>BAJA</strong></td>
+<td>Mejora estética o funcionalidad menor</td>
+<td>No bloqueante</td>
+</tr>
+</tbody>
+</table>
+<h3>2.3 Estados de Prueba</h3>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Estado</th>
+<th>Símbolo</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No probado</td>
+<td>⬜</td>
+<td>Caso de prueba aún no ejecutado</td>
+</tr>
+<tr>
+<td>Aprobado</td>
+<td>✅</td>
+<td>Caso de prueba pasó correctamente</td>
+</tr>
+<tr>
+<td>Fallido</td>
+<td>❌</td>
+<td>Caso de prueba falló</td>
+</tr>
+<tr>
+<td>Bloqueado</td>
+<td>🚫</td>
+<td>No se puede probar (dependencia bloqueada)</td>
+</tr>
+<tr>
+<td>En revisión</td>
+<td>🔄</td>
+<td>Bug reportado, esperando fix</td>
+</tr>
+</tbody>
+</table>
+<hr>
+
+</div>
+</details>
+
+
+<!-- ============================================
+     SECCIÓN 3: CONFIGURACIÓN DEL ENTORNO DE PRUEBAS
+     ============================================ -->
+
+<details id="seccion-3">
+<summary>3. CONFIGURACIÓN DEL ENTORNO DE PRUEBAS</summary>
+<div class="section-content">
+
+
+<h3>3.1 Requisitos Previos</h3>
+<p><strong>Hardware</strong>:</p>
+<ul>
+<li>Dispositivo Android (real o emulador) - Android 8.0+</li>
+<li>Dispositivo iOS (real o simulador) - iOS 12.0+</li>
+<li>PC/Mac con Flutter SDK instalado</li>
+</ul>
+<p><strong>Software</strong>:</p>
+<ul>
+<li>Flutter SDK (versión estable latest)</li>
+<li>Android Studio / Xcode</li>
+<li>Postman (para pruebas de API)</li>
+<li>Herramienta de captura de pantalla/video</li>
+</ul>
+<p><strong>Backend</strong>:</p>
+<ul>
+<li>Servidor de desarrollo corriendo en <code>http://localhost:8080</code></li>
+<li>Base de datos PostgreSQL con datos de prueba</li>
+</ul>
+<h3>3.2 Datos de Prueba</h3>
+<h4>Usuario de Prueba Principal</h4>
+<pre><code class="language-plaintext">
 Email: qa.tester@petos.com
 Password: QA_Test123!
 Nombre: QA
 Apellido: Tester
-```
-
-#### Usuarios Adicionales (para pruebas sociales)
-```
+</code></pre>
+<h4>Usuarios Adicionales (para pruebas sociales)</h4>
+<pre><code class="language-plaintext">
 Usuario 2:
 Email: user2@petos.com
 Password: User2_Test123!
@@ -150,193 +948,349 @@ Password: User2_Test123!
 Usuario 3:
 Email: user3@petos.com
 Password: User3_Test123!
-```
-
-#### Mascotas de Prueba
-```
+</code></pre>
+<h4>Mascotas de Prueba</h4>
+<pre><code class="language-plaintext">
 Mascota 1: "Max" - Perro - Golden Retriever - 3 años
 Mascota 2: "Luna" - Gato - Siamés - 2 años
 Mascota 3: "Rocky" - Perro - Bulldog - 5 años
-```
+</code></pre>
+<h3>3.3 Preparación del Entorno</h3>
+<p><strong>Pasos previos a las pruebas</strong>:</p>
+<ol>
+<li>✅ Verificar que el backend está corriendo (<code>GET http://localhost:8080/health</code>)</li>
+<li>✅ Limpiar base de datos o crear datos de prueba frescos</li>
+<li>✅ Instalar app en dispositivo de prueba (<code>flutter run</code>)</li>
+<li>✅ Verificar conexión a internet estable</li>
+<li>✅ Configurar herramienta de captura de pantalla</li>
+<li>✅ Limpiar caché de la app antes de cada sesión de pruebas</li>
+</ol>
+<hr>
 
-### 3.3 Preparación del Entorno
+</div>
+</details>
 
-**Pasos previos a las pruebas**:
-1. ✅ Verificar que el backend está corriendo (`GET http://localhost:8080/health`)
-2. ✅ Limpiar base de datos o crear datos de prueba frescos
-3. ✅ Instalar app en dispositivo de prueba (`flutter run`)
-4. ✅ Verificar conexión a internet estable
-5. ✅ Configurar herramienta de captura de pantalla
-6. ✅ Limpiar caché de la app antes de cada sesión de pruebas
 
----
+<!-- ============================================
+     SECCIÓN 4: CASOS DE PRUEBA POR MÓDULO
+     ============================================ -->
 
-## 4. CASOS DE PRUEBA POR MÓDULO
+<details id="seccion-4">
+<summary>4. CASOS DE PRUEBA POR MÓDULO</summary>
+<div class="section-content">
 
-### 4.1 MÓDULO: AUTENTICACIÓN Y REGISTRO
+<details id="modulo-auth">
+<summary>4.1 MÓDULO: AUTENTICACIÓN Y REGISTRO</summary>
+<div class="section-content">
 
-#### CP-AUTH-001: Login con Credenciales Válidas
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-AUTH-001 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Autenticación |
-| **Funcionalidad** | Login |
-
-**Precondiciones**:
-- Usuario registrado existe en base de datos
-- App instalada y abierta en pantalla de login
-
-**Pasos**:
-1. Ingresar email: `qa.tester@petos.com`
-2. Ingresar password: `QA_Test123!`
-3. Tocar botón "Iniciar Sesión"
-
-**Resultado Esperado**:
-- ✅ Indicador de carga se muestra mientras se procesa
-- ✅ Backend responde con status 200 y token JWT
-- ✅ App guarda token en storage local
-- ✅ Usuario es redirigido a pantalla de Home Feed
-- ✅ Bottom navigation bar es visible
-
-**Validaciones Backend**:
-- Response status: `200 OK`
-- Response body contiene: `{ access_token: "...", user: {...} }`
-
-**Casos Extremos**:
-- ⚠️ **Sin conexión**: Mostrar error "Sin conexión a internet"
-- ⚠️ **Backend caído**: Mostrar error "Servidor no disponible, intenta más tarde"
-
----
-
-#### CP-AUTH-002: Login con Credenciales Inválidas
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-AUTH-002 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Autenticación |
-
-**Pasos**:
-1. Ingresar email: `qa.tester@petos.com`
-2. Ingresar password: `PasswordIncorrecto`
-3. Tocar botón "Iniciar Sesión"
-
-**Resultado Esperado**:
-- ✅ Backend responde con status 401 Unauthorized
-- ✅ App muestra mensaje de error: "Credenciales incorrectas"
-- ✅ Usuario permanece en pantalla de login
-- ✅ Campos de formulario no se limpian (mantener email)
-
-**Validaciones Backend**:
-- Response status: `401 Unauthorized`
-- Response body: `{ message: "Invalid credentials", statusCode: 401 }`
-
----
-
-#### CP-AUTH-003: Validación de Formato de Email
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-AUTH-003 |
-| **Prioridad** | 🟡 ALTA |
-| **Módulo** | Autenticación |
-
-**Pasos**:
-1. Ingresar email inválido: `emailsinformato`
-2. Tocar campo de password (blur del campo email)
-
-**Resultado Esperado**:
-- ✅ Campo email muestra error: "Formato de email inválido"
-- ✅ Botón "Iniciar Sesión" permanece deshabilitado
-- ✅ No se hace petición al backend
-
-**Casos a Probar**:
-| Email Ingresado | Debe Validar Como |
-|-----------------|-------------------|
-| `emailsinformato` | ❌ Inválido |
-| `email@` | ❌ Inválido |
-| `@dominio.com` | ❌ Inválido |
-| `email@dominio` | ❌ Inválido |
-| `email@dominio.com` | ✅ Válido |
-| `email+tag@dominio.com` | ✅ Válido |
-
----
-
-#### CP-AUTH-004: Registro Multi-Paso - Paso 1 (Datos Usuario)
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-AUTH-004 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Registro |
-
-**Precondiciones**:
-- App abierta en pantalla de registro
-- Paso 1 visible (Datos de Usuario)
-
-**Pasos**:
-1. Ingresar nombre: `Nuevo`
-2. Ingresar apellido: `Usuario`
-3. Ingresar email: `nuevo.usuario@petos.com`
-4. Ingresar password: `NuevoUser123!`
-5. Confirmar password: `NuevoUser123!`
-6. Tocar botón "Siguiente"
-
-**Resultado Esperado**:
-- ✅ Todos los campos validan correctamente
-- ✅ Indicador de progreso muestra "1/3"
-- ✅ Usuario es llevado a Paso 2 (Ubicación)
-- ✅ Datos del Paso 1 se mantienen en memoria (si vuelve atrás)
-
-**Validación de Contraseña**:
-- ✅ Mínimo 8 caracteres
-- ✅ Al menos 1 mayúscula
-- ✅ Al menos 1 minúscula
-- ✅ Al menos 1 número
-- ✅ Opcional: 1 carácter especial
-
-**Casos Extremos**:
-| Password | Debe Validar Como |
-|----------|-------------------|
-| `123456` | ❌ Muy corta (< 8) |
-| `abcdefgh` | ❌ Sin mayúsculas ni números |
-| `ABCDEFGH` | ❌ Sin minúsculas ni números |
-| `Abcdefgh` | ❌ Sin números |
-| `Abcdefg1` | ✅ Válida |
-| `Abc123!@#` | ✅ Válida |
-
----
-
-#### CP-AUTH-005: Registro Multi-Paso - Paso 3 (Primera Mascota)
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-AUTH-005 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Registro |
-
-**Precondiciones**:
-- Usuario completó Paso 1 y Paso 2
-- Paso 3 visible (Registrar Primera Mascota)
-
-**Pasos**:
-1. Tocar avatar para agregar foto (opcional)
-2. Ingresar nombre: `Firulais`
-3. Seleccionar tipo: `Perro`
-4. Seleccionar raza: `Golden Retriever`
-5. Seleccionar fecha de nacimiento: `01/01/2020`
-6. Seleccionar sexo: `Macho`
-7. Ingresar biografía (opcional): `Mi primer amigo peludo`
-8. Tocar botón "Finalizar Registro"
-
-**Resultado Esperado**:
-- ✅ Loading indicator se muestra
-- ✅ Backend crea usuario nuevo (status 201 Created)
-- ✅ Backend crea mascota asociada al usuario
-- ✅ Backend genera JWT token
-- ✅ App guarda token en storage
-- ✅ Usuario es redirigido a Home Feed
-- ✅ Mensaje de bienvenida se muestra (opcional)
-
-**Validaciones Backend**:
-```json
+<h4>CP-AUTH-001: Login con Credenciales Válidas</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-AUTH-001</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Autenticación</td>
+</tr>
+<tr>
+<td><strong>Funcionalidad</strong></td>
+<td>Login</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario registrado existe en base de datos</li>
+<li>App instalada y abierta en pantalla de login</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Ingresar email: <code>qa.tester@petos.com</code></li>
+<li>Ingresar password: <code>QA_Test123!</code></li>
+<li>Tocar botón "Iniciar Sesión"</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Indicador de carga se muestra mientras se procesa</li>
+<li>✅ Backend responde con status 200 y token JWT</li>
+<li>✅ App guarda token en storage local</li>
+<li>✅ Usuario es redirigido a pantalla de Home Feed</li>
+<li>✅ Bottom navigation bar es visible</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+<ul>
+<li>Response status: <code>200 OK</code></li>
+<li>Response body contiene: <code>{ access_token: "...", user: {...} }</code></li>
+</ul>
+<p><strong>Casos Extremos</strong>:</p>
+<ul>
+<li>⚠️ <strong>Sin conexión</strong>: Mostrar error "Sin conexión a internet"</li>
+<li>⚠️ <strong>Backend caído</strong>: Mostrar error "Servidor no disponible, intenta más tarde"</li>
+</ul>
+<hr>
+<h4>CP-AUTH-002: Login con Credenciales Inválidas</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-AUTH-002</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Autenticación</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Ingresar email: <code>qa.tester@petos.com</code></li>
+<li>Ingresar password: <code>PasswordIncorrecto</code></li>
+<li>Tocar botón "Iniciar Sesión"</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend responde con status 401 Unauthorized</li>
+<li>✅ App muestra mensaje de error: "Credenciales incorrectas"</li>
+<li>✅ Usuario permanece en pantalla de login</li>
+<li>✅ Campos de formulario no se limpian (mantener email)</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+<ul>
+<li>Response status: <code>401 Unauthorized</code></li>
+<li>Response body: <code>{ message: "Invalid credentials", statusCode: 401 }</code></li>
+</ul>
+<hr>
+<h4>CP-AUTH-003: Validación de Formato de Email</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-AUTH-003</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-alta">🟡 ALTA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Autenticación</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Ingresar email inválido: <code>emailsinformato</code></li>
+<li>Tocar campo de password (blur del campo email)</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Campo email muestra error: "Formato de email inválido"</li>
+<li>✅ Botón "Iniciar Sesión" permanece deshabilitado</li>
+<li>✅ No se hace petición al backend</li>
+</ul>
+<p><strong>Casos a Probar</strong>:</p>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Email Ingresado</th>
+<th>Debe Validar Como</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>emailsinformato</code></td>
+<td>❌ Inválido</td>
+</tr>
+<tr>
+<td><code>email@</code></td>
+<td>❌ Inválido</td>
+</tr>
+<tr>
+<td><code>@dominio.com</code></td>
+<td>❌ Inválido</td>
+</tr>
+<tr>
+<td><code>email@dominio</code></td>
+<td>❌ Inválido</td>
+</tr>
+<tr>
+<td><code>email@dominio.com</code></td>
+<td>✅ Válido</td>
+</tr>
+<tr>
+<td><code>email+tag@dominio.com</code></td>
+<td>✅ Válido</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h4>CP-AUTH-004: Registro Multi-Paso - Paso 1 (Datos Usuario)</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-AUTH-004</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Registro</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>App abierta en pantalla de registro</li>
+<li>Paso 1 visible (Datos de Usuario)</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Ingresar nombre: <code>Nuevo</code></li>
+<li>Ingresar apellido: <code>Usuario</code></li>
+<li>Ingresar email: <code>nuevo.usuario@petos.com</code></li>
+<li>Ingresar password: <code>NuevoUser123!</code></li>
+<li>Confirmar password: <code>NuevoUser123!</code></li>
+<li>Tocar botón "Siguiente"</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Todos los campos validan correctamente</li>
+<li>✅ Indicador de progreso muestra "1/3"</li>
+<li>✅ Usuario es llevado a Paso 2 (Ubicación)</li>
+<li>✅ Datos del Paso 1 se mantienen en memoria (si vuelve atrás)</li>
+</ul>
+<p><strong>Validación de Contraseña</strong>:</p>
+<ul>
+<li>✅ Mínimo 8 caracteres</li>
+<li>✅ Al menos 1 mayúscula</li>
+<li>✅ Al menos 1 minúscula</li>
+<li>✅ Al menos 1 número</li>
+<li>✅ Opcional: 1 carácter especial</li>
+</ul>
+<p><strong>Casos Extremos</strong>:</p>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Password</th>
+<th>Debe Validar Como</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>123456</code></td>
+<td>❌ Muy corta (< 8)</td>
+</tr>
+<tr>
+<td><code>abcdefgh</code></td>
+<td>❌ Sin mayúsculas ni números</td>
+</tr>
+<tr>
+<td><code>ABCDEFGH</code></td>
+<td>❌ Sin minúsculas ni números</td>
+</tr>
+<tr>
+<td><code>Abcdefgh</code></td>
+<td>❌ Sin números</td>
+</tr>
+<tr>
+<td><code>Abcdefg1</code></td>
+<td>✅ Válida</td>
+</tr>
+<tr>
+<td><code>Abc123!@#</code></td>
+<td>✅ Válida</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h4>CP-AUTH-005: Registro Multi-Paso - Paso 3 (Primera Mascota)</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-AUTH-005</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Registro</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario completó Paso 1 y Paso 2</li>
+<li>Paso 3 visible (Registrar Primera Mascota)</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Tocar avatar para agregar foto (opcional)</li>
+<li>Ingresar nombre: <code>Firulais</code></li>
+<li>Seleccionar tipo: <code>Perro</code></li>
+<li>Seleccionar raza: <code>Golden Retriever</code></li>
+<li>Seleccionar fecha de nacimiento: <code>01/01/2020</code></li>
+<li>Seleccionar sexo: <code>Macho</code></li>
+<li>Ingresar biografía (opcional): <code>Mi primer amigo peludo</code></li>
+<li>Tocar botón "Finalizar Registro"</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Loading indicator se muestra</li>
+<li>✅ Backend crea usuario nuevo (status 201 Created)</li>
+<li>✅ Backend crea mascota asociada al usuario</li>
+<li>✅ Backend genera JWT token</li>
+<li>✅ App guarda token en storage</li>
+<li>✅ Usuario es redirigido a Home Feed</li>
+<li>✅ Mensaje de bienvenida se muestra (opcional)</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+<pre><code class="language-json">
 POST /auth/register
 Status: 201 Created
 Response: {
@@ -344,47 +1298,73 @@ Response: {
   "access_token": "eyJhbGc...",
   "pet": { "id": 1, "name": "Firulais", ... }
 }
-```
+</code></pre>
+<p><strong>Casos Extremos</strong>:</p>
+<ul>
+<li>⚠️ <strong>Email ya existe</strong>: Backend responde 409 Conflict, mostrar "Email ya registrado"</li>
+<li>⚠️ <strong>Sin conexión durante registro</strong>: Mostrar error, no guardar datos localmente</li>
+<li>⚠️ <strong>Falla upload de foto</strong>: Continuar registro sin foto, reintentable después</li>
+</ul>
+<hr>
 
-**Casos Extremos**:
-- ⚠️ **Email ya existe**: Backend responde 409 Conflict, mostrar "Email ya registrado"
-- ⚠️ **Sin conexión durante registro**: Mostrar error, no guardar datos localmente
-- ⚠️ **Falla upload de foto**: Continuar registro sin foto, reintentable después
+</div>
+</details>
 
----
+<details id="modulo-profile">
+<summary>4.2 MÓDULO: PERFIL DE USUARIO</summary>
+<div class="section-content">
 
-### 4.2 MÓDULO: GESTIÓN DE PERFIL DE USUARIO
-
-#### CP-PROFILE-001: Ver Perfil Propio
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-PROFILE-001 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Perfil Usuario |
-
-**Precondiciones**:
-- Usuario autenticado
-- Bottom navigation visible
-
-**Pasos**:
-1. Tocar tab "Perfil" en bottom navigation
-
-**Resultado Esperado**:
-- ✅ Backend es consultado: `GET /users/profile`
-- ✅ Response status: 200 OK
-- ✅ Perfil se muestra con:
-  - Avatar del usuario
-  - Nombre completo
-  - Username
-  - Biografía (si existe)
-  - Ubicación
-  - Estadísticas: # Publicaciones, # Seguidores, # Seguidos
-- ✅ Botón "Editar perfil" visible
-- ✅ Tabs visibles: Posts, Tagged, Likes
-- ✅ Menú (⋮) visible con opciones
-
-**Validaciones Backend**:
-```json
+<h4>CP-PROFILE-001: Ver Perfil Propio</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-PROFILE-001</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Perfil Usuario</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Bottom navigation visible</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Tocar tab "Perfil" en bottom navigation</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend es consultado: <code>GET /users/profile</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Perfil se muestra con:</li>
+</ul>
+<p>  - Avatar del usuario</p>
+<p>  - Nombre completo</p>
+<p>  - Username</p>
+<p>  - Biografía (si existe)</p>
+<p>  - Ubicación</p>
+<p>  - Estadísticas: # Publicaciones, # Seguidores, # Seguidos</p>
+<ul>
+<li>✅ Botón "Editar perfil" visible</li>
+<li>✅ Tabs visibles: Posts, Tagged, Likes</li>
+<li>✅ Menú (⋮) visible con opciones</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+<pre><code class="language-json">
 GET /users/profile
 Status: 200 OK
 Response: {
@@ -401,37 +1381,54 @@ Response: {
     "followingCount": 8
   }
 }
-```
-
----
-
-#### CP-PROFILE-002: Editar Perfil de Usuario
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-PROFILE-002 |
-| **Prioridad** | 🟡 ALTA |
-| **Módulo** | Perfil Usuario |
-
-**Precondiciones**:
-- Usuario en su perfil propio
-
-**Pasos**:
-1. Tocar botón "Editar perfil"
-2. Esperar que modal/pantalla de edición se abra
-3. Modificar nombre: `QA Modificado`
-4. Modificar biografía: `Nueva biografía de prueba`
-5. Tocar botón "Guardar cambios"
-
-**Resultado Esperado**:
-- ✅ Backend es consultado: `PATCH /users/profile`
-- ✅ Response status: 200 OK
-- ✅ Loading indicator durante guardado
-- ✅ Modal se cierra automáticamente
-- ✅ Perfil se actualiza con nuevos datos
-- ✅ Mensaje de éxito: "Perfil actualizado correctamente"
-
-**Validaciones Backend**:
-```json
+</code></pre>
+<hr>
+<h4>CP-PROFILE-002: Editar Perfil de Usuario</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-PROFILE-002</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-alta">🟡 ALTA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Perfil Usuario</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario en su perfil propio</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Tocar botón "Editar perfil"</li>
+<li>Esperar que modal/pantalla de edición se abra</li>
+<li>Modificar nombre: <code>QA Modificado</code></li>
+<li>Modificar biografía: <code>Nueva biografía de prueba</code></li>
+<li>Tocar botón "Guardar cambios"</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend es consultado: <code>PATCH /users/profile</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Loading indicator durante guardado</li>
+<li>✅ Modal se cierra automáticamente</li>
+<li>✅ Perfil se actualiza con nuevos datos</li>
+<li>✅ Mensaje de éxito: "Perfil actualizado correctamente"</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+<pre><code class="language-json">
 PATCH /users/profile
 Body: {
   "firstName": "QA Modificado",
@@ -439,45 +1436,86 @@ Body: {
 }
 Status: 200 OK
 Response: { ...usuario actualizado... }
-```
-
-**Casos Extremos**:
-| Campo | Valor | Debe |
-|-------|-------|------|
-| Biografía | 151 caracteres | ❌ Rechazar (máximo 150) |
-| Biografía | Texto con emojis 🐶🐱 | ✅ Aceptar |
-| Nombre | Vacío | ❌ Rechazar (requerido) |
-| Nombre | `<script>alert('xss')</script>` | ✅ Sanitizar/escapar |
-
----
-
-#### CP-PROFILE-003: Ver Perfil de Otro Usuario
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-PROFILE-003 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Perfil Usuario |
-
-**Precondiciones**:
-- Usuario autenticado
-- Existe otro usuario en la base de datos (ID: 2)
-
-**Pasos**:
-1. Desde Home Feed, tocar avatar de otra persona
-2. Esperar carga del perfil
-
-**Resultado Esperado**:
-- ✅ Backend es consultado: `GET /users/:userId`
-- ✅ Response status: 200 OK
-- ✅ Perfil se muestra con datos del otro usuario
-- ✅ Botón "Seguir" o "Siguiendo" visible (según estado)
-- ✅ Botón "Mensaje" visible
-- ✅ Menú (⋮) con opciones: "Reportar", "Bloquear"
-- ✅ Tabs visibles: Posts, Tagged (NO "Likes" - solo propio)
-- ✅ NO debe mostrar botón "Editar perfil"
-
-**Validaciones Backend**:
-```json
+</code></pre>
+<p><strong>Casos Extremos</strong>:</p>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Valor</th>
+<th>Debe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Biografía</td>
+<td>151 caracteres</td>
+<td>❌ Rechazar (máximo 150)</td>
+</tr>
+<tr>
+<td>Biografía</td>
+<td>Texto con emojis 🐶🐱</td>
+<td>✅ Aceptar</td>
+</tr>
+<tr>
+<td>Nombre</td>
+<td>Vacío</td>
+<td>❌ Rechazar (requerido)</td>
+</tr>
+<tr>
+<td>Nombre</td>
+<td><code><script>alert('xss')</script></code></td>
+<td>✅ Sanitizar/escapar</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h4>CP-PROFILE-003: Ver Perfil de Otro Usuario</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-PROFILE-003</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Perfil Usuario</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Existe otro usuario en la base de datos (ID: 2)</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde Home Feed, tocar avatar de otra persona</li>
+<li>Esperar carga del perfil</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend es consultado: <code>GET /users/:userId</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Perfil se muestra con datos del otro usuario</li>
+<li>✅ Botón "Seguir" o "Siguiendo" visible (según estado)</li>
+<li>✅ Botón "Mensaje" visible</li>
+<li>✅ Menú (⋮) con opciones: "Reportar", "Bloquear"</li>
+<li>✅ Tabs visibles: Posts, Tagged (NO "Likes" - solo propio)</li>
+<li>✅ NO debe mostrar botón "Editar perfil"</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+<pre><code class="language-json">
 GET /users/2
 Status: 200 OK
 Response: {
@@ -488,81 +1526,127 @@ Response: {
   "isFollowedBy": false,
   ...
 }
-```
+</code></pre>
+<hr>
+<h4>CP-PROFILE-004: Seguir/Dejar de Seguir Usuario</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-PROFILE-004</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Sistema Social</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado viendo perfil de otro usuario</li>
+<li>Usuario NO sigue al otro usuario actualmente</li>
+</ul>
+<p><strong>Pasos - Seguir</strong>:</p>
+<ol>
+<li>Tocar botón "Seguir"</li>
+</ol>
+<p><strong>Resultado Esperado - Seguir</strong>:</p>
+<ul>
+<li>✅ Backend: <code>POST /follows/:userId</code></li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Botón cambia a "Siguiendo" inmediatamente</li>
+<li>✅ Contador de "Seguidos" del usuario actual incrementa +1</li>
+<li>✅ Contador de "Seguidores" del otro usuario incrementa +1</li>
+<li>✅ Animación de botón (opcional)</li>
+</ul>
+<p><strong>Pasos - Dejar de Seguir</strong>:</p>
+<ol>
+<li>Tocar botón "Siguiendo"</li>
+<li>Confirmar acción (si hay confirmación)</li>
+</ol>
+<p><strong>Resultado Esperado - Dejar de Seguir</strong>:</p>
+<ul>
+<li>✅ Backend: <code>DELETE /follows/:userId</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Botón cambia a "Seguir" inmediatamente</li>
+<li>✅ Contadores se decrementan</li>
+<li>✅ Animación de botón</li>
+</ul>
+<p><strong>Casos Extremos</strong>:</p>
+<ul>
+<li>⚠️ <strong>Ya sigue al usuario</strong>: Backend responde 409 Conflict, app maneja sin crash</li>
+<li>⚠️ <strong>Usuario bloqueado</strong>: Backend responde 403 Forbidden, mostrar mensaje</li>
+<li>⚠️ <strong>Seguir/dejar de seguir rápidamente</strong>: Validar que solo última acción cuenta</li>
+</ul>
+<hr>
 
----
+</div>
+</details>
 
-#### CP-PROFILE-004: Seguir/Dejar de Seguir Usuario
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-PROFILE-004 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Sistema Social |
+<details id="modulo-pets">
+<summary>4.3 MÓDULO: GESTIÓN DE MASCOTAS</summary>
+<div class="section-content">
 
-**Precondiciones**:
-- Usuario autenticado viendo perfil de otro usuario
-- Usuario NO sigue al otro usuario actualmente
-
-**Pasos - Seguir**:
-1. Tocar botón "Seguir"
-
-**Resultado Esperado - Seguir**:
-- ✅ Backend: `POST /follows/:userId`
-- ✅ Response status: 201 Created
-- ✅ Botón cambia a "Siguiendo" inmediatamente
-- ✅ Contador de "Seguidos" del usuario actual incrementa +1
-- ✅ Contador de "Seguidores" del otro usuario incrementa +1
-- ✅ Animación de botón (opcional)
-
-**Pasos - Dejar de Seguir**:
-1. Tocar botón "Siguiendo"
-2. Confirmar acción (si hay confirmación)
-
-**Resultado Esperado - Dejar de Seguir**:
-- ✅ Backend: `DELETE /follows/:userId`
-- ✅ Response status: 200 OK
-- ✅ Botón cambia a "Seguir" inmediatamente
-- ✅ Contadores se decrementan
-- ✅ Animación de botón
-
-**Casos Extremos**:
-- ⚠️ **Ya sigue al usuario**: Backend responde 409 Conflict, app maneja sin crash
-- ⚠️ **Usuario bloqueado**: Backend responde 403 Forbidden, mostrar mensaje
-- ⚠️ **Seguir/dejar de seguir rápidamente**: Validar que solo última acción cuenta
-
----
-
-### 4.3 MÓDULO: GESTIÓN DE MASCOTAS
-
-#### CP-PET-001: Listar Mascotas del Usuario
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-PET-001 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Mascotas |
-
-**Precondiciones**:
-- Usuario autenticado
-- Usuario tiene al menos 1 mascota registrada
-
-**Pasos**:
-1. Desde perfil propio, tocar menú (⋮)
-2. Tocar opción "Mis Mascotas"
-
-**Resultado Esperado**:
-- ✅ Backend: `GET /pets/my-pets`
-- ✅ Response status: 200 OK
-- ✅ Lista de mascotas se muestra con cards
-- ✅ Cada card muestra:
-  - Avatar de la mascota
-  - Nombre, tipo, raza
-  - Edad
-  - Botones: "Ver perfil", "Editar", "Eliminar"
-- ✅ Botón flotante (+) para agregar nueva mascota
-- ✅ Pull-to-refresh funciona
-
-**Validaciones Backend**:
-```json
+<h4>CP-PET-001: Listar Mascotas del Usuario</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-PET-001</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Mascotas</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Usuario tiene al menos 1 mascota registrada</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde perfil propio, tocar menú (⋮)</li>
+<li>Tocar opción "Mis Mascotas"</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>GET /pets/my-pets</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Lista de mascotas se muestra con cards</li>
+<li>✅ Cada card muestra:</li>
+</ul>
+<p>  - Avatar de la mascota</p>
+<p>  - Nombre, tipo, raza</p>
+<p>  - Edad</p>
+<p>  - Botones: "Ver perfil", "Editar", "Eliminar"</p>
+<ul>
+<li>✅ Botón flotante (+) para agregar nueva mascota</li>
+<li>✅ Pull-to-refresh funciona</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+<pre><code class="language-json">
 GET /pets/my-pets
 Status: 200 OK
 Response: [
@@ -576,46 +1660,64 @@ Response: [
     ...
   }
 ]
-```
-
-**Estado Vacío**:
-- ✅ Si no tiene mascotas: Mostrar EmptyState con mensaje "Sin mascotas" y botón "Agregar Mascota"
-
----
-
-#### CP-PET-002: Agregar Nueva Mascota
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-PET-002 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Mascotas |
-
-**Precondiciones**:
-- Usuario en pantalla "Mis Mascotas"
-
-**Pasos**:
-1. Tocar botón flotante (+)
-2. Esperar que modal se abra
-3. (Opcional) Tocar avatar para agregar foto
-4. Ingresar nombre: `Nuevo Perro`
-5. Seleccionar tipo: `Perro`
-6. Seleccionar raza: `Labrador`
-7. Seleccionar fecha de nacimiento
-8. Seleccionar sexo: `Macho`
-9. Ingresar biografía (opcional): `Un perro juguetón`
-10. Tocar botón "Guardar"
-
-**Resultado Esperado**:
-- ✅ Formulario valida todos los campos requeridos
-- ✅ Backend: `POST /pets`
-- ✅ Si hay foto: Backend recibe `multipart/form-data`
-- ✅ Response status: 201 Created
-- ✅ Modal se cierra
-- ✅ Lista de mascotas se actualiza con nueva mascota
-- ✅ Mensaje de éxito: "Mascota agregada correctamente"
-
-**Validaciones Backend**:
-```json
+</code></pre>
+<p><strong>Estado Vacío</strong>:</p>
+<ul>
+<li>✅ Si no tiene mascotas: Mostrar EmptyState con mensaje "Sin mascotas" y botón "Agregar Mascota"</li>
+</ul>
+<hr>
+<h4>CP-PET-002: Agregar Nueva Mascota</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-PET-002</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Mascotas</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario en pantalla "Mis Mascotas"</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Tocar botón flotante (+)</li>
+<li>Esperar que modal se abra</li>
+<li>(Opcional) Tocar avatar para agregar foto</li>
+<li>Ingresar nombre: <code>Nuevo Perro</code></li>
+<li>Seleccionar tipo: <code>Perro</code></li>
+<li>Seleccionar raza: <code>Labrador</code></li>
+<li>Seleccionar fecha de nacimiento</li>
+<li>Seleccionar sexo: <code>Macho</code></li>
+<li>Ingresar biografía (opcional): <code>Un perro juguetón</code></li>
+<li>Tocar botón "Guardar"</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Formulario valida todos los campos requeridos</li>
+<li>✅ Backend: <code>POST /pets</code></li>
+<li>✅ Si hay foto: Backend recibe <code>multipart/form-data</code></li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Modal se cierra</li>
+<li>✅ Lista de mascotas se actualiza con nueva mascota</li>
+<li>✅ Mensaje de éxito: "Mascota agregada correctamente"</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+<pre><code class="language-json">
 POST /pets
 Body: {
   "name": "Nuevo Perro",
@@ -627,108 +1729,201 @@ Body: {
 }
 Status: 201 Created
 Response: { "id": 5, "name": "Nuevo Perro", ... }
-```
-
-**Casos Extremos**:
-| Campo | Valor | Debe |
-|-------|-------|------|
-| Nombre | Vacío | ❌ Mostrar error "Campo requerido" |
-| Nombre | 51 caracteres | ❌ Rechazar (máximo 50) |
-| Biografía | 151 caracteres | ❌ Rechazar (máximo 150) |
-| Fecha nacimiento | Fecha futura | ❌ Rechazar "Fecha no puede ser futura" |
-| Fecha nacimiento | Hace 30 años | ⚠️ Advertencia "¿Estás seguro?" |
-| Foto | Archivo > 10MB | ❌ Rechazar "Archivo muy grande" |
-| Foto | Formato .txt | ❌ Rechazar "Solo imágenes" |
-
----
-
-#### CP-PET-003: Editar Mascota Existente
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-PET-003 |
-| **Prioridad** | 🟡 ALTA |
-| **Módulo** | Mascotas |
-
-**Precondiciones**:
-- Usuario tiene al menos 1 mascota
-
-**Pasos**:
-1. Desde "Mis Mascotas", tocar botón "Editar" en una mascota
-2. Modal se abre con datos precargados
-3. Modificar biografía: `Biografía actualizada`
-4. (NO modificar foto)
-5. Tocar "Guardar"
-
-**Resultado Esperado**:
-- ✅ Backend: `PATCH /pets/:petId`
-- ✅ Response status: 200 OK
-- ✅ Modal se cierra
-- ✅ Card de mascota muestra datos actualizados
-- ✅ **IMPORTANTE**: Foto NO se borra (bug conocido, debe estar corregido)
-
-**Validación Crítica**:
-- 🔴 **Bug anterior**: Al editar sin cambiar foto, se borraba el avatar
-- ✅ **Debe corregirse**: Si no se cambia foto, backend NO debe borrar la foto existente
-
----
-
-#### CP-PET-004: Eliminar Mascota
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-PET-004 |
-| **Prioridad** | 🟡 ALTA |
-| **Módulo** | Mascotas |
-
-**Precondiciones**:
-- Usuario tiene al menos 2 mascotas (no puede eliminar la última)
-
-**Pasos**:
-1. Desde "Mis Mascotas", tocar botón "Eliminar" en una mascota
-2. Dialog de confirmación aparece
-3. Tocar "Confirmar eliminación"
-
-**Resultado Esperado**:
-- ✅ Backend: `DELETE /pets/:petId`
-- ✅ Response status: 200 OK
-- ✅ Mascota desaparece de la lista
-- ✅ Mensaje de éxito: "Mascota eliminada"
-- ✅ Contador de mascotas se actualiza
-
-**Caso Extremo**:
-- ⚠️ **Última mascota**: Backend debe rechazar (409 Conflict) o app debe prevenir
-- ⚠️ **Mascota con publicaciones**: Verificar que no se borran las publicaciones (soft delete)
-
----
-
-#### CP-PET-005: Ver Perfil de Mascota
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-PET-005 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Mascotas |
-
-**Precondiciones**:
-- Usuario autenticado
-- Mascota existe (ID conocido)
-
-**Pasos**:
-1. Desde "Mis Mascotas" o desde publicación, tocar "Ver perfil" o avatar de mascota
-2. Esperar carga del perfil
-
-**Resultado Esperado**:
-- ✅ Backend: `GET /pets/:petId`
-- ✅ Response status: 200 OK
-- ✅ Header muestra:
-  - Avatar grande
-  - Nombre, tipo, raza, edad, sexo, peso
-  - Biografía
-  - Chips de rasgos
-  - Estadísticas: # Fotos, # Posts
-- ✅ Tabs visibles: Fotos, Posts, Salud (si es propia)
-- ✅ Botón "Editar" visible (si es mascota propia)
-
-**Validaciones Backend**:
-```json
+</code></pre>
+<p><strong>Casos Extremos</strong>:</p>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Valor</th>
+<th>Debe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nombre</td>
+<td>Vacío</td>
+<td>❌ Mostrar error "Campo requerido"</td>
+</tr>
+<tr>
+<td>Nombre</td>
+<td>51 caracteres</td>
+<td>❌ Rechazar (máximo 50)</td>
+</tr>
+<tr>
+<td>Biografía</td>
+<td>151 caracteres</td>
+<td>❌ Rechazar (máximo 150)</td>
+</tr>
+<tr>
+<td>Fecha nacimiento</td>
+<td>Fecha futura</td>
+<td>❌ Rechazar "Fecha no puede ser futura"</td>
+</tr>
+<tr>
+<td>Fecha nacimiento</td>
+<td>Hace 30 años</td>
+<td>⚠️ Advertencia "¿Estás seguro?"</td>
+</tr>
+<tr>
+<td>Foto</td>
+<td>Archivo > 10MB</td>
+<td>❌ Rechazar "Archivo muy grande"</td>
+</tr>
+<tr>
+<td>Foto</td>
+<td>Formato .txt</td>
+<td>❌ Rechazar "Solo imágenes"</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h4>CP-PET-003: Editar Mascota Existente</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-PET-003</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-alta">🟡 ALTA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Mascotas</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario tiene al menos 1 mascota</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde "Mis Mascotas", tocar botón "Editar" en una mascota</li>
+<li>Modal se abre con datos precargados</li>
+<li>Modificar biografía: <code>Biografía actualizada</code></li>
+<li>(NO modificar foto)</li>
+<li>Tocar "Guardar"</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>PATCH /pets/:petId</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Modal se cierra</li>
+<li>✅ Card de mascota muestra datos actualizados</li>
+<li>✅ <strong>IMPORTANTE</strong>: Foto NO se borra (bug conocido, debe estar corregido)</li>
+</ul>
+<p><strong>Validación Crítica</strong>:</p>
+<ul>
+<li>🔴 <strong>Bug anterior</strong>: Al editar sin cambiar foto, se borraba el avatar</li>
+<li>✅ <strong>Debe corregirse</strong>: Si no se cambia foto, backend NO debe borrar la foto existente</li>
+</ul>
+<hr>
+<h4>CP-PET-004: Eliminar Mascota</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-PET-004</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-alta">🟡 ALTA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Mascotas</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario tiene al menos 2 mascotas (no puede eliminar la última)</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde "Mis Mascotas", tocar botón "Eliminar" en una mascota</li>
+<li>Dialog de confirmación aparece</li>
+<li>Tocar "Confirmar eliminación"</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>DELETE /pets/:petId</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Mascota desaparece de la lista</li>
+<li>✅ Mensaje de éxito: "Mascota eliminada"</li>
+<li>✅ Contador de mascotas se actualiza</li>
+</ul>
+<p><strong>Caso Extremo</strong>:</p>
+<ul>
+<li>⚠️ <strong>Última mascota</strong>: Backend debe rechazar (409 Conflict) o app debe prevenir</li>
+<li>⚠️ <strong>Mascota con publicaciones</strong>: Verificar que no se borran las publicaciones (soft delete)</li>
+</ul>
+<hr>
+<h4>CP-PET-005: Ver Perfil de Mascota</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-PET-005</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Mascotas</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Mascota existe (ID conocido)</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde "Mis Mascotas" o desde publicación, tocar "Ver perfil" o avatar de mascota</li>
+<li>Esperar carga del perfil</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>GET /pets/:petId</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Header muestra:</li>
+</ul>
+<p>  - Avatar grande</p>
+<p>  - Nombre, tipo, raza, edad, sexo, peso</p>
+<p>  - Biografía</p>
+<p>  - Chips de rasgos</p>
+<p>  - Estadísticas: # Fotos, # Posts</p>
+<ul>
+<li>✅ Tabs visibles: Fotos, Posts, Salud (si es propia)</li>
+<li>✅ Botón "Editar" visible (si es mascota propia)</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+<pre><code class="language-json">
 GET /pets/1
 Status: 200 OK
 Response: {
@@ -747,78 +1942,122 @@ Response: {
   },
   "isOwner": true
 }
-```
+</code></pre>
+<hr>
 
----
+</div>
+</details>
 
-### 4.4 MÓDULO: PUBLICACIONES (POSTS)
+<details id="modulo-posts">
+<summary>4.4 MÓDULO: PUBLICACIONES (POSTS)</summary>
+<div class="section-content">
 
-#### CP-POST-001: Ver Feed de Publicaciones
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-POST-001 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Publicaciones |
-
-**Precondiciones**:
-- Usuario autenticado
-- Usuario sigue al menos a 1 persona con publicaciones
-
-**Pasos**:
-1. App inicia, Home Feed es la pantalla principal
-
-**Resultado Esperado**:
-- ✅ Backend: `GET /posts/feed?page=1&limit=10`
-- ✅ Response status: 200 OK
-- ✅ Lista de publicaciones se muestra
-- ✅ Cada post muestra:
-  - Avatar y nombre del autor
-  - Carousel de imágenes (si múltiples) o video
-  - Descripción (con "ver más" si es larga)
-  - Mascotas etiquetadas
-  - Botones: Like, Comentar, Compartir
-  - Contador de likes y comentarios
-  - Fecha relativa ("hace 2 horas")
-- ✅ Pull-to-refresh funciona
-- ✅ Scroll infinito carga más publicaciones
-
-**Estado Vacío**:
-- ✅ Si no sigue a nadie: EmptyState "Sin publicaciones" con botón "Crear primera publicación"
-
----
-
-#### CP-POST-002: Crear Publicación con Imágenes
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-POST-002 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Publicaciones |
-
-**Precondiciones**:
-- Usuario autenticado
-- Usuario tiene al menos 1 mascota
-
-**Pasos**:
-1. Desde Home Feed, tocar botón flotante (+)
-2. Pantalla "Crear Publicación" se abre
-3. Tocar "Agregar medios"
-4. Seleccionar 3 fotos de galería
-5. Escribir descripción: "Día de paseo con mis amigos 🐶"
-6. Seleccionar mascotas a etiquetar (checkbox de 2 mascotas)
-7. Tocar botón "Publicar"
-
-**Resultado Esperado**:
-- ✅ Validación: Entre 1-5 imágenes (cumple ✅)
-- ✅ Loading indicator durante upload
-- ✅ Backend: `POST /posts` con `multipart/form-data`
-- ✅ Imágenes se suben a Cloudinary
-- ✅ Response status: 201 Created
-- ✅ Usuario vuelve a Home Feed
-- ✅ Publicación aparece en el feed
-- ✅ Mensaje de éxito: "Publicación creada correctamente"
-
-**Validaciones Backend**:
-```json
+<h4>CP-POST-001: Ver Feed de Publicaciones</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-POST-001</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Publicaciones</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Usuario sigue al menos a 1 persona con publicaciones</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>App inicia, Home Feed es la pantalla principal</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>GET /posts/feed?page=1&limit=10</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Lista de publicaciones se muestra</li>
+<li>✅ Cada post muestra:</li>
+</ul>
+<p>  - Avatar y nombre del autor</p>
+<p>  - Carousel de imágenes (si múltiples) o video</p>
+<p>  - Descripción (con "ver más" si es larga)</p>
+<p>  - Mascotas etiquetadas</p>
+<p>  - Botones: Like, Comentar, Compartir</p>
+<p>  - Contador de likes y comentarios</p>
+<p>  - Fecha relativa ("hace 2 horas")</p>
+<ul>
+<li>✅ Pull-to-refresh funciona</li>
+<li>✅ Scroll infinito carga más publicaciones</li>
+</ul>
+<p><strong>Estado Vacío</strong>:</p>
+<ul>
+<li>✅ Si no sigue a nadie: EmptyState "Sin publicaciones" con botón "Crear primera publicación"</li>
+</ul>
+<hr>
+<h4>CP-POST-002: Crear Publicación con Imágenes</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-POST-002</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Publicaciones</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Usuario tiene al menos 1 mascota</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde Home Feed, tocar botón flotante (+)</li>
+<li>Pantalla "Crear Publicación" se abre</li>
+<li>Tocar "Agregar medios"</li>
+<li>Seleccionar 3 fotos de galería</li>
+<li>Escribir descripción: "Día de paseo con mis amigos 🐶"</li>
+<li>Seleccionar mascotas a etiquetar (checkbox de 2 mascotas)</li>
+<li>Tocar botón "Publicar"</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Validación: Entre 1-5 imágenes (cumple ✅)</li>
+<li>✅ Loading indicator durante upload</li>
+<li>✅ Backend: <code>POST /posts</code> con <code>multipart/form-data</code></li>
+<li>✅ Imágenes se suben a Cloudinary</li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Usuario vuelve a Home Feed</li>
+<li>✅ Publicación aparece en el feed</li>
+<li>✅ Mensaje de éxito: "Publicación creada correctamente"</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+<pre><code class="language-json">
 POST /posts
 Body (multipart/form-data):
   - description: "Día de paseo con mis amigos 🐶"
@@ -835,114 +2074,210 @@ Response: {
   ],
   "pets": [...]
 }
-```
-
-**Casos Extremos**:
-| Escenario | Debe |
-|-----------|------|
-| Intentar publicar 0 imágenes | ❌ Botón "Publicar" deshabilitado |
-| Intentar publicar 6 imágenes | ❌ Mostrar error "Máximo 5 imágenes" |
-| Imagen > 10MB | ❌ Rechazar "Archivo muy grande" |
-| Sin descripción (solo imágenes) | ✅ Permitir (descripción opcional) |
-| Descripción > 500 caracteres | ❌ Rechazar o truncar |
-| Sin conexión durante upload | ❌ Mostrar error, NO publicar |
-
----
-
-#### CP-POST-003: Crear Publicación con Video
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-POST-003 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Publicaciones |
-
-**Pasos**:
-1. Tocar botón (+) en Home Feed
-2. Tocar "Agregar medios"
-3. Seleccionar 1 video de galería (duración: 30 segundos)
-4. Escribir descripción
-5. Tocar "Publicar"
-
-**Resultado Esperado**:
-- ✅ Validación: Solo 1 video permitido (excluyente con imágenes)
-- ✅ Backend: `POST /posts` con video
-- ✅ Video se sube a Cloudinary
-- ✅ Response status: 201 Created
-- ✅ Publicación aparece en feed con video reproducible
-
-**Casos Extremos**:
-| Escenario | Debe |
-|-----------|------|
-| Video > 2 minutos | ❌ Rechazar "Máximo 2 minutos" |
-| Video > 50MB | ❌ Rechazar "Archivo muy grande" |
-| Intentar agregar imagen + video | ❌ Bloquear UI "Solo imágenes O video" |
-
----
-
-#### CP-POST-004: Dar Like a Publicación
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-POST-004 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Sistema Social |
-
-**Precondiciones**:
-- Usuario autenticado
-- Publicación visible en feed
-
-**Pasos**:
-1. Tocar botón de "Me gusta" (corazón) en una publicación
-
-**Resultado Esperado**:
-- ✅ Botón cambia a color rojo inmediatamente (optimistic update)
-- ✅ Contador de likes incrementa +1
-- ✅ Animación de corazón (opcional)
-- ✅ Backend: `POST /posts/:postId/like`
-- ✅ Response status: 201 Created
-- ✅ Notificación creada para el autor del post (backend)
-
-**Pasos - Quitar Like**:
-1. Tocar botón de "Me gusta" nuevamente
-
-**Resultado Esperado - Quitar Like**:
-- ✅ Botón vuelve a color gris
-- ✅ Contador decrementa -1
-- ✅ Backend: `DELETE /posts/:postId/like`
-- ✅ Response status: 200 OK
-
-**Casos Extremos**:
-- ⚠️ **Like/unlike rápidamente**: Validar que última acción cuenta
-- ⚠️ **Ya dio like**: Backend responde 409 Conflict, app maneja sin crash
-
----
-
-#### CP-POST-005: Comentar Publicación
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-POST-005 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Sistema Social |
-
-**Precondiciones**:
-- Usuario autenticado
-- Publicación visible en feed
-
-**Pasos**:
-1. Tocar botón "Comentar" en una publicación
-2. Modal de comentarios se abre desde abajo
-3. Escribir comentario: "¡Qué hermoso! 🐶"
-4. Tocar botón "Enviar"
-
-**Resultado Esperado**:
-- ✅ Backend: `POST /posts/:postId/comments`
-- ✅ Response status: 201 Created
-- ✅ Comentario aparece en la lista inmediatamente
-- ✅ Campo de texto se limpia
-- ✅ Contador de comentarios en el post incrementa +1
-- ✅ Notificación creada para el autor del post
-
-**Validaciones Backend**:
-```json
+</code></pre>
+<p><strong>Casos Extremos</strong>:</p>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Escenario</th>
+<th>Debe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Intentar publicar 0 imágenes</td>
+<td>❌ Botón "Publicar" deshabilitado</td>
+</tr>
+<tr>
+<td>Intentar publicar 6 imágenes</td>
+<td>❌ Mostrar error "Máximo 5 imágenes"</td>
+</tr>
+<tr>
+<td>Imagen > 10MB</td>
+<td>❌ Rechazar "Archivo muy grande"</td>
+</tr>
+<tr>
+<td>Sin descripción (solo imágenes)</td>
+<td>✅ Permitir (descripción opcional)</td>
+</tr>
+<tr>
+<td>Descripción > 500 caracteres</td>
+<td>❌ Rechazar o truncar</td>
+</tr>
+<tr>
+<td>Sin conexión durante upload</td>
+<td>❌ Mostrar error, NO publicar</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h4>CP-POST-003: Crear Publicación con Video</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-POST-003</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Publicaciones</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Tocar botón (+) en Home Feed</li>
+<li>Tocar "Agregar medios"</li>
+<li>Seleccionar 1 video de galería (duración: 30 segundos)</li>
+<li>Escribir descripción</li>
+<li>Tocar "Publicar"</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Validación: Solo 1 video permitido (excluyente con imágenes)</li>
+<li>✅ Backend: <code>POST /posts</code> con video</li>
+<li>✅ Video se sube a Cloudinary</li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Publicación aparece en feed con video reproducible</li>
+</ul>
+<p><strong>Casos Extremos</strong>:</p>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Escenario</th>
+<th>Debe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Video > 2 minutos</td>
+<td>❌ Rechazar "Máximo 2 minutos"</td>
+</tr>
+<tr>
+<td>Video > 50MB</td>
+<td>❌ Rechazar "Archivo muy grande"</td>
+</tr>
+<tr>
+<td>Intentar agregar imagen + video</td>
+<td>❌ Bloquear UI "Solo imágenes O video"</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h4>CP-POST-004: Dar Like a Publicación</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-POST-004</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Sistema Social</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Publicación visible en feed</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Tocar botón de "Me gusta" (corazón) en una publicación</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Botón cambia a color rojo inmediatamente (optimistic update)</li>
+<li>✅ Contador de likes incrementa +1</li>
+<li>✅ Animación de corazón (opcional)</li>
+<li>✅ Backend: <code>POST /posts/:postId/like</code></li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Notificación creada para el autor del post (backend)</li>
+</ul>
+<p><strong>Pasos - Quitar Like</strong>:</p>
+<ol>
+<li>Tocar botón de "Me gusta" nuevamente</li>
+</ol>
+<p><strong>Resultado Esperado - Quitar Like</strong>:</p>
+<ul>
+<li>✅ Botón vuelve a color gris</li>
+<li>✅ Contador decrementa -1</li>
+<li>✅ Backend: <code>DELETE /posts/:postId/like</code></li>
+<li>✅ Response status: 200 OK</li>
+</ul>
+<p><strong>Casos Extremos</strong>:</p>
+<ul>
+<li>⚠️ <strong>Like/unlike rápidamente</strong>: Validar que última acción cuenta</li>
+<li>⚠️ <strong>Ya dio like</strong>: Backend responde 409 Conflict, app maneja sin crash</li>
+</ul>
+<hr>
+<h4>CP-POST-005: Comentar Publicación</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-POST-005</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Sistema Social</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Publicación visible en feed</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Tocar botón "Comentar" en una publicación</li>
+<li>Modal de comentarios se abre desde abajo</li>
+<li>Escribir comentario: "¡Qué hermoso! 🐶"</li>
+<li>Tocar botón "Enviar"</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>POST /posts/:postId/comments</code></li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Comentario aparece en la lista inmediatamente</li>
+<li>✅ Campo de texto se limpia</li>
+<li>✅ Contador de comentarios en el post incrementa +1</li>
+<li>✅ Notificación creada para el autor del post</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+<pre><code class="language-json">
 POST /posts/10/comments
 Body: {
   "content": "¡Qué hermoso! 🐶"
@@ -954,83 +2289,146 @@ Response: {
   "user": { "id": 1, "firstName": "QA", ... },
   "createdAt": "2025-01-15T10:30:00Z"
 }
-```
+</code></pre>
+<p><strong>Casos Extremos</strong>:</p>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Escenario</th>
+<th>Debe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Comentario vacío</td>
+<td>❌ Botón "Enviar" deshabilitado</td>
+</tr>
+<tr>
+<td>Comentario > 500 caracteres</td>
+<td>❌ Rechazar o truncar</td>
+</tr>
+<tr>
+<td>Comentario solo con espacios</td>
+<td>❌ Rechazar "Campo requerido"</td>
+</tr>
+<tr>
+<td>Comentario con emojis</td>
+<td>✅ Permitir</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h4>CP-POST-006: Eliminar Publicación Propia</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-POST-006</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-alta">🟡 ALTA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Publicaciones</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Usuario tiene al menos 1 publicación propia</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde perfil propio, tocar una publicación propia</li>
+<li>Tocar menú (⋮) en la publicación</li>
+<li>Tocar "Eliminar publicación"</li>
+<li>Confirmación aparece</li>
+<li>Tocar "Confirmar"</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>DELETE /posts/:postId</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Publicación desaparece del feed</li>
+<li>✅ Contador de publicaciones del usuario decrementa -1</li>
+<li>✅ Mensaje de éxito: "Publicación eliminada"</li>
+</ul>
+<p><strong>Validación</strong>:</p>
+<ul>
+<li>🔴 Solo el autor puede eliminar su publicación</li>
+<li>❌ Si otro usuario intenta eliminar: Backend responde 403 Forbidden</li>
+</ul>
+<hr>
 
-**Casos Extremos**:
-| Escenario | Debe |
-|-----------|------|
-| Comentario vacío | ❌ Botón "Enviar" deshabilitado |
-| Comentario > 500 caracteres | ❌ Rechazar o truncar |
-| Comentario solo con espacios | ❌ Rechazar "Campo requerido" |
-| Comentario con emojis | ✅ Permitir |
+</div>
+</details>
 
----
+<details id="modulo-stories">
+<summary>4.5 MÓDULO: HISTORIAS (STORIES)</summary>
+<div class="section-content">
 
-#### CP-POST-006: Eliminar Publicación Propia
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-POST-006 |
-| **Prioridad** | 🟡 ALTA |
-| **Módulo** | Publicaciones |
-
-**Precondiciones**:
-- Usuario autenticado
-- Usuario tiene al menos 1 publicación propia
-
-**Pasos**:
-1. Desde perfil propio, tocar una publicación propia
-2. Tocar menú (⋮) en la publicación
-3. Tocar "Eliminar publicación"
-4. Confirmación aparece
-5. Tocar "Confirmar"
-
-**Resultado Esperado**:
-- ✅ Backend: `DELETE /posts/:postId`
-- ✅ Response status: 200 OK
-- ✅ Publicación desaparece del feed
-- ✅ Contador de publicaciones del usuario decrementa -1
-- ✅ Mensaje de éxito: "Publicación eliminada"
-
-**Validación**:
-- 🔴 Solo el autor puede eliminar su publicación
-- ❌ Si otro usuario intenta eliminar: Backend responde 403 Forbidden
-
----
-
-### 4.5 MÓDULO: HISTORIAS (STORIES)
-
-#### CP-STORY-001: Ver Historias de Usuarios Seguidos
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-STORY-001 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Historias |
-
-**Precondiciones**:
-- Usuario autenticado
-- Al menos 1 usuario seguido tiene historias activas (< 24h)
-
-**Pasos**:
-1. Desde Home Feed, ver barra superior de historias
-2. Tocar avatar de un usuario con historia
-
-**Resultado Esperado**:
-- ✅ Backend: `GET /stories/:userId`
-- ✅ Response status: 200 OK
-- ✅ Visor de historia abre en fullscreen
-- ✅ Historia se reproduce automáticamente
-- ✅ Controles superiores visibles:
-  - Avatar y nombre del autor
-  - Barras de progreso (una por historia)
-  - Botón de cerrar (X)
-  - Tiempo de publicación
-- ✅ Tap derecha: siguiente historia
-- ✅ Tap izquierda: historia anterior
-- ✅ Mantener tap: pausar
-- ✅ Deslizar abajo: cerrar
-
-**Validaciones Backend**:
-```json
+<h4>CP-STORY-001: Ver Historias de Usuarios Seguidos</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-STORY-001</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Historias</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Al menos 1 usuario seguido tiene historias activas (< 24h)</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde Home Feed, ver barra superior de historias</li>
+<li>Tocar avatar de un usuario con historia</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>GET /stories/:userId</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Visor de historia abre en fullscreen</li>
+<li>✅ Historia se reproduce automáticamente</li>
+<li>✅ Controles superiores visibles:</li>
+</ul>
+<p>  - Avatar y nombre del autor</p>
+<p>  - Barras de progreso (una por historia)</p>
+<p>  - Botón de cerrar (X)</p>
+<p>  - Tiempo de publicación</p>
+<ul>
+<li>✅ Tap derecha: siguiente historia</li>
+<li>✅ Tap izquierda: historia anterior</li>
+<li>✅ Mantener tap: pausar</li>
+<li>✅ Deslizar abajo: cerrar</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+<pre><code class="language-json">
 GET /stories/2
 Status: 200 OK
 Response: [
@@ -1042,34 +2440,50 @@ Response: [
     "expiresAt": "2025-01-16T10:00:00Z"
   }
 ]
-```
-
----
-
-#### CP-STORY-002: Crear Historia con Imagen
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-STORY-002 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Historias |
-
-**Pasos**:
-1. Desde Home Feed, tocar tu avatar en barra de historias (o botón +)
-2. Seleccionar foto de galería o tomar foto
-3. (Opcional) Agregar texto sobre la imagen
-4. (Opcional) Cambiar color de fondo del texto
-5. Tocar botón "Publicar historia"
-
-**Resultado Esperado**:
-- ✅ Backend: `POST /stories` con imagen
-- ✅ Response status: 201 Created
-- ✅ Historia se sube a Cloudinary
-- ✅ Historia aparece en tu perfil con indicador "Tu historia"
-- ✅ Historia visible para tus seguidores
-- ✅ Historia expira automáticamente en 24 horas
-
-**Validaciones Backend**:
-```json
+</code></pre>
+<hr>
+<h4>CP-STORY-002: Crear Historia con Imagen</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-STORY-002</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Historias</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde Home Feed, tocar tu avatar en barra de historias (o botón +)</li>
+<li>Seleccionar foto de galería o tomar foto</li>
+<li>(Opcional) Agregar texto sobre la imagen</li>
+<li>(Opcional) Cambiar color de fondo del texto</li>
+<li>Tocar botón "Publicar historia"</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>POST /stories</code> con imagen</li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Historia se sube a Cloudinary</li>
+<li>✅ Historia aparece en tu perfil con indicador "Tu historia"</li>
+<li>✅ Historia visible para tus seguidores</li>
+<li>✅ Historia expira automáticamente en 24 horas</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+<pre><code class="language-json">
 POST /stories
 Body (multipart/form-data):
   - media: File (imagen)
@@ -1083,74 +2497,133 @@ Response: {
   "mediaType": "image",
   "expiresAt": "2025-01-16T10:00:00Z"
 }
-```
+</code></pre>
+<p><strong>Casos Extremos</strong>:</p>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Escenario</th>
+<th>Debe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Imagen > 10MB</td>
+<td>❌ Rechazar "Archivo muy grande"</td>
+</tr>
+<tr>
+<td>Sin imagen</td>
+<td>❌ No permitir publicar (requerido)</td>
+</tr>
+<tr>
+<td>Video > 30 segundos</td>
+<td>❌ Rechazar "Máximo 30 segundos"</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h4>CP-STORY-003: Eliminar Historia Propia</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-STORY-003</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-alta">🟡 ALTA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Historias</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario tiene al menos 1 historia propia activa</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Ver tu propia historia</li>
+<li>Tocar menú (⋮)</li>
+<li>Tocar "Eliminar historia"</li>
+<li>Confirmar</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>DELETE /stories/:storyId</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Historia desaparece inmediatamente</li>
+<li>✅ Si es la última historia, avatar desaparece de la barra</li>
+</ul>
+<hr>
 
-**Casos Extremos**:
-| Escenario | Debe |
-|-----------|------|
-| Imagen > 10MB | ❌ Rechazar "Archivo muy grande" |
-| Sin imagen | ❌ No permitir publicar (requerido) |
-| Video > 30 segundos | ❌ Rechazar "Máximo 30 segundos" |
+</div>
+</details>
 
----
+<details id="modulo-notifications">
+<summary>4.6 MÓDULO: SISTEMA DE NOTIFICACIONES</summary>
+<div class="section-content">
 
-#### CP-STORY-003: Eliminar Historia Propia
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-STORY-003 |
-| **Prioridad** | 🟡 ALTA |
-| **Módulo** | Historias |
-
-**Precondiciones**:
-- Usuario tiene al menos 1 historia propia activa
-
-**Pasos**:
-1. Ver tu propia historia
-2. Tocar menú (⋮)
-3. Tocar "Eliminar historia"
-4. Confirmar
-
-**Resultado Esperado**:
-- ✅ Backend: `DELETE /stories/:storyId`
-- ✅ Response status: 200 OK
-- ✅ Historia desaparece inmediatamente
-- ✅ Si es la última historia, avatar desaparece de la barra
-
----
-
-### 4.6 MÓDULO: SISTEMA DE NOTIFICACIONES
-
-#### CP-NOTIF-001: Ver Lista de Notificaciones
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-NOTIF-001 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Notificaciones |
-
-**Precondiciones**:
-- Usuario autenticado
-- Usuario ha recibido al menos 3 notificaciones
-
-**Pasos**:
-1. Desde Home Feed, tocar ícono de campana (notificaciones)
-
-**Resultado Esperado**:
-- ✅ Backend: `GET /activities?page=1&limit=20`
-- ✅ Response status: 200 OK
-- ✅ Lista de notificaciones se muestra
-- ✅ Cada notificación muestra:
-  - Avatar del usuario que generó la notificación
-  - Ícono según tipo (❤️ like, 💬 comentario, 👤 seguidor)
-  - Texto descriptivo
-  - Fecha relativa
-  - Thumbnail de publicación (si aplica)
-  - Indicador de no leída (punto azul o fondo)
-- ✅ Filtros superiores visibles: Todas | No leídas | Me gusta | Comentarios | Seguidores
-- ✅ Pull-to-refresh funciona
-
-**Validaciones Backend**:
-```json
-GET /activities?page=1&limit=20
+<h4>CP-NOTIF-001: Ver Lista de Notificaciones</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-NOTIF-001</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Notificaciones</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Usuario ha recibido al menos 3 notificaciones</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde Home Feed, tocar ícono de campana (notificaciones)</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>GET /activities?page=1&limit=20</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Lista de notificaciones se muestra</li>
+<li>✅ Cada notificación muestra:</li>
+</ul>
+<p>  - Avatar del usuario que generó la notificación</p>
+<p>  - Ícono según tipo (❤️ like, 💬 comentario, 👤 seguidor)</p>
+<p>  - Texto descriptivo</p>
+<p>  - Fecha relativa</p>
+<p>  - Thumbnail de publicación (si aplica)</p>
+<p>  - Indicador de no leída (punto azul o fondo)</p>
+<ul>
+<li>✅ Filtros superiores visibles: Todas | No leídas | Me gusta | Comentarios | Seguidores</li>
+<li>✅ Pull-to-refresh funciona</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+<pre><code class="language-json">
+GET /activities?page=1&amp;limit=20
 Status: 200 OK
 Response: [
   {
@@ -1162,84 +2635,163 @@ Response: [
     "createdAt": "2025-01-15T09:30:00Z"
   }
 ]
-```
+</code></pre>
+<hr>
+<h4>CP-NOTIF-002: Marcar Notificación como Leída</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-NOTIF-002</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-alta">🟡 ALTA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Notificaciones</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Tocar una notificación de tipo "like" o "comentario"</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>PATCH /activities/:activityId</code> (marcar como leída)</li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Notificación cambia visualmente (fondo blanco, sin punto azul)</li>
+<li>✅ Usuario es redirigido a la publicación correspondiente</li>
+<li>✅ Contador de notificaciones no leídas decrementa -1</li>
+</ul>
+<hr>
+<h4>CP-NOTIF-003: Filtrar Notificaciones por Tipo</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-NOTIF-003</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-media">🟢 MEDIA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Notificaciones</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>En pantalla de notificaciones, tocar filtro "Me gusta"</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>GET /activities?type=POST_LIKED&page=1&limit=20</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Solo notificaciones de tipo "like" se muestran</li>
+<li>✅ Filtro "Me gusta" aparece activo visualmente</li>
+</ul>
+<p><strong>Casos a Probar</strong>:</p>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Filtro</th>
+<th>Tipos de Notificación Mostrados</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Todas</td>
+<td>POST<em>LIKED, POST</em>COMMENTED, USER_FOLLOWED</td>
+</tr>
+<tr>
+<td>Me gusta</td>
+<td>POST_LIKED</td>
+</tr>
+<tr>
+<td>Comentarios</td>
+<td>POST_COMMENTED</td>
+</tr>
+<tr>
+<td>Seguidores</td>
+<td>USER_FOLLOWED</td>
+</tr>
+<tr>
+<td>No leídas</td>
+<td>Todas con <code>isRead: false</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
 
----
+</div>
+</details>
 
-#### CP-NOTIF-002: Marcar Notificación como Leída
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-NOTIF-002 |
-| **Prioridad** | 🟡 ALTA |
-| **Módulo** | Notificaciones |
+<details id="modulo-services">
+<summary>4.7 MÓDULO: SERVICIOS MARKETPLACE</summary>
+<div class="section-content">
 
-**Pasos**:
-1. Tocar una notificación de tipo "like" o "comentario"
-
-**Resultado Esperado**:
-- ✅ Backend: `PATCH /activities/:activityId` (marcar como leída)
-- ✅ Response status: 200 OK
-- ✅ Notificación cambia visualmente (fondo blanco, sin punto azul)
-- ✅ Usuario es redirigido a la publicación correspondiente
-- ✅ Contador de notificaciones no leídas decrementa -1
-
----
-
-#### CP-NOTIF-003: Filtrar Notificaciones por Tipo
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-NOTIF-003 |
-| **Prioridad** | 🟢 MEDIA |
-| **Módulo** | Notificaciones |
-
-**Pasos**:
-1. En pantalla de notificaciones, tocar filtro "Me gusta"
-
-**Resultado Esperado**:
-- ✅ Backend: `GET /activities?type=POST_LIKED&page=1&limit=20`
-- ✅ Response status: 200 OK
-- ✅ Solo notificaciones de tipo "like" se muestran
-- ✅ Filtro "Me gusta" aparece activo visualmente
-
-**Casos a Probar**:
-| Filtro | Tipos de Notificación Mostrados |
-|--------|----------------------------------|
-| Todas | POST_LIKED, POST_COMMENTED, USER_FOLLOWED |
-| Me gusta | POST_LIKED |
-| Comentarios | POST_COMMENTED |
-| Seguidores | USER_FOLLOWED |
-| No leídas | Todas con `isRead: false` |
-
----
-
-### 4.7 MÓDULO: SERVICIOS MARKETPLACE
-
-#### CP-SERVICE-001: Ver Mapa de Servicios
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-SERVICE-001 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Servicios |
-
-**Precondiciones**:
-- Usuario autenticado
-- Existen servicios creados en la base de datos
-
-**Pasos**:
-1. Tocar tab "Mapa" en bottom navigation
-2. Tab "Servicios" seleccionado por defecto
-
-**Resultado Esperado**:
-- ✅ Backend: `GET /services`
-- ✅ Response status: 200 OK
-- ✅ Mapa se muestra con marcadores de servicios
-- ✅ Marcador de ubicación del usuario visible
-- ✅ Controles de zoom funcionan
-- ✅ Panel inferior de filtros visible
-- ✅ Contador de servicios encontrados visible
-
-**Validaciones Backend**:
-```json
+<h4>CP-SERVICE-001: Ver Mapa de Servicios</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-SERVICE-001</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Servicios</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario autenticado</li>
+<li>Existen servicios creados en la base de datos</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Tocar tab "Mapa" en bottom navigation</li>
+<li>Tab "Servicios" seleccionado por defecto</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>GET /services</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Mapa se muestra con marcadores de servicios</li>
+<li>✅ Marcador de ubicación del usuario visible</li>
+<li>✅ Controles de zoom funcionan</li>
+<li>✅ Panel inferior de filtros visible</li>
+<li>✅ Contador de servicios encontrados visible</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+<pre><code class="language-json">
 GET /services
 Status: 200 OK
 Response: [
@@ -1254,101 +2806,186 @@ Response: [
     "images": [...]
   }
 ]
-```
+</code></pre>
+<p><strong>Caso Extremo</strong>:</p>
+<ul>
+<li>⚠️ <strong>Carga lenta</strong> (3-5 segundos): Verificar si es problema de backend (falta paginación/índices)</li>
+</ul>
+<hr>
+<h4>CP-SERVICE-002: Filtrar Servicios por Categoría</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-SERVICE-002</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-alta">🟡 ALTA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Servicios</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>En mapa de servicios, tocar panel de filtros</li>
+<li>Seleccionar categoría "Veterinaria"</li>
+<li>Tocar "Aplicar filtros"</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>GET /services?category=veterinary</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Solo marcadores de veterinarias visibles en mapa</li>
+<li>✅ Contador actualizado: "5 servicios encontrados"</li>
+</ul>
+<hr>
+<h4>CP-SERVICE-003: Crear Nuevo Servicio</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-SERVICE-003</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Servicios</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde mapa de servicios, tocar botón flotante (+)</li>
+<li>Completar formulario:</li>
+</ol>
+<p>   - Título: "Mi Veterinaria"</p>
+<p>   - Descripción: "Atención profesional para tu mascota"</p>
+<p>   - Categoría: "Veterinaria"</p>
+<p>   - Precio: 100</p>
+<p>   - Ubicación: "Calle Falsa 123"</p>
+<p>   - Teléfono: "+54 11 1234-5678"</p>
+<p>   - Email: "contacto@miveterinaria.com"</p>
+<ol>
+<li>Agregar 2 imágenes</li>
+<li>Tocar "Guardar"</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>POST /services</code></li>
+<li>✅ Imágenes se suben a Cloudinary</li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Usuario vuelve al mapa</li>
+<li>✅ Nuevo marcador aparece en el mapa</li>
+<li>✅ Mensaje de éxito</li>
+</ul>
+<p><strong>Casos Extremos</strong>:</p>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Valor</th>
+<th>Debe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Título</td>
+<td>Vacío</td>
+<td>❌ Error "Campo requerido"</td>
+</tr>
+<tr>
+<td>Precio</td>
+<td>Negativo</td>
+<td>❌ Error "Precio inválido"</td>
+</tr>
+<tr>
+<td>Email</td>
+<td>Formato inválido</td>
+<td>❌ Error "Email inválido"</td>
+</tr>
+<tr>
+<td>Imágenes</td>
+<td>6 imágenes</td>
+<td>❌ Error "Máximo 5 imágenes"</td>
+</tr>
+</tbody>
+</table>
+<hr>
 
-**Caso Extremo**:
-- ⚠️ **Carga lenta** (3-5 segundos): Verificar si es problema de backend (falta paginación/índices)
+</div>
+</details>
 
----
+<details id="modulo-events">
+<summary>4.8 MÓDULO: EVENTOS</summary>
+<div class="section-content">
 
-#### CP-SERVICE-002: Filtrar Servicios por Categoría
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-SERVICE-002 |
-| **Prioridad** | 🟡 ALTA |
-| **Módulo** | Servicios |
-
-**Pasos**:
-1. En mapa de servicios, tocar panel de filtros
-2. Seleccionar categoría "Veterinaria"
-3. Tocar "Aplicar filtros"
-
-**Resultado Esperado**:
-- ✅ Backend: `GET /services?category=veterinary`
-- ✅ Response status: 200 OK
-- ✅ Solo marcadores de veterinarias visibles en mapa
-- ✅ Contador actualizado: "5 servicios encontrados"
-
----
-
-#### CP-SERVICE-003: Crear Nuevo Servicio
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-SERVICE-003 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Servicios |
-
-**Pasos**:
-1. Desde mapa de servicios, tocar botón flotante (+)
-2. Completar formulario:
-   - Título: "Mi Veterinaria"
-   - Descripción: "Atención profesional para tu mascota"
-   - Categoría: "Veterinaria"
-   - Precio: 100
-   - Ubicación: "Calle Falsa 123"
-   - Teléfono: "+54 11 1234-5678"
-   - Email: "contacto@miveterinaria.com"
-3. Agregar 2 imágenes
-4. Tocar "Guardar"
-
-**Resultado Esperado**:
-- ✅ Backend: `POST /services`
-- ✅ Imágenes se suben a Cloudinary
-- ✅ Response status: 201 Created
-- ✅ Usuario vuelve al mapa
-- ✅ Nuevo marcador aparece en el mapa
-- ✅ Mensaje de éxito
-
-**Casos Extremos**:
-| Campo | Valor | Debe |
-|-------|-------|------|
-| Título | Vacío | ❌ Error "Campo requerido" |
-| Precio | Negativo | ❌ Error "Precio inválido" |
-| Email | Formato inválido | ❌ Error "Email inválido" |
-| Imágenes | 6 imágenes | ❌ Error "Máximo 5 imágenes" |
-
----
-
-### 4.8 MÓDULO: EVENTOS
-
-#### CP-EVENT-001: Crear Nuevo Evento
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-EVENT-001 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Eventos |
-
-**Pasos**:
-1. Desde mapa, cambiar a tab "Eventos"
-2. Tocar botón (+)
-3. Completar formulario:
-   - Título: "Encuentro de Mascotas"
-   - Descripción: "Reunión mensual de dueños"
-   - Ubicación: "Parque Central"
-   - Fecha: Mañana
-   - Hora: 15:00
-   - Capacidad: 20
-4. Agregar 1 imagen
-5. Tocar "Guardar Evento"
-
-**Resultado Esperado**:
-- ✅ Backend: `POST /events`
-- ✅ Response status: 201 Created
-- ✅ Evento aparece en mapa
-- ✅ Mensaje de éxito
-
-**Validaciones Backend**:
-```json
+<h4>CP-EVENT-001: Crear Nuevo Evento</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-EVENT-001</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Eventos</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desde mapa, cambiar a tab "Eventos"</li>
+<li>Tocar botón (+)</li>
+<li>Completar formulario:</li>
+</ol>
+<p>   - Título: "Encuentro de Mascotas"</p>
+<p>   - Descripción: "Reunión mensual de dueños"</p>
+<p>   - Ubicación: "Parque Central"</p>
+<p>   - Fecha: Mañana</p>
+<p>   - Hora: 15:00</p>
+<p>   - Capacidad: 20</p>
+<ol>
+<li>Agregar 1 imagen</li>
+<li>Tocar "Guardar Evento"</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>POST /events</code></li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Evento aparece en mapa</li>
+<li>✅ Mensaje de éxito</li>
+</ul>
+<p><strong>Validaciones Backend</strong>:</p>
+<pre><code class="language-json">
 POST /events
 Body: {
   "title": "Encuentro de Mascotas",
@@ -1358,134 +2995,339 @@ Body: {
   "capacity": 20
 }
 Status: 201 Created
-```
+</code></pre>
+<p><strong>Casos Extremos</strong>:</p>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Escenario</th>
+<th>Debe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fecha pasada</td>
+<td>❌ Error "Fecha debe ser futura"</td>
+</tr>
+<tr>
+<td>Capacidad 0</td>
+<td>❌ Error "Capacidad inválida"</td>
+</tr>
+<tr>
+<td>Sin ubicación</td>
+<td>❌ Error "Campo requerido"</td>
+</tr>
+</tbody>
+</table>
+<hr>
 
-**Casos Extremos**:
-| Escenario | Debe |
-|-----------|------|
-| Fecha pasada | ❌ Error "Fecha debe ser futura" |
-| Capacidad 0 | ❌ Error "Capacidad inválida" |
-| Sin ubicación | ❌ Error "Campo requerido" |
+</div>
+</details>
 
----
+<details id="modulo-chat">
+<summary>4.9 MÓDULO: CHAT/MENSAJERÍA</summary>
+<div class="section-content">
 
-### 4.9 MÓDULO: CHAT/MENSAJERÍA
+<h4>CP-CHAT-001: Ver Lista de Conversaciones</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-CHAT-001</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Chat</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>:</p>
+<ul>
+<li>Usuario tiene al menos 1 conversación activa</li>
+</ul>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Tocar tab "Chats" en bottom navigation</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>GET /conversations</code></li>
+<li>✅ Response status: 200 OK</li>
+<li>✅ Lista de conversaciones ordenada por última actividad</li>
+<li>✅ Cada conversación muestra:</li>
+</ul>
+<p>  - Avatar del otro usuario</p>
+<p>  - Nombre</p>
+<p>  - Último mensaje (preview)</p>
+<p>  - Fecha/hora</p>
+<p>  - Badge con contador de no leídos (si hay)</p>
+<hr>
+<h4>CP-CHAT-002: Enviar Mensaje</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-CHAT-002</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-critica">🔴 CRÍTICA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Chat</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Tocar una conversación</li>
+<li>Escribir mensaje: "Hola, ¿cómo estás?"</li>
+<li>Tocar botón "Enviar"</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>POST /messages</code></li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Mensaje aparece en la conversación</li>
+<li>✅ Campo de texto se limpia</li>
+<li>✅ Scroll automático al último mensaje</li>
+<li>✅ Estado de mensaje: ✓✓ (entregado)</li>
+</ul>
+<hr>
 
-#### CP-CHAT-001: Ver Lista de Conversaciones
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-CHAT-001 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Chat |
+</div>
+</details>
 
-**Precondiciones**:
-- Usuario tiene al menos 1 conversación activa
+<details id="modulo-match">
+<summary>4.10 MÓDULO: MATCH DE MASCOTAS</summary>
+<div class="section-content">
 
-**Pasos**:
-1. Tocar tab "Chats" en bottom navigation
+<p><em>Sin casos de prueba definidos aún para este módulo.</em></p>
 
-**Resultado Esperado**:
-- ✅ Backend: `GET /conversations`
-- ✅ Response status: 200 OK
-- ✅ Lista de conversaciones ordenada por última actividad
-- ✅ Cada conversación muestra:
-  - Avatar del otro usuario
-  - Nombre
-  - Último mensaje (preview)
-  - Fecha/hora
-  - Badge con contador de no leídos (si hay)
+</div>
+</details>
 
----
+<details id="modulo-blocks">
+<summary>4.11 MÓDULO: BLOQUEO Y REPORTES</summary>
+<div class="section-content">
 
-#### CP-CHAT-002: Enviar Mensaje
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-CHAT-002 |
-| **Prioridad** | 🔴 CRÍTICA |
-| **Módulo** | Chat |
+<h4>CP-BLOCK-001: Bloquear Usuario</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-BLOCK-001</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-alta">🟡 ALTA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Bloqueo</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Visitar perfil de otro usuario</li>
+<li>Tocar menú (⋮)</li>
+<li>Tocar "Bloquear usuario"</li>
+<li>Confirmar acción</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>POST /user-blocks/:userId</code></li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Usuario bloqueado desaparece del feed</li>
+<li>✅ Conversación con usuario bloqueado desaparece</li>
+<li>✅ No se pueden ver publicaciones del bloqueado</li>
+</ul>
+<hr>
+<h4>CP-REPORT-001: Reportar Publicación</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td>CP-REPORT-001</td>
+</tr>
+<tr>
+<td><strong>Prioridad</strong></td>
+<td><span class="badge badge-alta">🟡 ALTA</span></td>
+</tr>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Reportes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>En una publicación, tocar menú (⋮)</li>
+<li>Tocar "Denunciar publicación"</li>
+<li>Seleccionar categoría: "Spam"</li>
+<li>Agregar descripción (opcional)</li>
+<li>Tocar "Enviar reporte"</li>
+</ol>
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend: <code>POST /reports</code></li>
+<li>✅ Response status: 201 Created</li>
+<li>✅ Modal se cierra</li>
+<li>✅ Mensaje de éxito: "Reporte enviado"</li>
+</ul>
+<hr>
 
-**Pasos**:
-1. Tocar una conversación
-2. Escribir mensaje: "Hola, ¿cómo estás?"
-3. Tocar botón "Enviar"
+</div>
+</details>
 
-**Resultado Esperado**:
-- ✅ Backend: `POST /messages`
-- ✅ Response status: 201 Created
-- ✅ Mensaje aparece en la conversación
-- ✅ Campo de texto se limpia
-- ✅ Scroll automático al último mensaje
-- ✅ Estado de mensaje: ✓✓ (entregado)
+</div>
+</details>
 
----
 
-### 4.10 MÓDULO: BLOQUEO Y REPORTES
+<!-- ============================================
+     SECCIÓN 5: MATRIZ DE PRUEBAS
+     ============================================ -->
 
-#### CP-BLOCK-001: Bloquear Usuario
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-BLOCK-001 |
-| **Prioridad** | 🟡 ALTA |
-| **Módulo** | Bloqueo |
+<details id="seccion-5">
+<summary>5. MATRIZ DE PRUEBAS</summary>
+<div class="section-content">
 
-**Pasos**:
-1. Visitar perfil de otro usuario
-2. Tocar menú (⋮)
-3. Tocar "Bloquear usuario"
-4. Confirmar acción
 
-**Resultado Esperado**:
-- ✅ Backend: `POST /user-blocks/:userId`
-- ✅ Response status: 201 Created
-- ✅ Usuario bloqueado desaparece del feed
-- ✅ Conversación con usuario bloqueado desaparece
-- ✅ No se pueden ver publicaciones del bloqueado
-
----
-
-#### CP-REPORT-001: Reportar Publicación
-| Campo | Detalle |
-|-------|---------|
-| **ID** | CP-REPORT-001 |
-| **Prioridad** | 🟡 ALTA |
-| **Módulo** | Reportes |
-
-**Pasos**:
-1. En una publicación, tocar menú (⋮)
-2. Tocar "Denunciar publicación"
-3. Seleccionar categoría: "Spam"
-4. Agregar descripción (opcional)
-5. Tocar "Enviar reporte"
-
-**Resultado Esperado**:
-- ✅ Backend: `POST /reports`
-- ✅ Response status: 201 Created
-- ✅ Modal se cierra
-- ✅ Mensaje de éxito: "Reporte enviado"
-
----
-
-## 5. MATRIZ DE PRUEBAS
-
-### 5.1 Resumen por Módulo
-
-| Módulo | Total Casos | Críticos | Altos | Medios | Estado |
-|--------|-------------|----------|-------|--------|--------|
-| Autenticación y Registro | 5 | 4 | 1 | 0 | ⬜ |
-| Perfil de Usuario | 4 | 2 | 2 | 0 | ⬜ |
-| Gestión de Mascotas | 5 | 3 | 2 | 0 | ⬜ |
-| Publicaciones (Posts) | 6 | 4 | 2 | 0 | ⬜ |
-| Historias (Stories) | 3 | 2 | 1 | 0 | ⬜ |
-| Notificaciones | 3 | 1 | 1 | 1 | ⬜ |
-| Servicios Marketplace | 3 | 2 | 1 | 0 | ⬜ |
-| Eventos | 1 | 1 | 0 | 0 | ⬜ |
-| Chat/Mensajería | 2 | 2 | 0 | 0 | ⬜ |
-| Bloqueo y Reportes | 2 | 0 | 2 | 0 | ⬜ |
-| **TOTAL** | **34** | **21** | **12** | **1** | **0/34** |
-
-### 5.2 Plantilla de Seguimiento
-
-```
+<h3>5.1 Resumen por Módulo</h3>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Módulo</th>
+<th>Total Casos</th>
+<th>Críticos</th>
+<th>Altos</th>
+<th>Medios</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Autenticación y Registro</td>
+<td>5</td>
+<td>4</td>
+<td>1</td>
+<td>0</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Perfil de Usuario</td>
+<td>4</td>
+<td>2</td>
+<td>2</td>
+<td>0</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Gestión de Mascotas</td>
+<td>5</td>
+<td>3</td>
+<td>2</td>
+<td>0</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Publicaciones (Posts)</td>
+<td>6</td>
+<td>4</td>
+<td>2</td>
+<td>0</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Historias (Stories)</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td>0</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Notificaciones</td>
+<td>3</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Servicios Marketplace</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td>0</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Chat/Mensajería</td>
+<td>2</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Bloqueo y Reportes</td>
+<td>2</td>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td><strong>34</strong></td>
+<td><strong>21</strong></td>
+<td><strong>12</strong></td>
+<td><strong>1</strong></td>
+<td><strong>0/34</strong></td>
+</tr>
+</tbody>
+</table>
+<h3>5.2 Plantilla de Seguimiento</h3>
+<pre><code class="language-plaintext">
 Caso de Prueba: CP-AUTH-001
 Fecha: __/__/____
 Ejecutor: _________________
@@ -1494,131 +3336,247 @@ Versión App: _____________
 Resultado: ✅ Aprobado / ❌ Fallido / 🚫 Bloqueado
 Observaciones: ___________________________________________
 Bug ID (si aplica): ______________________________________
-```
+</code></pre>
+<hr>
 
----
+</div>
+</details>
 
-## 6. CASOS EXTREMOS Y PRUEBAS DE ESTRÉS
 
-### 6.1 Pruebas de Límites de Datos
+<!-- ============================================
+     SECCIÓN 6: CASOS EXTREMOS Y PRUEBAS DE ESTRÉS
+     ============================================ -->
 
-#### CE-001: Campos de Texto con Límites
-| Campo | Límite | Caso de Prueba |
-|-------|--------|----------------|
-| Nombre usuario | 50 chars | Ingresar 51 caracteres → Rechazar |
-| Biografía | 150 chars | Ingresar 151 caracteres → Rechazar |
-| Descripción post | 500 chars | Ingresar 501 caracteres → Rechazar |
-| Comentario | 500 chars | Ingresar 501 caracteres → Rechazar |
+<details id="seccion-6">
+<summary>6. CASOS EXTREMOS Y PRUEBAS DE ESTRÉS</summary>
+<div class="section-content">
 
-#### CE-002: Caracteres Especiales
-- ✅ Emojis en texto: Deben permitirse 🐶🐱❤️
-- ✅ Caracteres Unicode: Deben permitirse (ñ, á, ü, etc.)
-- ❌ Scripts HTML: `<script>alert('xss')</script>` → Sanitizar
-- ❌ SQL Injection: `'; DROP TABLE users; --` → Sanitizar
 
-#### CE-003: Archivos de Medios
-| Escenario | Límite | Resultado Esperado |
-|-----------|--------|-------------------|
-| Imagen > 10MB | 10MB | ❌ Rechazar "Archivo muy grande" |
-| Video > 50MB | 50MB | ❌ Rechazar "Archivo muy grande" |
-| Video > 2 min | 2 min | ❌ Rechazar "Máximo 2 minutos" |
-| Formato no soportado (.txt) | jpg/png/mp4 | ❌ Rechazar "Formato no soportado" |
+<h3>6.1 Pruebas de Límites de Datos</h3>
+<h4>CE-001: Campos de Texto con Límites</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Límite</th>
+<th>Caso de Prueba</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nombre usuario</td>
+<td>50 chars</td>
+<td>Ingresar 51 caracteres → Rechazar</td>
+</tr>
+<tr>
+<td>Biografía</td>
+<td>150 chars</td>
+<td>Ingresar 151 caracteres → Rechazar</td>
+</tr>
+<tr>
+<td>Descripción post</td>
+<td>500 chars</td>
+<td>Ingresar 501 caracteres → Rechazar</td>
+</tr>
+<tr>
+<td>Comentario</td>
+<td>500 chars</td>
+<td>Ingresar 501 caracteres → Rechazar</td>
+</tr>
+</tbody>
+</table>
+<h4>CE-002: Caracteres Especiales</h4>
+<ul>
+<li>✅ Emojis en texto: Deben permitirse 🐶🐱❤️</li>
+<li>✅ Caracteres Unicode: Deben permitirse (ñ, á, ü, etc.)</li>
+<li>❌ Scripts HTML: <code><script>alert('xss')</script></code> → Sanitizar</li>
+<li>❌ SQL Injection: <code>'; DROP TABLE users; --</code> → Sanitizar</li>
+</ul>
+<h4>CE-003: Archivos de Medios</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Escenario</th>
+<th>Límite</th>
+<th>Resultado Esperado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Imagen > 10MB</td>
+<td>10MB</td>
+<td>❌ Rechazar "Archivo muy grande"</td>
+</tr>
+<tr>
+<td>Video > 50MB</td>
+<td>50MB</td>
+<td>❌ Rechazar "Archivo muy grande"</td>
+</tr>
+<tr>
+<td>Video > 2 min</td>
+<td>2 min</td>
+<td>❌ Rechazar "Máximo 2 minutos"</td>
+</tr>
+<tr>
+<td>Formato no soportado (.txt)</td>
+<td>jpg/png/mp4</td>
+<td>❌ Rechazar "Formato no soportado"</td>
+</tr>
+</tbody>
+</table>
+<h3>6.2 Pruebas de Conectividad</h3>
+<h4>CE-004: Sin Conexión a Internet</h4>
+<p><strong>Escenarios a probar</strong>:</p>
+<ol>
+<li>Login sin conexión → Mostrar error "Sin conexión"</li>
+<li>Crear publicación sin conexión → Mostrar error, no publicar</li>
+<li>Cargar feed sin conexión → Mostrar error</li>
+<li>Enviar mensaje sin conexión → Mostrar indicador de espera</li>
+</ol>
+<p><strong>Resultado esperado</strong>:</p>
+<ul>
+<li>❌ Nunca crash de la app</li>
+<li>✅ Mensaje de error claro y útil</li>
+<li>✅ Posibilidad de reintentar</li>
+</ul>
+<h4>CE-005: Pérdida de Conexión Durante Operación</h4>
+<p><strong>Escenarios</strong>:</p>
+<ol>
+<li>Perder conexión mientras se sube una publicación</li>
+<li>Perder conexión durante login</li>
+<li>Perder conexión mientras se envía mensaje</li>
+</ol>
+<p><strong>Resultado esperado</strong>:</p>
+<ul>
+<li>✅ Operación se cancela o reintenta</li>
+<li>✅ Mensaje de error: "Conexión perdida, intenta nuevamente"</li>
+<li>❌ NO debe quedar en estado inconsistente</li>
+</ul>
+<h3>6.3 Pruebas de Concurrencia</h3>
+<h4>CE-006: Múltiples Acciones Simultáneas</h4>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Escenario</th>
+<th>Acción</th>
+<th>Resultado Esperado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dar like rápidamente múltiples veces</td>
+<td>Tocar botón like 5 veces seguidas</td>
+<td>Solo cuenta última acción</td>
+</tr>
+<tr>
+<td>Seguir/dejar de seguir rápidamente</td>
+<td>Alternar 10 veces en 2 segundos</td>
+<td>Solo cuenta última acción, sin crash</td>
+</tr>
+<tr>
+<td>Enviar múltiples mensajes simultáneamente</td>
+<td>Tocar "Enviar" 5 veces rápido</td>
+<td>Todos los mensajes se envían (no duplicar)</td>
+</tr>
+</tbody>
+</table>
+<h3>6.4 Pruebas de Sesión</h3>
+<h4>CE-007: Token Expirado</h4>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Usuario autenticado</li>
+<li>Esperar que token JWT expire (backend configurable, ej: 1 hora)</li>
+<li>Intentar realizar acción (like, comentar, etc.)</li>
+</ol>
+<p><strong>Resultado esperado</strong>:</p>
+<ul>
+<li>✅ Backend responde 401 Unauthorized</li>
+<li>✅ App redirige a login automáticamente</li>
+<li>✅ Mensaje: "Tu sesión ha expirado, inicia sesión nuevamente"</li>
+</ul>
+<h4>CE-008: Cerrar Sesión en Múltiples Dispositivos</h4>
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Login en dispositivo A</li>
+<li>Login en dispositivo B con misma cuenta</li>
+<li>Cerrar sesión en dispositivo A</li>
+<li>Intentar acción en dispositivo A</li>
+</ol>
+<p><strong>Resultado esperado</strong>:</p>
+<ul>
+<li>✅ Dispositivo A redirige a login</li>
+<li>✅ Dispositivo B sigue funcionando (si se permite sesiones múltiples)</li>
+</ul>
+<h3>6.5 Pruebas de Validaciones Backend</h3>
+<h4>CE-009: Manipulación Directa de API</h4>
+<p><strong>Escenario</strong>: Usuario malicioso intenta enviar peticiones directamente al backend saltándose validaciones del frontend</p>
+<p><strong>Casos a probar</strong>:</p>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Petición</th>
+<th>Dato Malicioso</th>
+<th>Backend Debe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST /posts</td>
+<td>descripción: 1000 caracteres</td>
+<td>❌ 400 Bad Request</td>
+</tr>
+<tr>
+<td>POST /pets</td>
+<td>birthDate: fecha futura</td>
+<td>❌ 400 Bad Request</td>
+</tr>
+<tr>
+<td>POST /posts/:id/like</td>
+<td>Ya dio like</td>
+<td>❌ 409 Conflict</td>
+</tr>
+<tr>
+<td>DELETE /posts/:id</td>
+<td>Post de otro usuario</td>
+<td>❌ 403 Forbidden</td>
+</tr>
+<tr>
+<td>PATCH /users/profile</td>
+<td>email: formato inválido</td>
+<td>❌ 400 Bad Request</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Herramienta recomendada</strong>: Postman o curl para hacer peticiones directas</p>
+<hr>
 
-### 6.2 Pruebas de Conectividad
+</div>
+</details>
 
-#### CE-004: Sin Conexión a Internet
-**Escenarios a probar**:
-1. Login sin conexión → Mostrar error "Sin conexión"
-2. Crear publicación sin conexión → Mostrar error, no publicar
-3. Cargar feed sin conexión → Mostrar error
-4. Enviar mensaje sin conexión → Mostrar indicador de espera
 
-**Resultado esperado**:
-- ❌ Nunca crash de la app
-- ✅ Mensaje de error claro y útil
-- ✅ Posibilidad de reintentar
+<!-- ============================================
+     SECCIÓN 7: HERRAMIENTAS DE AUTOMATIZACIÓN
+     ============================================ -->
 
-#### CE-005: Pérdida de Conexión Durante Operación
-**Escenarios**:
-1. Perder conexión mientras se sube una publicación
-2. Perder conexión durante login
-3. Perder conexión mientras se envía mensaje
+<details id="seccion-7">
+<summary>7. HERRAMIENTAS DE AUTOMATIZACIÓN</summary>
+<div class="section-content">
 
-**Resultado esperado**:
-- ✅ Operación se cancela o reintenta
-- ✅ Mensaje de error: "Conexión perdida, intenta nuevamente"
-- ❌ NO debe quedar en estado inconsistente
 
-### 6.3 Pruebas de Concurrencia
-
-#### CE-006: Múltiples Acciones Simultáneas
-| Escenario | Acción | Resultado Esperado |
-|-----------|--------|-------------------|
-| Dar like rápidamente múltiples veces | Tocar botón like 5 veces seguidas | Solo cuenta última acción |
-| Seguir/dejar de seguir rápidamente | Alternar 10 veces en 2 segundos | Solo cuenta última acción, sin crash |
-| Enviar múltiples mensajes simultáneamente | Tocar "Enviar" 5 veces rápido | Todos los mensajes se envían (no duplicar) |
-
-### 6.4 Pruebas de Sesión
-
-#### CE-007: Token Expirado
-**Pasos**:
-1. Usuario autenticado
-2. Esperar que token JWT expire (backend configurable, ej: 1 hora)
-3. Intentar realizar acción (like, comentar, etc.)
-
-**Resultado esperado**:
-- ✅ Backend responde 401 Unauthorized
-- ✅ App redirige a login automáticamente
-- ✅ Mensaje: "Tu sesión ha expirado, inicia sesión nuevamente"
-
-#### CE-008: Cerrar Sesión en Múltiples Dispositivos
-**Pasos**:
-1. Login en dispositivo A
-2. Login en dispositivo B con misma cuenta
-3. Cerrar sesión en dispositivo A
-4. Intentar acción en dispositivo A
-
-**Resultado esperado**:
-- ✅ Dispositivo A redirige a login
-- ✅ Dispositivo B sigue funcionando (si se permite sesiones múltiples)
-
-### 6.5 Pruebas de Validaciones Backend
-
-#### CE-009: Manipulación Directa de API
-**Escenario**: Usuario malicioso intenta enviar peticiones directamente al backend saltándose validaciones del frontend
-
-**Casos a probar**:
-| Petición | Dato Malicioso | Backend Debe |
-|----------|----------------|--------------|
-| POST /posts | descripción: 1000 caracteres | ❌ 400 Bad Request |
-| POST /pets | birthDate: fecha futura | ❌ 400 Bad Request |
-| POST /posts/:id/like | Ya dio like | ❌ 409 Conflict |
-| DELETE /posts/:id | Post de otro usuario | ❌ 403 Forbidden |
-| PATCH /users/profile | email: formato inválido | ❌ 400 Bad Request |
-
-**Herramienta recomendada**: Postman o curl para hacer peticiones directas
-
----
-
-## 7. HERRAMIENTAS DE AUTOMATIZACIÓN
-
-### 7.1 Testing Frontend (Flutter)
-
-#### 7.1.1 Flutter Integration Tests
-**Propósito**: Automatizar casos de prueba funcionales del frontend
-
-**Configuración**:
-```yaml
+<h3>7.1 Testing Frontend (Flutter)</h3>
+<h4>7.1.1 Flutter Integration Tests</h4>
+<p><strong>Propósito</strong>: Automatizar casos de prueba funcionales del frontend</p>
+<p><strong>Configuración</strong>:</p>
+<pre><code class="language-yaml">
 # pubspec.yaml
 dev_dependencies:
   integration_test:
     sdk: flutter
   flutter_test:
     sdk: flutter
-```
-
-**Ejemplo de test automatizado** (referencia):
-```dart
+</code></pre>
+<p><strong>Ejemplo de test automatizado</strong> (referencia):</p>
+<pre><code class="language-dart">
 // test_driver/app_test.dart
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -1641,34 +3599,33 @@ void main() {
     });
   });
 }
-```
-
-**Cobertura sugerida**:
-- ✅ Flujo de login/registro completo
-- ✅ Creación de publicación
-- ✅ Interacciones sociales (like, comentar, seguir)
-- ✅ Navegación entre pantallas principales
-
-#### 7.1.2 Flutter Widget Tests
-**Propósito**: Probar componentes individuales de UI
-
-**Casos sugeridos**:
-- Validaciones de formularios
-- Comportamiento de botones
-- Estados de loading/error
-
-### 7.2 Testing Backend API
-
-#### 7.2.1 Postman Collections
-**Propósito**: Automatizar pruebas de API del backend
-
-**Configuración**:
-1. Crear colección "Petos API Tests"
-2. Organizar por módulos (Auth, Posts, Users, etc.)
-3. Agregar tests en cada request
-
-**Ejemplo de test en Postman**:
-```javascript
+</code></pre>
+<p><strong>Cobertura sugerida</strong>:</p>
+<ul>
+<li>✅ Flujo de login/registro completo</li>
+<li>✅ Creación de publicación</li>
+<li>✅ Interacciones sociales (like, comentar, seguir)</li>
+<li>✅ Navegación entre pantallas principales</li>
+</ul>
+<h4>7.1.2 Flutter Widget Tests</h4>
+<p><strong>Propósito</strong>: Probar componentes individuales de UI</p>
+<p><strong>Casos sugeridos</strong>:</p>
+<ul>
+<li>Validaciones de formularios</li>
+<li>Comportamiento de botones</li>
+<li>Estados de loading/error</li>
+</ul>
+<h3>7.2 Testing Backend API</h3>
+<h4>7.2.1 Postman Collections</h4>
+<p><strong>Propósito</strong>: Automatizar pruebas de API del backend</p>
+<p><strong>Configuración</strong>:</p>
+<ol>
+<li>Crear colección "Petos API Tests"</li>
+<li>Organizar por módulos (Auth, Posts, Users, etc.)</li>
+<li>Agregar tests en cada request</li>
+</ol>
+<p><strong>Ejemplo de test en Postman</strong>:</p>
+<pre><code class="language-javascript">
 // POST /auth/login - Test
 pm.test("Status code is 200", function () {
     pm.response.to.have.status(200);
@@ -1683,64 +3640,64 @@ pm.test("Token is valid JWT", function () {
     var jsonData = pm.response.json();
     pm.expect(jsonData.access_token).to.match(/^eyJ/);
 });
-```
-
-**Colecciones sugeridas**:
-- ✅ **Auth Flow**: Login, Register, Token refresh
-- ✅ **Posts CRUD**: Create, Read, Update, Delete
-- ✅ **Social Actions**: Like, Comment, Follow
-- ✅ **Validations**: Edge cases, invalid data
-- ✅ **Permissions**: Unauthorized access attempts
-
-**Runner de Postman**:
-- Ejecutar colección completa con `Newman` (CLI de Postman)
-- Integrar en CI/CD para pruebas automáticas pre-deploy
-
-#### 7.2.2 Bruno o Insomnia (Alternativas)
-- Alternativas open-source a Postman
-- Misma funcionalidad de testing de API
-
-### 7.3 Testing de Performance
-
-#### 7.3.1 Flutter DevTools
-**Propósito**: Analizar rendimiento de la app
-
-**Métricas a monitorear**:
-- FPS (frames per second) - objetivo: 60 FPS
-- Tiempo de carga de pantallas - objetivo: < 2 segundos
-- Uso de memoria
-- Rebuild de widgets innecesarios
-
-#### 7.3.2 Lighthouse (Web - si aplica)
-Si hay versión web de Petos:
-- Performance score > 90
-- Accessibility score > 90
-
-### 7.4 Testing de Regresión Visual
-
-#### 7.4.1 Percy o Chromatic (sugerido)
-**Propósito**: Detectar cambios visuales no intencionales
-
-**Cómo funciona**:
-1. Captura screenshots de referencia (baseline)
-2. En cada PR, captura nuevos screenshots
-3. Compara pixel por pixel
-4. Alerta si hay diferencias visuales
-
-**Pantallas a incluir**:
-- Login, Registro
-- Home Feed
-- Perfil de usuario
-- Crear publicación
-- Formularios (agregar mascota, editar perfil)
-
-### 7.5 Testing de Accesibilidad
-
-#### 7.5.1 Flutter Semantics Test
-**Propósito**: Verificar que la app es accesible para screen readers
-
-**Ejemplo**:
-```dart
+</code></pre>
+<p><strong>Colecciones sugeridas</strong>:</p>
+<ul>
+<li>✅ <strong>Auth Flow</strong>: Login, Register, Token refresh</li>
+<li>✅ <strong>Posts CRUD</strong>: Create, Read, Update, Delete</li>
+<li>✅ <strong>Social Actions</strong>: Like, Comment, Follow</li>
+<li>✅ <strong>Validations</strong>: Edge cases, invalid data</li>
+<li>✅ <strong>Permissions</strong>: Unauthorized access attempts</li>
+</ul>
+<p><strong>Runner de Postman</strong>:</p>
+<ul>
+<li>Ejecutar colección completa con <code>Newman</code> (CLI de Postman)</li>
+<li>Integrar en CI/CD para pruebas automáticas pre-deploy</li>
+</ul>
+<h4>7.2.2 Bruno o Insomnia (Alternativas)</h4>
+<ul>
+<li>Alternativas open-source a Postman</li>
+<li>Misma funcionalidad de testing de API</li>
+</ul>
+<h3>7.3 Testing de Performance</h3>
+<h4>7.3.1 Flutter DevTools</h4>
+<p><strong>Propósito</strong>: Analizar rendimiento de la app</p>
+<p><strong>Métricas a monitorear</strong>:</p>
+<ul>
+<li>FPS (frames per second) - objetivo: 60 FPS</li>
+<li>Tiempo de carga de pantallas - objetivo: < 2 segundos</li>
+<li>Uso de memoria</li>
+<li>Rebuild de widgets innecesarios</li>
+</ul>
+<h4>7.3.2 Lighthouse (Web - si aplica)</h4>
+<p>Si hay versión web de Petos:</p>
+<ul>
+<li>Performance score > 90</li>
+<li>Accessibility score > 90</li>
+</ul>
+<h3>7.4 Testing de Regresión Visual</h3>
+<h4>7.4.1 Percy o Chromatic (sugerido)</h4>
+<p><strong>Propósito</strong>: Detectar cambios visuales no intencionales</p>
+<p><strong>Cómo funciona</strong>:</p>
+<ol>
+<li>Captura screenshots de referencia (baseline)</li>
+<li>En cada PR, captura nuevos screenshots</li>
+<li>Compara pixel por pixel</li>
+<li>Alerta si hay diferencias visuales</li>
+</ol>
+<p><strong>Pantallas a incluir</strong>:</p>
+<ul>
+<li>Login, Registro</li>
+<li>Home Feed</li>
+<li>Perfil de usuario</li>
+<li>Crear publicación</li>
+<li>Formularios (agregar mascota, editar perfil)</li>
+</ul>
+<h3>7.5 Testing de Accesibilidad</h3>
+<h4>7.5.1 Flutter Semantics Test</h4>
+<p><strong>Propósito</strong>: Verificar que la app es accesible para screen readers</p>
+<p><strong>Ejemplo</strong>:</p>
+<pre><code class="language-dart">
 testWidgets('Botón de login tiene semantic label', (tester) async {
   await tester.pumpWidget(LoginView());
 
@@ -1750,17 +3707,25 @@ testWidgets('Botón de login tiene semantic label', (tester) async {
     isButton: true,
   ));
 });
-```
+</code></pre>
+<hr>
 
----
+</div>
+</details>
 
-## 8. REPORTE DE BUGS
 
-### 8.1 Formato de Reporte
+<!-- ============================================
+     SECCIÓN 8: REPORTE DE BUGS
+     ============================================ -->
 
-**Plantilla estándar**:
+<details id="seccion-8">
+<summary>8. REPORTE DE BUGS</summary>
+<div class="section-content">
 
-```markdown
+
+<h3>8.1 Formato de Reporte</h3>
+<p><strong>Plantilla estándar</strong>:</p>
+<pre><code class="language-markdown">
 # BUG-001: [Título descriptivo del bug]
 
 ## 📋 Información General
@@ -1796,9 +3761,9 @@ Qué sucede en realidad (el bug).
 
 ## 🔄 Frecuencia
 - ✅ Siempre reproducible (100%)
-- ⚠️ Frecuente (>50%)
-- 🔸 Ocasional (<50%)
-- ⚪ Rara vez (<10%)
+- ⚠️ Frecuente (&gt;50%)
+- 🔸 Ocasional (&lt;50%)
+- ⚪ Rara vez (&lt;10%)
 
 ## 🌐 Entorno
 - Backend: http://localhost:8080
@@ -1807,121 +3772,165 @@ Qué sucede en realidad (el bug).
 
 ## 🔍 Información Adicional
 Cualquier información relevante que ayude a reproducir o resolver el bug.
-```
-
-### 8.2 Clasificación de Severidad
-
-| Severidad | Descripción | Ejemplo |
-|-----------|-------------|---------|
-| 🔴 **Crítica** | Bloquea funcionalidad core, app crash, pérdida de datos | Login no funciona, app crashea al crear post |
-| 🟡 **Alta** | Afecta funcionalidad importante pero hay workaround | Like no funciona, pero se puede comentar |
-| 🟢 **Media** | Afecta UX pero no bloquea funcionalidades | Animación incorrecta, texto mal alineado |
-| ⚪ **Baja** | Problema cosmético o mejora sugerida | Color de botón no ideal, typo en texto |
-
-### 8.3 Flujo de Manejo de Bugs
-
-```
+</code></pre>
+<h3>8.2 Clasificación de Severidad</h3>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Severidad</th>
+<th>Descripción</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🔴 <strong>Crítica</strong></td>
+<td>Bloquea funcionalidad core, app crash, pérdida de datos</td>
+<td>Login no funciona, app crashea al crear post</td>
+</tr>
+<tr>
+<td>🟡 <strong>Alta</strong></td>
+<td>Afecta funcionalidad importante pero hay workaround</td>
+<td>Like no funciona, pero se puede comentar</td>
+</tr>
+<tr>
+<td>🟢 <strong>Media</strong></td>
+<td>Afecta UX pero no bloquea funcionalidades</td>
+<td>Animación incorrecta, texto mal alineado</td>
+</tr>
+<tr>
+<td>⚪ <strong>Baja</strong></td>
+<td>Problema cosmético o mejora sugerida</td>
+<td>Color de botón no ideal, typo en texto</td>
+</tr>
+</tbody>
+</table>
+<h3>8.3 Flujo de Manejo de Bugs</h3>
+<pre><code class="language-plaintext">
 [Bug Reportado] → [Triaje] → [Asignado a Desarrollador]
                                        ↓
 [QA Verifica Fix] ← [Desarrollador Corrige] ← [En Desarrollo]
        ↓
 [Bug Cerrado] ✅
-```
+</code></pre>
+<hr>
 
----
+</div>
+</details>
 
-## 9. CHECKLIST FINAL DE CALIDAD
 
-### 9.1 Pre-Release Checklist
+<!-- ============================================
+     SECCIÓN 9: CHECKLIST FINAL DE CALIDAD
+     ============================================ -->
 
-Antes de cada lanzamiento, verificar:
+<details id="seccion-9">
+<summary>9. CHECKLIST FINAL DE CALIDAD</summary>
+<div class="section-content">
 
-#### ✅ Funcionalidades Core
-- [ ] Login funciona correctamente
-- [ ] Registro multi-paso completo funciona
-- [ ] Crear publicación con imágenes funciona
-- [ ] Crear publicación con video funciona
-- [ ] Feed carga y muestra publicaciones
-- [ ] Like, comentar, compartir funcionan
-- [ ] Seguir/dejar de seguir funciona
-- [ ] Crear/ver historias funciona
-- [ ] Notificaciones se reciben correctamente
-- [ ] Chat/mensajería funciona
-- [ ] Crear/ver mascotas funciona
-- [ ] Registros de salud funcionan
-- [ ] Mapa de servicios carga correctamente
-- [ ] Crear/editar servicios funciona
-- [ ] Crear/editar eventos funciona
 
-#### ✅ Validaciones y Seguridad
-- [ ] Campos de formulario validan correctamente
-- [ ] Backend rechaza datos inválidos
-- [ ] Sesión expira correctamente
-- [ ] Tokens JWT se manejan correctamente
-- [ ] No hay XSS ni SQL Injection posible
-- [ ] Usuarios bloqueados no pueden interactuar
-
-#### ✅ UX y Navegación
-- [ ] Todas las pantallas cargan en < 2 segundos
-- [ ] Pull-to-refresh funciona en todas las listas
-- [ ] Animaciones son fluidas (60 FPS)
-- [ ] Botón back funciona correctamente
-- [ ] Estados vacíos se muestran correctamente
-- [ ] Loading indicators se muestran durante operaciones largas
-- [ ] Mensajes de error son claros y útiles
-
-#### ✅ Manejo de Errores
-- [ ] Sin conexión: Muestra error claro
-- [ ] Backend caído: Muestra error claro
-- [ ] Token expirado: Redirige a login
-- [ ] Operaciones fallidas: Permiten reintentar
-- [ ] No hay crashes no controlados
-
-#### ✅ Dispositivos y Plataformas
-- [ ] Probado en Android (versión mínima: 8.0)
-- [ ] Probado en iOS (versión mínima: 12.0)
-- [ ] Probado en diferentes tamaños de pantalla
-- [ ] Probado en orientación portrait y landscape (si aplica)
-
-#### ✅ Performance
-- [ ] App inicia en < 3 segundos
-- [ ] Feed carga en < 2 segundos
-- [ ] Imágenes se cargan progresivamente (caché funciona)
-- [ ] No hay memory leaks evidentes
-- [ ] Scroll es fluido sin lag
-
-#### ✅ Accesibilidad
-- [ ] Todos los botones tienen semantic labels
-- [ ] Contraste de colores cumple WCAG AA
-- [ ] Tamaño de elementos táctiles > 44x44 puntos
-- [ ] Screen reader puede navegar la app
-
-### 9.2 Sign-Off de Release
-
-**Checklist de aprobación**:
-```
+<h3>9.1 Pre-Release Checklist</h3>
+<p>Antes de cada lanzamiento, verificar:</p>
+<h4>✅ Funcionalidades Core</h4>
+<ul>
+<li>[ ] Login funciona correctamente</li>
+<li>[ ] Registro multi-paso completo funciona</li>
+<li>[ ] Crear publicación con imágenes funciona</li>
+<li>[ ] Crear publicación con video funciona</li>
+<li>[ ] Feed carga y muestra publicaciones</li>
+<li>[ ] Like, comentar, compartir funcionan</li>
+<li>[ ] Seguir/dejar de seguir funciona</li>
+<li>[ ] Crear/ver historias funciona</li>
+<li>[ ] Notificaciones se reciben correctamente</li>
+<li>[ ] Chat/mensajería funciona</li>
+<li>[ ] Crear/ver mascotas funciona</li>
+<li>[ ] Registros de salud funcionan</li>
+<li>[ ] Mapa de servicios carga correctamente</li>
+<li>[ ] Crear/editar servicios funciona</li>
+<li>[ ] Crear/editar eventos funciona</li>
+</ul>
+<h4>✅ Validaciones y Seguridad</h4>
+<ul>
+<li>[ ] Campos de formulario validan correctamente</li>
+<li>[ ] Backend rechaza datos inválidos</li>
+<li>[ ] Sesión expira correctamente</li>
+<li>[ ] Tokens JWT se manejan correctamente</li>
+<li>[ ] No hay XSS ni SQL Injection posible</li>
+<li>[ ] Usuarios bloqueados no pueden interactuar</li>
+</ul>
+<h4>✅ UX y Navegación</h4>
+<ul>
+<li>[ ] Todas las pantallas cargan en < 2 segundos</li>
+<li>[ ] Pull-to-refresh funciona en todas las listas</li>
+<li>[ ] Animaciones son fluidas (60 FPS)</li>
+<li>[ ] Botón back funciona correctamente</li>
+<li>[ ] Estados vacíos se muestran correctamente</li>
+<li>[ ] Loading indicators se muestran durante operaciones largas</li>
+<li>[ ] Mensajes de error son claros y útiles</li>
+</ul>
+<h4>✅ Manejo de Errores</h4>
+<ul>
+<li>[ ] Sin conexión: Muestra error claro</li>
+<li>[ ] Backend caído: Muestra error claro</li>
+<li>[ ] Token expirado: Redirige a login</li>
+<li>[ ] Operaciones fallidas: Permiten reintentar</li>
+<li>[ ] No hay crashes no controlados</li>
+</ul>
+<h4>✅ Dispositivos y Plataformas</h4>
+<ul>
+<li>[ ] Probado en Android (versión mínima: 8.0)</li>
+<li>[ ] Probado en iOS (versión mínima: 12.0)</li>
+<li>[ ] Probado en diferentes tamaños de pantalla</li>
+<li>[ ] Probado en orientación portrait y landscape (si aplica)</li>
+</ul>
+<h4>✅ Performance</h4>
+<ul>
+<li>[ ] App inicia en < 3 segundos</li>
+<li>[ ] Feed carga en < 2 segundos</li>
+<li>[ ] Imágenes se cargan progresivamente (caché funciona)</li>
+<li>[ ] No hay memory leaks evidentes</li>
+<li>[ ] Scroll es fluido sin lag</li>
+</ul>
+<h4>✅ Accesibilidad</h4>
+<ul>
+<li>[ ] Todos los botones tienen semantic labels</li>
+<li>[ ] Contraste de colores cumple WCAG AA</li>
+<li>[ ] Tamaño de elementos táctiles > 44x44 puntos</li>
+<li>[ ] Screen reader puede navegar la app</li>
+</ul>
+<h3>9.2 Sign-Off de Release</h3>
+<p><strong>Checklist de aprobación</strong>:</p>
+<pre><code class="language-plaintext">
 Versión: ___________
 Fecha: __/__/____
 
 ✅ Todos los casos de prueba críticos aprobados
 ✅ Bugs críticos resueltos (0 abiertos)
 ✅ Bugs altos resueltos o documentados
-✅ Performance aceptable (< 2s carga pantallas)
+✅ Performance aceptable (&lt; 2s carga pantallas)
 ✅ Sin crashes en testing manual extensivo
 ✅ Aprobado por Product Owner: _________________
 ✅ Aprobado por QA Lead: _____________________
 
 🚀 RELEASE APROBADA PARA PRODUCCIÓN
-```
+</code></pre>
+<hr>
 
----
+</div>
+</details>
 
-## 10. ANEXOS
 
-### 10.1 Comandos Útiles
+<!-- ============================================
+     SECCIÓN 10: ANEXOS
+     ============================================ -->
 
-**Flutter**:
-```bash
+<details id="seccion-10">
+<summary>10. ANEXOS</summary>
+<div class="section-content">
+
+
+<h3>10.1 Comandos Útiles</h3>
+<p><strong>Flutter</strong>:</p>
+<pre><code class="language-bash">
 # Ejecutar app en dispositivo
 flutter run
 
@@ -1936,10 +3945,9 @@ flutter analyze
 
 # Limpiar build
 flutter clean
-```
-
-**Backend**:
-```bash
+</code></pre>
+<p><strong>Backend</strong>:</p>
+<pre><code class="language-bash">
 # Iniciar servidor de desarrollo
 cd petos-backend
 yarn dev
@@ -1949,56 +3957,102 @@ yarn test
 
 # Verificar health endpoint
 curl http://localhost:8080/health
-```
+</code></pre>
+<h3>10.2 URLs de Referencia</h3>
+<p><strong>Documentación del proyecto</strong>:</p>
+<ul>
+<li><a href="./Analisis%20Funcional.md">Análisis Funcional</a></li>
+<li><a href="./Analisis<em>Diseno</em>UI_UX.md">Análisis de Diseño UI/UX</a></li>
+<li><a href="../CLAUDE.md">CLAUDE.md (Reglas de Desarrollo)</a></li>
+</ul>
+<p><strong>Herramientas</strong>:</p>
+<ul>
+<li>Flutter: https://flutter.dev</li>
+<li>Postman: https://www.postman.com</li>
+<li>Percy (Visual testing): https://percy.io</li>
+</ul>
+<h3>10.3 Glosario</h3>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Término</th>
+<th>Definición</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Happy Path</strong></td>
+<td>Flujo de uso normal sin errores</td>
+</tr>
+<tr>
+<td><strong>Edge Case</strong></td>
+<td>Caso extremo o límite de uso</td>
+</tr>
+<tr>
+<td><strong>Regression</strong></td>
+<td>Bug que reaparece después de haber sido corregido</td>
+</tr>
+<tr>
+<td><strong>Smoke Test</strong></td>
+<td>Prueba rápida de funcionalidades básicas</td>
+</tr>
+<tr>
+<td><strong>Sanity Test</strong></td>
+<td>Prueba rápida después de un cambio menor</td>
+</tr>
+<tr>
+<td><strong>Flaky Test</strong></td>
+<td>Test que a veces pasa y a veces falla</td>
+</tr>
+<tr>
+<td><strong>Mock</strong></td>
+<td>Simulación de datos o servicios para testing</td>
+</tr>
+</tbody>
+</table>
+<hr>
 
-### 10.2 URLs de Referencia
+</div>
+</details>
 
-**Documentación del proyecto**:
-- [Análisis Funcional](./Analisis%20Funcional.md)
-- [Análisis de Diseño UI/UX](./Analisis_Diseno_UI_UX.md)
-- [CLAUDE.md (Reglas de Desarrollo)](../CLAUDE.md)
 
-**Herramientas**:
-- Flutter: https://flutter.dev
-- Postman: https://www.postman.com
-- Percy (Visual testing): https://percy.io
+<!-- ============================================
+     CONCLUSIÓN
+     ============================================ -->
 
-### 10.3 Glosario
+<details id="seccion-11">
+<summary>11. CONCLUSIÓN</summary>
+<div class="section-content">
 
-| Término | Definición |
-|---------|------------|
-| **Happy Path** | Flujo de uso normal sin errores |
-| **Edge Case** | Caso extremo o límite de uso |
-| **Regression** | Bug que reaparece después de haber sido corregido |
-| **Smoke Test** | Prueba rápida de funcionalidades básicas |
-| **Sanity Test** | Prueba rápida después de un cambio menor |
-| **Flaky Test** | Test que a veces pasa y a veces falla |
-| **Mock** | Simulación de datos o servicios para testing |
+<p>Este plan de calidad y pruebas proporciona una guía completa para asegurar que <strong>Petos App</strong> cumple con los estándares de calidad necesarios para su lanzamiento.</p>
 
----
+<h3>Próximos Pasos Recomendados:</h3>
+<ol>
+<li><strong>Ejecutar todos los casos de prueba manuales</strong> (55 casos totales)</li>
+<li><strong>Reportar y trackear todos los bugs</strong> encontrados</li>
+<li><strong>Implementar tests automatizados</strong> de casos críticos (Flutter Integration Tests)</li>
+<li><strong>Crear colección de Postman</strong> con tests de API</li>
+<li><strong>Realizar UAT</strong> con usuarios beta antes del lanzamiento</li>
+<li><strong>Aprobar release</strong> solo si 100% de casos críticos pasan</li>
+</ol>
 
-## CONCLUSIÓN
+<h3>Contacto</h3>
+<p>Para dudas o reporte de bugs:</p>
+<ul>
+<li>QA Lead: [Nombre]</li>
+<li>Email: [email]</li>
+<li>Herramienta de tracking: [Jira / Trello / GitHub Issues]</li>
+</ul>
 
-Este plan de calidad y pruebas proporciona una guía completa para asegurar que **Petos App** cumple con los estándares de calidad necesarios para su lanzamiento.
+<hr>
 
-### Próximos Pasos Recomendados:
+<p><strong>Documento creado por</strong>: Claude AI</p>
+<p><strong>Última actualización</strong>: Enero 2025</p>
+<p><strong>Versión</strong>: 1.0</p>
 
-1. **Ejecutar todos los casos de prueba manuales** (34 casos totales)
-2. **Reportar y trackear todos los bugs** encontrados
-3. **Implementar tests automatizados** de casos críticos (Flutter Integration Tests)
-4. **Crear colección de Postman** con tests de API
-5. **Realizar UAT** con usuarios beta antes del lanzamiento
-6. **Aprobar release** solo si 100% de casos críticos pasan
+</div>
+</details>
 
-### Contacto
-
-Para dudas o reporte de bugs:
-- QA Lead: [Nombre]
-- Email: [email]
-- Herramienta de tracking: [Jira / Trello / GitHub Issues]
-
----
-
-**Documento creado por**: Claude AI
-**Última actualización**: Enero 2025
-**Versión**: 1.0
+</div>
+</body>
+</html>
