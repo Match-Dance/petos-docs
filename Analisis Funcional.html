@@ -1,346 +1,3874 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Markdown: Rich Preview</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-    <script>
-        // Initialize highlight.js
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('pre code').forEach((block) => {
-                hljs.highlightElement(block);
-            });
-        });
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PETOS - Análisis Funcional</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    /* Paleta de colores simplificada */
+    --primary-color: #4A90E2;
+    --primary-dark: #2E5C8A;
+    --secondary-color: #7ED321;
+    --accent-color: #FFD700;
+    --success-color: #51CF66;
+    --text-primary: #2C3E50;
+    --text-secondary: #7F8C8D;
+    --bg-light: #F8F9FA;
+    --bg-white: #FFFFFF;
+    --border-color: #E9ECEF;
+    --shadow: 0 2px 8px rgba(0,0,0,0.1);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.15);
+  }
 
-        // Copy to clipboard function
-        function copyToClipboard(button) {
-            const codeBlock = button.closest('.code-block');
-            const code = codeBlock.querySelector('code').textContent;
-            navigator.clipboard.writeText(code).then(() => {
-                const originalText = button.textContent;
-                button.textContent = 'Copied!';
-                button.style.backgroundColor = '#4CAF50';
-                button.style.color = 'white';
-                setTimeout(() => {
-                    button.textContent = originalText;
-                    button.style.backgroundColor = '';
-                    button.style.color = '';
-                }, 2000);
-            }).catch(err => {
-                console.error('Failed to copy: ', err);
-            });
-        }
-    </script>
-    <style>
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
-            font-size: 14px;
-            line-height: 1.6;
-            padding: 0 20px;
-        }
-        /* Twemoji emoji image style for inline, text-sized emojis */
-        img.emoji {
-            height: 1em;
-            width: 1em;
-            margin: 0 .05em 0 .1em;
-            vertical-align: -0.1em;
-            display: inline;
-        }
-        
-        h1, h2, h3, h4, h5, h6 {
-            font-weight: 600;
-            margin-top: 24px;
-            margin-bottom: 16px;
-            line-height: 1.25;
-        }
-        
-        h1 { 
-            font-size: 2em; 
-            border-bottom: 1px solid #eaecef; 
-            padding-bottom: 0.3em;
-            margin-top: 0.67em 0;
-        }
-        
-        h2 { 
-            font-size: 1.5em; 
-            border-bottom: 1px solid #eaecef; 
-            padding-bottom: 0.3em;
-            margin-top: 1.5em;
-        }
-        
-        h3 { 
-            font-size: 1.25em; 
-            margin-top: 1.25em;
-        }
-        
-        h4 { 
-            font-size: 1em; 
-            margin-top: 1em;
-        }
-        
-        a { 
-            color: #0366d6; 
-            text-decoration: none; 
-        }
-        
-        a:hover { 
-            text-decoration: underline; 
-        }
-        
-        strong { 
-            font-weight: 600; 
-        }
-        
-        pre {
-            background-color:rgb(9, 7, 10);
-            overflow: auto;
-            margin: 0;
-        }
-        
-        code {
-            font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
-            padding: 0.2em 0.4em;
-            font-size: 90%;
-        }
-        
-        pre code {
-            background-color: transparent;
-            padding: 0;
-        }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .code-block {
-            position: relative;
-            background-color:rgb(9, 7, 10);
-            border-radius: 6px;
-            margin: 1em 0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
+  body {
+    font-family: 'Inter', 'Segoe UI', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.8;
+    color: var(--text-primary);
+    background: #f0f2f5;
+    padding: 0;
+    margin: 0;
+    font-size: 16px;
+    min-height: 100vh;
+  }
 
-        .code-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 4px 10px;
-            background-color:rgb(32, 30, 43);
-            border-top-left-radius: 6px;
-            border-top-right-radius: 6px;
-        }
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 60px;
+  }
 
-        .language {
-            color: #efe9e9;
-            font-size: 0.9em;
-            font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
-        }
+  /* ============================================
+     HEADER Y PORTADA
+     ============================================ */
 
-        .copy-button {
-            padding: 4px 8px;
-            font-size: 0.9em;
-            color: #efe9e9;
-            background-color: transparent;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+  .header {
+    background: white;
+    color: var(--text-primary);
+    padding: 80px 60px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+  }
 
-        .copy-button:hover {
-            background-color: #e9e9e9;
-            border-color: #ccc;
-        }
-        
-        blockquote {
-            margin: 0;
-            padding: 0 1em;
-            color: #6a737d;
-            border-left: 0.25em solid #dfe2e5;
-        }
-        
-        ul, ol {
-            padding-left: 2em;
-        }
-        
-        table {
-            border-collapse: collapse;
-            border-spacing: 0;
-            width: 100%;
-            overflow: auto;
-            margin-bottom: 16px;
-        }
-        
-        table th {
-            font-weight: 600;
-        }
-        
-        table th, table td {
-            padding: 6px 13px;
-            border: 1px solid #dfe2e5;
-        }
-        
-        table tr {
-            background-color: #fff;
-            border-top: 1px solid #c6cbd1;
-        }
-        
-        table tr:nth-child(2n) {
-            background-color: #f6f8fa;
-        }
-        
-        img {
-            max-width: 100%;
-            box-sizing: content-box;
-        }
-    </style>
+  .header h1 {
+    font-size: 3em;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+    position: relative;
+    color: var(--text-primary);
+  }
+
+  .header .subtitle {
+    font-size: 1.2em;
+    font-weight: 400;
+    margin-top: 15px;
+    color: var(--text-secondary);
+    position: relative;
+    letter-spacing: 0;
+  }
+
+  .header-meta {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+  }
+
+  .header-meta-item {
+    background: #f8f9fa;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+    color: var(--text-secondary);
+  }
+
+  .header-meta-item strong {
+    font-weight: 700;
+  }
+
+  /* ============================================
+     ÍNDICE
+     ============================================ */
+
+  .toc {
+    background: white;
+    padding: 40px 50px;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 40px;
+    border: none;
+  }
+
+  .toc h2 {
+    color: var(--text-primary);
+    font-size: 1.8em;
+    font-weight: 700;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e9ecef;
+    letter-spacing: -0.5px;
+  }
+
+  .toc ul {
+    list-style: none;
+    counter-reset: toc-counter;
+  }
+
+  .toc li {
+    counter-increment: toc-counter;
+    margin: 18px 0;
+    padding-left: 50px;
+    position: relative;
+    font-size: 1.1em;
+  }
+
+  .toc li::before {
+    content: counter(toc-counter);
+    position: absolute;
+    left: 0;
+    background: var(--primary-color);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85em;
+    font-weight: 600;
+  }
+
+  .toc a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+
+  .toc a:hover {
+    color: var(--primary-color);
+  }
+
+  /* ============================================
+     SECCIONES COLAPSABLES
+     ============================================ */
+
+  details {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 30px;
+    overflow: hidden;
+    border: none;
+    transition: all 0.3s ease;
+  }
+
+  details:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  summary {
+    background: white;
+    color: var(--text-primary);
+    padding: 25px 40px;
+    cursor: pointer;
+    font-size: 1.5em;
+    font-weight: 600;
+    list-style: none;
+    user-select: none;
+    position: relative;
+    transition: all 0.3s ease;
+    letter-spacing: -0.5px;
+    border-bottom: 1px solid #f0f2f5;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::after {
+    content: '▼';
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%) rotate(0deg);
+    transition: transform 0.3s;
+    font-size: 0.6em;
+    color: var(--text-secondary);
+  }
+
+  details[open] summary::after {
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  summary:hover {
+    background: #f8f9fa;
+  }
+
+  .section-content {
+    padding: 40px;
+  }
+
+  .section-separator {
+    height: 1px;
+    background: #e9ecef;
+    margin: 30px 0;
+  }
+
+  /* ============================================
+     TÍTULOS
+     ============================================ */
+
+  h2 {
+    color: var(--text-primary);
+    font-size: 1.8em;
+    font-weight: 600;
+    margin-top: 40px;
+    margin-bottom: 25px;
+    padding-bottom: 0;
+    border-bottom: none;
+    letter-spacing: -0.5px;
+  }
+
+  h3 {
+    color: var(--text-primary);
+    font-size: 1.4em;
+    font-weight: 600;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    padding-left: 0;
+    border-left: none;
+    letter-spacing: -0.3px;
+  }
+
+  h4 {
+    color: var(--text-primary);
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-top: 25px;
+    margin-bottom: 15px;
+  }
+
+  /* ============================================
+     TABLAS
+     ============================================ */
+
+  table {
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin: 30px 0;
+    border-collapse: collapse;
+    border: none;
+  }
+
+  thead {
+    background: #f8f9fa;
+  }
+
+  th {
+    padding: 16px 20px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.9em;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--text-secondary) !important;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f2f5;
+    font-size: 0.95em;
+    color: var(--text-primary);
+  }
+
+  /* Ancho de columnas solo para la primera tabla (Funcionalidades Implementadas) */
+  .table-funcionalidades th:nth-child(1),
+  .table-funcionalidades td:nth-child(1) {
+    width: 20%;
+  }
+
+  .table-funcionalidades th:nth-child(2),
+  .table-funcionalidades td:nth-child(2) {
+    width: 55%;
+  }
+
+  .table-funcionalidades th:nth-child(3),
+  .table-funcionalidades td:nth-child(3) {
+    width: 25%;
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    transition: all 0.2s ease;
+  }
+
+  tbody tr:hover {
+    background-color: #f8f9fa;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* ============================================
+     BLOCKQUOTES Y CALLOUTS
+     ============================================ */
+
+  blockquote {
+    background: #f8f9fa;
+    border-left: 4px solid var(--primary-color);
+    padding: 25px 30px;
+    margin: 25px 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 1em;
+    color: var(--text-secondary);
+    position: relative;
+    line-height: 1.7;
+  }
+
+  .callout {
+    background: #e3f2fd;
+    border-left: 4px solid var(--primary-color);
+    padding: 20px 25px;
+    margin: 25px 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.95em;
+    line-height: 1.7;
+  }
+
+  .callout-warning {
+    border-left-color: var(--primary-color);
+    background: #e3f2fd;
+  }
+
+  .callout-success {
+    border-left-color: var(--success-color);
+    background: #f0f9ff;
+  }
+
+  /* ============================================
+     BADGES Y ETIQUETAS
+     ============================================ */
+
+  /* Opción 3 - Solo borde (limpio y minimalista) */
+  .badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.85em;
+    margin: 2px 4px;
+    transition: all 0.2s ease;
+    background: transparent;
+    border: 1.5px solid #e1e4e8;
+    color: #586069;
+  }
+
+  .badge-implementado {
+    /* ✅ Implementado */
+  }
+
+  .badge-pendiente {
+    /* 📋 V2.0 */
+  }
+
+  .badge-progress {
+    /* ⏳ En Desarrollo */
+  }
+
+  /* ============================================
+     GRÁFICOS
+     ============================================ */
+
+  .chart-container {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin: 30px 0;
+    border: none;
+  }
+
+  .chart-container h3 {
+    border-left: none;
+    padding-left: 0;
+    margin-top: 0;
+    text-align: left;
+    color: var(--text-primary);
+    margin-bottom: 30px;
+    font-size: 1.4em;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+
+  .chart-wrapper {
+    position: relative;
+    height: 400px;
+    margin-top: 20px;
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+  }
+
+  .chart-wrapper-small {
+    position: relative;
+    height: 300px;
+    margin-top: 20px;
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+  }
+
+  /* Layout de gráfica + tabla dentro del mismo card */
+  .chart-table-card {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin: 30px 0;
+    display: flex;
+    gap: 40px;
+    align-items: stretch;
+  }
+
+  .chart-table-card .chart-column {
+    flex: 0 0 35%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chart-table-card .table-column {
+    flex: 1;
+  }
+
+  .chart-table-card .chart-column h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+  }
+
+  .chart-table-card .chart-wrapper {
+    height: auto;
+    flex: 1;
+    min-height: 250px;
+    margin-top: 0;
+  }
+
+  .chart-table-card table {
+    margin: 0;
+    box-shadow: none;
+  }
+
+  .chart-table-card .chart-source {
+    font-size: 0.85em;
+    margin-top: 20px;
+    color: var(--text-secondary);
+    text-align: left;
+  }
+
+  /* ============================================
+     LISTAS
+     ============================================ */
+
+  ul, ol {
+    padding-left: 30px;
+    margin: 20px 0;
+  }
+
+  li {
+    margin: 12px 0;
+    line-height: 1.7;
+    font-size: 0.95em;
+  }
+
+  ul li::marker {
+    color: var(--primary-color);
+  }
+
+  ol li::marker {
+    color: var(--primary-color);
+    font-weight: 600;
+  }
+
+  /* ============================================
+     SEPARADORES
+     ============================================ */
+
+  hr {
+    border: none;
+    height: 1px;
+    background: #e9ecef;
+    margin: 30px 0;
+  }
+
+  /* ============================================
+     PÁRRAFOS Y TEXTO
+     ============================================ */
+
+  p {
+    margin: 15px 0;
+    line-height: 1.7;
+    font-size: 0.95em;
+    color: var(--text-primary);
+  }
+
+  strong {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  /* ============================================
+     ICONOS MATERIAL (Unicode)
+     ============================================ */
+
+  .material-icon {
+    font-family: 'Segoe UI Symbol', 'Material Icons', sans-serif;
+    font-size: 1.2em;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+
+  /* ============================================
+     RESPONSIVE
+     ============================================ */
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 20px;
+    }
+
+    .header {
+      padding: 60px 30px;
+      border-radius: 20px;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      letter-spacing: -1.5px;
+    }
+
+    .header .subtitle {
+      font-size: 1.3em;
+    }
+
+    .header-meta {
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .toc {
+      padding: 40px 30px;
+      border-radius: 20px;
+    }
+
+    .toc h2 {
+      font-size: 1.8em;
+    }
+
+    summary {
+      font-size: 1.5em;
+      padding: 25px 30px;
+    }
+
+    .section-content {
+      padding: 40px 30px;
+    }
+
+    h2 {
+      font-size: 2em;
+    }
+
+    h3 {
+      font-size: 1.5em;
+    }
+
+    table {
+      font-size: 0.9em;
+    }
+
+    th, td {
+      padding: 15px 12px;
+    }
+
+    .chart-container {
+      padding: 40px 30px;
+    }
+
+    .chart-wrapper {
+      height: 300px;
+      padding: 20px;
+    }
+
+    .chart-wrapper-small {
+      height: 250px;
+    }
+
+    blockquote {
+      padding: 30px 35px;
+      font-size: 1.1em;
+    }
+
+    .callout {
+      padding: 30px 35px;
+    }
+  }
+
+  /* ============================================
+     UTILIDADES
+     ============================================ */
+
+  .text-center {
+    text-align: center;
+  }
+
+  .mt-4 {
+    margin-top: 40px;
+  }
+
+  .mb-4 {
+    margin-bottom: 40px;
+  }
+
+  .highlight-box {
+    background: white;
+    border-radius: 12px;
+    padding: 30px 40px;
+    margin: 30px 0;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.15);
+    border: 2px solid var(--primary-color);
+    position: relative;
+  }
+
+  .highlight-box p {
+    position: relative;
+    z-index: 1;
+    font-size: 0.95em;
+    line-height: 1.7;
+    margin: 10px 0;
+    color: var(--text-primary);
+  }
+
+  .highlight-box p strong {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  /* Estilos adicionales para código */
+  pre {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    overflow-x: auto;
+    margin: 20px 0;
+    border: 1px solid #e9ecef;
+  }
+
+  code {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9em;
+    color: var(--text-primary);
+  }
+
+  p code {
+    background: #f8f9fa;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #e83e8c;
+    font-size: 0.85em;
+  }
+
+  /* Clase section para secciones principales */
+  .section {
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+</style>
 </head>
 <body>
-    <h1>Documentación Técnica - Petos App</h1>
+
+<div class="header">
+  <h1>📊 ANÁLISIS FUNCIONAL - PETOS APP</h1>
+  <p class="subtitle">Documentación técnica de requisitos y funcionalidades de la red social de mascotas</p>
+  <div class="header-meta">
+    <div class="header-meta-item"><strong>Fecha:</strong> Enero 2025</div>
+    <div class="header-meta-item"><strong>Versión:</strong> 1.0</div>
+    <div class="header-meta-item"><strong>Tipo:</strong> Análisis Funcional</div>
+    <div class="header-meta-item"><strong>Alcance:</strong> Frontend Flutter + Backend NestJS</div>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="toc">
+  <h2>📋 Tabla de Contenidos</h2>
+  <ul>
+    <li><a href="#seccion-1">1. Requisitos Funcionales</a>
+      <ul style="list-style: none; margin-left: 20px; margin-top: 10px;">
+        <li><a href="#seccion-1-1">1.1 MVP (Implementados) - 106 RFs</a></li>
+        <li><a href="#seccion-1-2">1.2 V2.0 (Planificados) - Febrero 2026</a></li>
+        <li><a href="#seccion-1-3">1.3 Pendientes de Aprobacion</a></li>
+      </ul>
+    </li>
+    <li><a href="#seccion-2">2. Requisitos No Funcionales</a></li>
+    <li><a href="#seccion-3">3. Pantallas y Funcionalidades</a></li>
+    <li><a href="#seccion-4">4. Flujo de Navegación</a></li>
+    <li><a href="#seccion-5">5. Características Especiales de Navegación</a></li>
+    <li><a href="#seccion-6">6. Análisis del Estado Real de la App</a></li>
+  </ul>
+</div>
+
+<!-- SECCIÓN 1: REQUISITOS FUNCIONALES -->
+<details id="seccion-1" open>
+<summary>1. REQUISITOS FUNCIONALES</summary>
+<div class="section-content">
+
+<p>Los requisitos funcionales definen las funcionalidades específicas que debe implementar Petos App para satisfacer las necesidades de los usuarios. Se dividen en dos categorías:</p>
+
+<ul>
+<li><strong>MVP (Implementados)</strong>: Requisitos funcionales RF-001 a RF-094 completamente implementados y en producción.</li>
+<li><strong>V2.0 (Planificados - Febrero 2026)</strong>: Requisitos funcionales planificados para la version de monetizacion.</li>
+<li><strong>Pendientes de Aprobacion</strong>: Requisitos funcionales identificados que requieren evaluacion adicional antes de incluirlos en el roadmap oficial.</li>
+</ul>
+
+<!-- ========== SUB-SECCIÓN 1.1: RF MVP ========== -->
+<details id="seccion-1-1" open>
+<summary>1.1 REQUISITOS FUNCIONALES MVP (Implementados)</summary>
+<div class="section-content">
+
+<h3>Módulo: Autenticación y Registro</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Autenticación</td>
+<td>RF-001</td>
+<td>Registro de usuarios</td>
+<td>El sistema debe permitir registro de usuarios con email y contraseña</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-002</td>
+<td>Validación de contraseñas</td>
+<td>El sistema debe validar la fortaleza de contraseñas (mínimo 8 caracteres, mayúsculas, minúsculas, números)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-003</td>
+<td>Login de usuarios</td>
+<td>El sistema debe permitir login con credenciales registradas</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-004</td>
+<td>Sesión con JWT</td>
+<td>El sistema debe mantener sesión activa mediante JWT tokens</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-005</td>
+<td>Recuperación de contraseña</td>
+<td>El sistema debe permitir recuperación de contraseña vía email</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-006</td>
+<td>Onboarding multi-paso</td>
+<td>El registro debe incluir proceso de onboarding en múltiples pasos</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-007</td>
+<td>Registro de mascota en onboarding</td>
+<td>El usuario debe poder registrar al menos una mascota durante el onboarding</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Gestión de Perfil de Usuario</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Perfil Usuario</td>
+<td>RF-008</td>
+<td>Ver y editar perfil</td>
+<td>El usuario debe poder ver y editar su perfil (nombre, apellido, biografía, ubicación)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Perfil Usuario</td>
+<td>RF-009</td>
+<td>Avatar de usuario</td>
+<td>El usuario debe poder subir y cambiar su foto de perfil (avatar)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Perfil Usuario</td>
+<td>RF-010</td>
+<td>Estadísticas de perfil</td>
+<td>El usuario debe poder ver estadísticas de su perfil (publicaciones, seguidores, seguidos)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Perfil Usuario</td>
+<td>RF-011</td>
+<td>Ver otros perfiles</td>
+<td>El usuario debe poder ver el perfil de otros usuarios</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Perfil Usuario</td>
+<td>RF-012</td>
+<td>Seguir/Dejar de seguir</td>
+<td>El usuario debe poder seguir y dejar de seguir a otros usuarios</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Perfil Usuario</td>
+<td>RF-013</td>
+<td>Estado de seguimiento</td>
+<td>El sistema debe mostrar si el usuario está siguiendo a otro usuario</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Gestión de Mascotas</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mascotas</td>
+<td>RF-014</td>
+<td>Crear perfil de mascota</td>
+<td>El usuario debe poder crear perfiles de mascotas con datos básicos (nombre, tipo, raza, edad, sexo, biografía)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mascotas</td>
+<td>RF-015</td>
+<td>Fotos de mascota</td>
+<td>El usuario debe poder agregar fotos a los perfiles de sus mascotas</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mascotas</td>
+<td>RF-016</td>
+<td>Editar mascota</td>
+<td>El usuario debe poder editar información de sus mascotas</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mascotas</td>
+<td>RF-017</td>
+<td>Eliminar mascota</td>
+<td>El usuario debe poder eliminar mascotas de su cuenta</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Mascotas</td>
+<td>RF-018</td>
+<td>Múltiples mascotas</td>
+<td>El sistema debe permitir múltiples mascotas por usuario</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mascotas</td>
+<td>RF-019</td>
+<td>Galería de fotos</td>
+<td>El perfil de mascota debe mostrar galería de fotos</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Mascotas</td>
+<td>RF-020</td>
+<td>Publicaciones etiquetadas</td>
+<td>El perfil de mascota debe mostrar publicaciones etiquetadas</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Registros de Salud de Mascotas</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Salud</td>
+<td>RF-021</td>
+<td>Crear registro de salud</td>
+<td>El usuario debe poder crear registros de salud para sus mascotas (vacunas, desparasitación, visitas al veterinario)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Salud</td>
+<td>RF-022</td>
+<td>Editar registro de salud</td>
+<td>El usuario debe poder editar registros de salud existentes</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Salud</td>
+<td>RF-023</td>
+<td>Eliminar registro de salud</td>
+<td>El usuario debe poder eliminar registros de salud</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Salud</td>
+<td>RF-024</td>
+<td>Recordatorios de salud</td>
+<td>El sistema debe permitir activar recordatorios para eventos de salud futuros</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Salud</td>
+<td>RF-025</td>
+<td>Datos médicos generales</td>
+<td>El usuario debe poder registrar datos médicos generales de la mascota (alergias, condiciones médicas, veterinario, seguro)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Publicaciones (Posts)</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Publicaciones</td>
+<td>RF-026</td>
+<td>Crear publicación con texto</td>
+<td>El usuario debe poder crear publicaciones con texto descriptivo</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicaciones</td>
+<td>RF-027</td>
+<td>Agregar imágenes (1-5)</td>
+<td>El usuario debe poder agregar entre 1 y 5 imágenes a una publicación</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicaciones</td>
+<td>RF-028</td>
+<td>Agregar video (1)</td>
+<td>El usuario debe poder agregar 1 video a una publicación (excluyente con imágenes)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicaciones</td>
+<td>RF-029</td>
+<td>Etiquetar mascotas</td>
+<td>El usuario debe poder etiquetar a sus mascotas en publicaciones</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Publicaciones</td>
+<td>RF-030</td>
+<td>Me gusta en publicaciones</td>
+<td>El usuario debe poder dar "me gusta" a publicaciones</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicaciones</td>
+<td>RF-031</td>
+<td>Comentar publicaciones</td>
+<td>El usuario debe poder comentar publicaciones</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicaciones</td>
+<td>RF-034</td>
+<td>Feed de publicaciones</td>
+<td>El sistema debe mostrar feed con publicaciones de usuarios seguidos</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicaciones</td>
+<td>RF-035</td>
+<td>Scroll infinito</td>
+<td>El sistema debe permitir scroll infinito en el feed</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Historias (Stories)</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Historias</td>
+<td>RF-036</td>
+<td>Crear historia con imagen/video</td>
+<td>El usuario debe poder crear historias con imagen o video</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Historias</td>
+<td>RF-037</td>
+<td>Ver historias de seguidos</td>
+<td>El usuario debe poder ver historias de usuarios seguidos</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Historias</td>
+<td>RF-038</td>
+<td>Duración 24 horas</td>
+<td>Las historias deben tener duración limitada (24 horas)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Historias</td>
+<td>RF-039</td>
+<td>Comentar historias</td>
+<td>El usuario debe poder comentar historias</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Historias</td>
+<td>RF-040</td>
+<td>Me gusta en historias</td>
+<td>El usuario debe poder dar "me gusta" a historias</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Servicios (Marketplace)</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Servicios</td>
+<td>RF-041</td>
+<td>Crear servicio</td>
+<td>El usuario debe poder crear servicios con información detallada (título, descripción, categoría, precio, ubicación)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Servicios</td>
+<td>RF-042</td>
+<td>Imágenes de servicio (hasta 5)</td>
+<td>El usuario debe poder agregar hasta 5 imágenes a un servicio</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Servicios</td>
+<td>RF-043</td>
+<td>Editar servicio</td>
+<td>El usuario debe poder editar servicios existentes</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Servicios</td>
+<td>RF-044</td>
+<td>Eliminar servicio</td>
+<td>El usuario debe poder eliminar sus servicios</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Servicios</td>
+<td>RF-045</td>
+<td>Mapa de servicios</td>
+<td>El sistema debe mostrar servicios en un mapa con marcadores</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Servicios</td>
+<td>RF-046</td>
+<td>Filtros de servicios</td>
+<td>El usuario debe poder filtrar servicios por categoría, rango de precio y distancia</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Servicios</td>
+<td>RF-047</td>
+<td>Detalles de servicio</td>
+<td>El usuario debe poder ver detalles completos de un servicio</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Servicios</td>
+<td>RF-048</td>
+<td>Información de contacto</td>
+<td>El sistema debe mostrar información de contacto del proveedor del servicio</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Eventos</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Eventos</td>
+<td>RF-049</td>
+<td>Crear evento</td>
+<td>El usuario debe poder crear eventos con información detallada (título, descripción, ubicación, fecha y hora)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-050</td>
+<td>Imágenes de evento (hasta 5)</td>
+<td>El usuario debe poder agregar hasta 5 imágenes a un evento</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-051</td>
+<td>Editar evento</td>
+<td>El usuario debe poder editar eventos existentes</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-052</td>
+<td>Filtros de eventos</td>
+<td>El usuario debe poder filtrar eventos por categoría</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-053</td>
+<td>Eliminar evento</td>
+<td>El usuario debe poder eliminar eventos</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-054</td>
+<td>Mapa de eventos</td>
+<td>El sistema debe mostrar eventos en un mapa con marcadores</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-055</td>
+<td>Detalles de evento</td>
+<td>El usuario debe poder ver detalles completos de un evento</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-056</td>
+<td>Lista de eventos propios</td>
+<td>El sistema debe mostrar lista de eventos organizados por el usuario</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Notificaciones</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Notificaciones</td>
+<td>RF-057</td>
+<td>Sistema de push notifications</td>
+<td>El sistema debe implementar push notifications para iOS y Android</td>
+<td><span class="badge badge-desarrollo">🔄 En Desarrollo</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Notificaciones</td>
+<td>RF-058</td>
+<td>Ver y eliminar notificaciones</td>
+<td>El usuario debe poder ver y eliminar todas sus notificaciones</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Notificaciones</td>
+<td>RF-059</td>
+<td>Push para notificaciones sociales</td>
+<td>Los usuarios deben recibir push para likes, mensajes, comentarios y nuevos seguidores</td>
+<td><span class="badge badge-desarrollo">🔄 En Desarrollo</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Notificaciones</td>
+<td>RF-060</td>
+<td>Filtrar notificaciones</td>
+<td>El usuario debe poder filtrar notificaciones por (no leídas, leídas, Todo, Social (likes, comentarios), Solicitudes (de mensajes, de seguimiento), Eventos (actualizaciones, recordatorios). La pestaña "Todo" está activa por defecto)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Notificaciones</td>
+<td>RF-061</td>
+<td>Marcar como leída automáticamente</td>
+<td>El sistema debe marcar notificaciones como leídas automáticamente al abrirlas</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Notificaciones</td>
+<td>RF-062</td>
+<td>Push para recordatorios de salud</td>
+<td>Los usuarios deben recibir push notifications para recordatorios de salud de mascotas</td>
+<td><span class="badge badge-desarrollo">🔄 En Desarrollo</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Notificaciones</td>
+<td>RF-063</td>
+<td>Configurar tipos de push</td>
+<td>Los usuarios deben poder configurar qué tipos de push notifications desean recibir</td>
+<td><span class="badge badge-desarrollo">🔄 En Desarrollo</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Notificaciones</td>
+<td>RF-064</td>
+<td>Horario de no molestar</td>
+<td>Los usuarios deben poder configurar horario de "no molestar" para push notifications</td>
+<td><span class="badge badge-desarrollo">🔄 En Desarrollo</span></td>
+<td>Baja</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Mensajería (Chat)</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mensajería</td>
+<td>RF-065</td>
+<td>Enviar mensajes directos</td>
+<td>El usuario debe poder enviar mensajes directos a otros usuarios</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mensajería</td>
+<td>RF-066</td>
+<td>Lista de conversaciones</td>
+<td>El usuario debe poder ver lista de conversaciones activas</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mensajería</td>
+<td>RF-067</td>
+<td>Último mensaje</td>
+<td>El sistema debe mostrar último mensaje en lista de conversaciones</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Mensajería</td>
+<td>RF-068</td>
+<td>Estado de lectura</td>
+<td>El sistema debe mostrar estado de lectura de mensajes</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Mensajería</td>
+<td>RF-069</td>
+<td>Ordenar conversaciones</td>
+<td>El sistema debe ordenar conversaciones por fecha del último mensaje</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Baja</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Reportes y Moderación</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reportes</td>
+<td>RF-070</td>
+<td>Reportar publicaciones</td>
+<td>El usuario debe poder reportar contenido inapropiado (publicaciones, historias, usuarios, comentarios)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Reportes</td>
+<td>RF-071</td>
+<td>Categorizar reportes</td>
+<td>El sistema debe categorizar reportes (spam, acoso, contenido inapropiado, etc.)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Reportes</td>
+<td>RF-072</td>
+<td>Descripción de reporte</td>
+<td>El sistema debe permitir agregar descripción opcional al reporte</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Baja</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Bloqueo de Usuarios</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bloqueo</td>
+<td>RF-073</td>
+<td>Bloquear usuarios</td>
+<td>El usuario debe poder bloquear a otros usuarios</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Bloqueo</td>
+<td>RF-074</td>
+<td>Lista de bloqueados</td>
+<td>El usuario debe poder ver lista de usuarios bloqueados</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Bloqueo</td>
+<td>RF-075</td>
+<td>Desbloquear usuarios</td>
+<td>El usuario debe poder desbloquear usuarios</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Bloqueo</td>
+<td>RF-076</td>
+<td>Ocultar contenido bloqueado</td>
+<td>El sistema debe ocultar contenido de usuarios bloqueados</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Configuración</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Configuración</td>
+<td>RF-077</td>
+<td>Cerrar sesión</td>
+<td>El usuario debe poder cerrar sesión</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>RF-078</td>
+<td>Eliminar cuenta</td>
+<td>El usuario debe poder eliminar su cuenta</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Seguridad</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Seguridad</td>
+<td>RF-079</td>
+<td>Rate limiting</td>
+<td>El sistema debe implementar rate limiting por usuario</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Seguridad</td>
+<td>RF-080</td>
+<td>Validación de inputs</td>
+<td>El sistema debe validar y sanitizar todos los inputs</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Seguridad</td>
+<td>RF-081</td>
+<td>Protección contra ataques</td>
+<td>El sistema debe implementar protección contra ataques comunes (XSS, CSRF, SQL Injection)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Seguridad</td>
+<td>RF-082</td>
+<td>Logs de auditoría</td>
+<td>El sistema debe registrar actividades importantes en logs de auditoría</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Seguridad</td>
+<td>RF-083</td>
+<td>Encriptación de contraseñas</td>
+<td>El sistema debe encriptar contraseñas con bcrypt</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Seguridad</td>
+<td>RF-084</td>
+<td>Validación de archivos</td>
+<td>El sistema debe validar tamaño y tipo de archivos subidos</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Multimedia</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Multimedia</td>
+<td>RF-085</td>
+<td>Almacenamiento en Cloudinary</td>
+<td>El sistema debe almacenar imágenes en Cloudinary</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Multimedia</td>
+<td>RF-086</td>
+<td>Múltiples tamaños de imagen</td>
+<td>El sistema debe generar múltiples tamaños de imágenes (thumbnail, medium, large)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Multimedia</td>
+<td>RF-087</td>
+<td>Optimización automática</td>
+<td>El sistema debe optimizar imágenes automáticamente</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Multimedia</td>
+<td>RF-088</td>
+<td>Soporte de videos</td>
+<td>El sistema debe soportar videos en publicaciones e historias</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Multimedia</td>
+<td>RF-089</td>
+<td>Validación de videos</td>
+<td>El sistema debe validar duración máxima de videos</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Búsqueda</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Búsqueda</td>
+<td>RF-090</td>
+<td>Buscar usuarios</td>
+<td>Los usuarios deben poder buscar otros usuarios por nombre o ubicación</td>
+<td><span class="badge badge-desarrollo">🔄 En Desarrollo</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Búsqueda</td>
+<td>RF-091</td>
+<td>Buscar mascotas</td>
+<td>Los usuarios deben poder buscar mascotas por nombre, tipo o raza</td>
+<td><span class="badge badge-desarrollo">🔄 En Desarrollo</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</details>
+
+<!-- ========== SUB-SECCIÓN 1.2: RF V2.0 ========== -->
+<details id="seccion-1-2">
+<summary>1.2 REQUISITOS FUNCIONALES V2.0 (Planificados - Febrero 2026)</summary>
+<div class="section-content">
+
+<div class="callout callout-warning">
+<h4>Roadmap de Monetización - V2.0</h4>
+<p>Los siguientes requisitos funcionales están planificados para la versión de monetización (V2.0) con lanzamiento previsto en <strong>Febrero 2026</strong>. Incluyen funcionalidades premium, planes de negocio, sistema de publicidad y herramientas avanzadas para profesionales.</p>
+
+<div class="callout callout-success" style="margin-top: 30px;">
+<h4>✅ Orden de Prioridad de Implementación V2.0</h4>
+<ol style="margin: 15px 0; padding-left: 20px;">
+<li style="margin: 8px 0;"><strong>Suscripciones Premium</strong> - Monetización principal</li>
+<li style="margin: 8px 0;"><strong>Planes de Negocio</strong> - Comisiones del marketplace</li>
+<li style="margin: 8px 0;"><strong>Booking de Servicios</strong> - Cierre del ciclo de transacción</li>
+<li style="margin: 8px 0;"><strong>Alerta de Mascota Perdida</strong> - Diferenciador viral con impacto social</li>
+<li style="margin: 8px 0;"><strong>Sistema de Publicidad</strong> - Ingresos pasivos</li>
+</ol>
+<p style="margin-top: 15px;"><strong>Roadmap estimado</strong>: Febrero 2026</p>
+</div>
+</div>
+
+<h3>Módulo: Publicaciones</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Publicaciones</td>
+<td>RF-032</td>
+<td>Eliminar publicación propia</td>
+<td>El usuario debe poder eliminar sus propias publicaciones</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Publicaciones</td>
+<td>RF-033</td>
+<td>Eliminar comentarios propios</td>
+<td>El usuario debe poder eliminar comentarios en sus propias publicaciones</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Historias</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Historias</td>
+<td>RF-037</td>
+<td>Texto y color en historias</td>
+<td>El usuario debe poder agregar texto y color de fondo a las historias</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Historias</td>
+<td>RF-042</td>
+<td>Indicador de historias no vistas</td>
+<td>El sistema debe mostrar indicador de historias no vistas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Eventos</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Eventos</td>
+<td>RF-054</td>
+<td>Cancelar evento</td>
+<td>El usuario debe poder cancelar eventos</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Notificaciones</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Notificaciones</td>
+<td>RF-059</td>
+<td>Notificación de me gusta</td>
+<td>El sistema debe notificar cuando alguien da "me gusta" a una publicación</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Notificaciones</td>
+<td>RF-060</td>
+<td>Notificación de comentario</td>
+<td>El sistema debe notificar cuando alguien comenta una publicación</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Notificaciones</td>
+<td>RF-061</td>
+<td>Notificación de seguidor</td>
+<td>El sistema debe notificar cuando alguien sigue al usuario</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Configuración</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Configuración</td>
+<td>RF-078</td>
+<td>Cambiar contraseña</td>
+<td>El usuario debe poder cambiar su contraseña</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>RF-079</td>
+<td>Seleccionar tema</td>
+<td>El usuario debe poder seleccionar tema de la aplicación (claro, oscuro, automático)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>RF-080</td>
+<td>Cambiar idioma</td>
+<td>El usuario debe poder cambiar idioma de la aplicación</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>RF-081</td>
+<td>Gestionar notificaciones</td>
+<td>El usuario debe poder gestionar notificaciones</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Suscripciones Premium</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Premium</td>
+<td>RF-095</td>
+<td>Sistema de planes (Free/Premium)</td>
+<td>El sistema debe gestionar dos tipos de planes: Free y Premium (€4.59/mes)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-096</td>
+<td>Integración con Stripe</td>
+<td>El sistema debe integrarse con Stripe para procesar pagos de suscripciones</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-097</td>
+<td>UI de selección de plan</td>
+<td>El usuario debe poder ver y seleccionar un plan de suscripción</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-098</td>
+<td>Checkout de pago</td>
+<td>El usuario debe poder completar el proceso de pago de suscripción Premium</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-099</td>
+<td>Límite de historias en plan Free</td>
+<td>Los usuarios Free deben tener un límite de 3 historias por día</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-100</td>
+<td>Historias ilimitadas en Premium</td>
+<td>Los usuarios Premium deben poder crear historias ilimitadas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-101</td>
+<td>Límite de 1 mascota en plan Free</td>
+<td>Los usuarios Free deben poder tener solo 1 perfil de mascota</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-102</td>
+<td>Hasta 5 mascotas en Premium</td>
+<td>Los usuarios Premium deben poder tener hasta 5 perfiles de mascotas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-103</td>
+<td>Push notifications para Premium</td>
+<td>Los usuarios Premium deben recibir notificaciones push avanzadas de recordatorios de salud</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-105</td>
+<td>Sin publicidad para Premium</td>
+<td>Los usuarios Premium no deben ver publicidad en la aplicación</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-106</td>
+<td>Gestión de suscripción</td>
+<td>El usuario Premium debe poder gestionar su suscripción (ver detalles, cambiar plan, cancelar)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-107</td>
+<td>Renovación automática</td>
+<td>Las suscripciones Premium deben renovarse automáticamente cada mes</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-108</td>
+<td>Cancelación de suscripción</td>
+<td>El usuario debe poder cancelar su suscripción Premium en cualquier momento</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-109</td>
+<td>Período de gracia</td>
+<td>El sistema debe ofrecer un período de gracia de 3 días tras fallo de pago</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-110</td>
+<td>Historial de pagos</td>
+<td>El usuario Premium debe poder ver su historial de pagos y facturas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-111</td>
+<td>Notificación de renovación</td>
+<td>El sistema debe notificar al usuario 3 días antes de la renovación de suscripción</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-112</td>
+<td>Notificación de fallo de pago</td>
+<td>El sistema debe notificar al usuario si falla un pago de suscripción</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-113</td>
+<td>Downgrade automático</td>
+<td>El sistema debe bajar automáticamente a plan Free tras cancelación o fallo de pago prolongado</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Planes de Negocio</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Negocio</td>
+<td>RF-114</td>
+<td>Sistema de planes de negocio</td>
+<td>El sistema debe gestionar tres planes de negocio: Básico (€0), Pro (€26.68/mes) y Premium (€91.08/mes)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-115</td>
+<td>Comisión por venta - Básico</td>
+<td>El sistema debe cobrar 15% de comisión en ventas para usuarios con plan Básico</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-116</td>
+<td>Comisión por venta - Pro</td>
+<td>El sistema debe cobrar 10% de comisión en ventas para usuarios con plan Pro</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-117</td>
+<td>Comisión por venta - Premium</td>
+<td>El sistema debe cobrar 5% de comisión en ventas para usuarios con plan Premium</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-118</td>
+<td>Límite de fotos por plan</td>
+<td>El plan Básico permite 5 fotos, Pro 20 fotos por servicio/evento</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-120</td>
+<td>UI de selección de plan de negocio</td>
+<td>El usuario debe poder ver y seleccionar un plan de negocio</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-121</td>
+<td>Upgrade de plan de negocio</td>
+<td>El usuario debe poder hacer upgrade de su plan de negocio (Básico → Pro → Premium)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-122</td>
+<td>Downgrade de plan de negocio</td>
+<td>El usuario debe poder hacer downgrade de su plan de negocio con confirmación</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-123</td>
+<td>Dashboard de negocio</td>
+<td>Los usuarios con plan de negocio deben tener acceso a un dashboard con estadísticas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-124</td>
+<td>Historial de comisiones</td>
+<td>El usuario debe poder ver el historial de comisiones cobradas por el sistema</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-125</td>
+<td>Sistema de facturación</td>
+<td>El sistema debe generar facturas mensuales para los planes de negocio</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-126</td>
+<td>Notificación de venta</td>
+<td>El sistema debe notificar al negocio cuando se registra una venta</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-127</td>
+<td>Reporte de ingresos</td>
+<td>Los negocios deben poder generar reportes de ingresos y comisiones</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-128</td>
+<td>Integración con sistema de pagos</td>
+<td>El sistema debe integrarse con pasarela de pagos para cobrar comisiones automáticamente</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Sistema de Publicidad</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Publicidad</td>
+<td>RF-129</td>
+<td>Mostrar anuncios en feed Free</td>
+<td>El sistema debe mostrar anuncios publicitarios en el feed para usuarios Free</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-130</td>
+<td>Integración con AdMob</td>
+<td>El sistema debe integrarse con Google AdMob para servir anuncios</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-131</td>
+<td>Anuncios nativos en feed</td>
+<td>Los anuncios deben aparecer como posts nativos cada 5 publicaciones en el feed</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-132</td>
+<td>Banner ads en servicios</td>
+<td>El sistema debe mostrar banner ads en la vista de mapa de servicios para usuarios Free</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-133</td>
+<td>Control de frecuencia de ads</td>
+<td>El sistema debe controlar la frecuencia de anuncios para no saturar al usuario</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-134</td>
+<td>Publicidad de negocios Premium</td>
+<td>Los negocios con plan Premium deben poder promocionar sus servicios en el feed</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-135</td>
+<td>Crear campaña publicitaria</td>
+<td>Los negocios Premium deben poder crear campañas publicitarias con presupuesto y duración</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-136</td>
+<td>Targeting por ubicación</td>
+<td>Las campañas publicitarias deben poder segmentarse por ubicación geográfica</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-137</td>
+<td>Targeting por tipo de mascota</td>
+<td>Las campañas publicitarias deben poder segmentarse por tipo de mascota del usuario</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-138</td>
+<td>Dashboard de campaña</td>
+<td>Los negocios deben poder ver estadísticas de sus campañas publicitarias (impresiones, clics, CTR)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-139</td>
+<td>Pausar/Reanudar campaña</td>
+<td>Los negocios deben poder pausar y reanudar campañas publicitarias</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-140</td>
+<td>Presupuesto diario de campaña</td>
+<td>Las campañas publicitarias deben tener un presupuesto diario configurable</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-141</td>
+<td>Sistema de pago por impresión</td>
+<td>El sistema debe cobrar por CPM (costo por mil impresiones) en campañas publicitarias</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-142</td>
+<td>Reportar anuncio</td>
+<td>Los usuarios deben poder reportar anuncios inapropiados</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-143</td>
+<td>Historial de inversión</td>
+<td>Los negocios deben poder ver el historial de inversión en publicidad</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-144</td>
+<td>ROI de campañas</td>
+<td>El sistema debe calcular y mostrar el ROI (retorno de inversión) de las campañas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Badges y Analytics</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Analytics</td>
+<td>RF-145</td>
+<td>Analytics de perfil Premium</td>
+<td>Los usuarios Premium deben tener acceso a analytics de su perfil (vistas, engagement, alcance)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Analytics</td>
+<td>RF-146</td>
+<td>Vistas de perfil</td>
+<td>El sistema debe rastrear y mostrar el número de vistas del perfil del usuario</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Analytics</td>
+<td>RF-147</td>
+<td>Engagement por publicación</td>
+<td>Los usuarios Premium deben ver métricas de engagement (likes, comentarios, shares) por publicación</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Analytics</td>
+<td>RF-148</td>
+<td>Alcance de publicaciones</td>
+<td>El sistema debe calcular y mostrar el alcance de cada publicación (usuarios únicos alcanzados)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Analytics</td>
+<td>RF-149</td>
+<td>Gráficos de crecimiento</td>
+<td>Los usuarios Premium deben ver gráficos de crecimiento de seguidores y engagement</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Analytics</td>
+<td>RF-153</td>
+<td>Badge verificado para usuarios</td>
+<td>El sistema debe mostrar badge verificado azul para usuarios Premium</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Analytics</td>
+<td>RF-154</td>
+<td>Badge verificado para negocios</td>
+<td>El sistema debe mostrar badge verificado dorado para negocios verificados</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Analytics</td>
+<td>RF-155</td>
+<td>Badge de profesional veterinario</td>
+<td>El sistema debe mostrar badge especial para veterinarios verificados</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Analytics</td>
+<td>RF-156</td>
+<td>Badge de criador verificado</td>
+<td>El sistema debe mostrar badge especial para criadores verificados</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Posicionamiento</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Posicionamiento</td>
+<td>RF-158</td>
+<td>Destacar en búsqueda - Plan Pro</td>
+<td>Los servicios con plan Pro deben aparecer destacados en resultados de búsqueda</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Posicionamiento</td>
+<td>RF-159</td>
+<td>Posicionamiento TOP - Plan Premium</td>
+<td>Los servicios con plan Premium deben aparecer en posiciones TOP del mapa y listados</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Posicionamiento</td>
+<td>RF-160</td>
+<td>Indicador de destacado</td>
+<td>Los servicios destacados deben tener un indicador visual (estrella o badge)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Booking de Servicios</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Booking</td>
+<td>RF-161</td>
+<td>Sistema de reservas</td>
+<td>Los usuarios deben poder reservar servicios directamente desde la app</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Booking</td>
+<td>RF-162</td>
+<td>Calendario de disponibilidad</td>
+<td>Los proveedores deben poder configurar su calendario de disponibilidad</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Booking</td>
+<td>RF-163</td>
+<td>Confirmación de reserva</td>
+<td>El proveedor debe poder confirmar o rechazar reservas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Booking</td>
+<td>RF-164</td>
+<td>Notificación de reserva</td>
+<td>Tanto el cliente como el proveedor deben recibir notificaciones sobre reservas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Booking</td>
+<td>RF-165</td>
+<td>Historial de reservas</td>
+<td>Los usuarios deben poder ver su historial de reservas (realizadas y recibidas)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Soporte Prioritario</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Soporte</td>
+<td>RF-176</td>
+<td>Canal de soporte Premium</td>
+<td>Los usuarios Premium y negocios deben tener acceso a un canal de soporte prioritario</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Búsqueda Avanzada</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Búsqueda</td>
+<td>RF-185</td>
+<td>Filtros avanzados</td>
+<td>La búsqueda debe tener filtros avanzados (ubicación, tipo de mascota, verificado, etc.)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Autenticación con Terceros</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Autenticación</td>
+<td>RF-190</td>
+<td>Login con Google</td>
+<td>El usuario debe poder iniciar sesión usando su cuenta de Google (OAuth 2.0)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-191</td>
+<td>Login con Apple</td>
+<td>El usuario debe poder iniciar sesión usando Apple Sign-In</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-192</td>
+<td>Vincular cuenta social</td>
+<td>El usuario debe poder vincular su cuenta existente con Google/Apple desde configuración</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-193</td>
+<td>Registro con cuenta social</td>
+<td>El usuario debe poder registrarse directamente usando Google/Apple sin email/contraseña</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Alerta de Mascota Perdida</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mascotas Perdidas</td>
+<td>RF-201</td>
+<td>Marcar mascota como perdida</td>
+<td>El dueño debe poder marcar una mascota como "Perdida" desde el perfil de la mascota</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mascotas Perdidas</td>
+<td>RF-202</td>
+<td>Alerta a usuarios cercanos</td>
+<td>El sistema debe enviar alerta push a usuarios dentro de un radio configurable cuando se marca una mascota como perdida</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mascotas Perdidas</td>
+<td>RF-203</td>
+<td>Información de contacto</td>
+<td>La alerta de mascota perdida debe incluir foto, descripción, ubicación aproximada y datos de contacto del dueño</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mascotas Perdidas</td>
+<td>RF-204</td>
+<td>Mapa de mascotas perdidas</td>
+<td>El sistema debe mostrar un mapa con todas las mascotas perdidas activas en la zona del usuario</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Mascotas Perdidas</td>
+<td>RF-205</td>
+<td>Reportar avistamiento</td>
+<td>Los usuarios deben poder reportar un avistamiento de una mascota perdida con foto y ubicación</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mascotas Perdidas</td>
+<td>RF-206</td>
+<td>Notificación de avistamiento</td>
+<td>El dueño debe recibir notificación cuando alguien reporta un avistamiento de su mascota perdida</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mascotas Perdidas</td>
+<td>RF-207</td>
+<td>Marcar como encontrada</td>
+<td>El dueño debe poder marcar la mascota como "Encontrada" para desactivar las alertas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mascotas Perdidas</td>
+<td>RF-208</td>
+<td>Historial de mascotas perdidas</td>
+<td>El sistema debe mantener un historial de mascotas perdidas y encontradas para estadísticas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Valoraciones y Reseñas de Servicios</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reseñas</td>
+<td>RF-209</td>
+<td>Dejar valoración</td>
+<td>El usuario debe poder dejar una valoración (1-5 estrellas) a un servicio que ha utilizado</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Reseñas</td>
+<td>RF-210</td>
+<td>Escribir reseña</td>
+<td>El usuario debe poder escribir una reseña de texto (máximo 500 caracteres) y agregar hasta 3 fotos</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Reseñas</td>
+<td>RF-212</td>
+<td>Editar valoración</td>
+<td>El usuario debe poder editar su valoración y reseña dentro de 30 días de haberla publicado</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Reseñas</td>
+<td>RF-213</td>
+<td>Eliminar valoración propia</td>
+<td>El usuario debe poder eliminar su propia valoración y reseña en cualquier momento</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Reseñas</td>
+<td>RF-214</td>
+<td>Calificación promedio</td>
+<td>El sistema debe calcular y mostrar la calificación promedio del servicio (1-5 estrellas)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Reseñas</td>
+<td>RF-215</td>
+<td>Número total de reseñas</td>
+<td>El perfil del servicio debe mostrar el número total de reseñas recibidas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Reseñas</td>
+<td>RF-216</td>
+<td>Ordenar reseñas</td>
+<td>El usuario debe poder ordenar reseñas por: Más recientes, Más útiles, Mejor valoradas, Peor valoradas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Reseñas</td>
+<td>RF-217</td>
+<td>Marcar reseña como útil</td>
+<td>Los usuarios deben poder marcar reseñas de otros como "Útil"</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Reseñas</td>
+<td>RF-218</td>
+<td>Responder a reseñas (negocio)</td>
+<td>El dueño del servicio debe poder responder a las reseñas de los clientes</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Reseñas</td>
+<td>RF-219</td>
+<td>Reportar reseña inapropiada</td>
+<td>Los usuarios deben poder reportar reseñas que consideren spam o inapropiadas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Reseñas</td>
+<td>RF-220</td>
+<td>Verificar compra</td>
+<td>El sistema debe verificar que el usuario ha utilizado el servicio antes de permitir valoración</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Unicidad de Nombres</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unicidad</td>
+<td>RF-221</td>
+<td>Username único de usuario</td>
+<td>El nombre de usuario (handle) de cada perfil de usuario y mascota debe ser único en toda la plataforma</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Unicidad</td>
+<td>RF-222</td>
+<td>Validación de username</td>
+<td>El sistema debe validar en tiempo real si el username está disponible al registrarse o cambiarlo</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Unicidad</td>
+<td>RF-224</td>
+<td>Formato de username</td>
+<td>Los usernames deben seguir un formato específico (solo letras, números, guión bajo, mínimo 3 caracteres)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Unicidad</td>
+<td>RF-225</td>
+<td>Cambio de username</td>
+<td>El usuario debe poder cambiar su username (limitado a 1 vez cada 30 días para evitar abuso)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Privacidad de Ubicación</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Privacidad</td>
+<td>RF-226</td>
+<td>Ubicación aproximada</td>
+<td>La ubicación exacta del usuario nunca debe compartirse públicamente, solo ciudad o región</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Privacidad</td>
+<td>RF-227</td>
+<td>Distancias relativas</td>
+<td>Las funciones de cercanía deben mostrar distancias relativas (ej. "a menos de 1 km") en lugar de coordenadas precisas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Privacidad</td>
+<td>RF-228</td>
+<td>Ocultar ubicación en posts</td>
+<td>El usuario debe poder elegir si mostrar u ocultar la ubicación al crear una publicación o historia</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Privacidad</td>
+<td>RF-229</td>
+<td>Configuración de privacidad de ubicación</td>
+<td>El usuario debe poder configurar el nivel de privacidad de su ubicación (Pública/Ciudad/Oculta)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Privacidad</td>
+<td>RF-230</td>
+<td>Zona segura</td>
+<td>El usuario debe poder definir una "zona segura" (ej. su hogar) que nunca se muestra en el mapa</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Integración con Collar de Actividad</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Wearables</td>
+<td>RF-231</td>
+<td>Sincronizar collar de actividad</td>
+<td>El usuario debe poder sincronizar el collar de actividad de su mascota (Fitbark, Whistle, etc.) con la app</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Wearables</td>
+<td>RF-232</td>
+<td>Monitoreo de ejercicio</td>
+<td>El sistema debe mostrar las estadísticas de ejercicio diario de la mascota (pasos, distancia, calorías)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Wearables</td>
+<td>RF-233</td>
+<td>Monitoreo de sueño</td>
+<td>El sistema debe mostrar las estadísticas de sueño de la mascota (horas dormidas, calidad del sueño)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Wearables</td>
+<td>RF-234</td>
+<td>Objetivos de actividad</td>
+<td>El usuario debe poder establecer objetivos de actividad diaria para su mascota</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Wearables</td>
+<td>RF-235</td>
+<td>Alertas de inactividad</td>
+<td>El sistema debe alertar al usuario si la mascota está inactiva por un período prolongado</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Wearables</td>
+<td>RF-236</td>
+<td>Historial de actividad</td>
+<td>El usuario debe poder ver el historial de actividad de su mascota (gráficas semanales/mensuales)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Wearables</td>
+<td>RF-237</td>
+<td>Exportar datos de actividad</td>
+<td>El usuario debe poder exportar los datos de actividad de la mascota en formato CSV/PDF</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Registro de Paseos</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Paseos</td>
+<td>RF-250</td>
+<td>Iniciar registro de paseo</td>
+<td>El usuario debe poder iniciar el registro de un paseo usando el GPS del teléfono</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Paseos</td>
+<td>RF-251</td>
+<td>Pausar/Reanudar paseo</td>
+<td>El usuario debe poder pausar y reanudar el registro del paseo</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Paseos</td>
+<td>RF-252</td>
+<td>Finalizar paseo</td>
+<td>El usuario debe poder finalizar el paseo y ver el resumen (duración, distancia, ruta)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Paseos</td>
+<td>RF-253</td>
+<td>Mapa de ruta</td>
+<td>El sistema debe mostrar el mapa con la ruta completa del paseo realizado</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Paseos</td>
+<td>RF-254</td>
+<td>Estadísticas de paseo</td>
+<td>El sistema debe calcular y mostrar: duración, distancia total, velocidad promedio, calorías quemadas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Paseos</td>
+<td>RF-255</td>
+<td>Historial de paseos</td>
+<td>El usuario debe poder ver el historial de todos los paseos realizados con su mascota</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Paseos</td>
+<td>RF-256</td>
+<td>Compartir paseo</td>
+<td>El usuario debe poder compartir el paseo realizado como publicación en el feed</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Paseos</td>
+<td>RF-257</td>
+<td>Objetivos de paseo</td>
+<td>El usuario debe poder establecer objetivos semanales de paseos</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Paseos</td>
+<td>RF-258</td>
+<td>Notificación de objetivo</td>
+<td>El sistema debe notificar al usuario cuando alcance sus objetivos de paseo semanales</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Paseos</td>
+<td>RF-259</td>
+<td>Integración con collar</td>
+<td>Los datos de paseos deben sincronizarse con el collar de actividad si está vinculado</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Métricas de Negocio</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Métricas</td>
+<td>RF-186</td>
+<td>Dashboard de KPIs</td>
+<td>Los administradores deben tener acceso a dashboard con KPIs de la plataforma</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Métricas</td>
+<td>RF-187</td>
+<td>Reportes de ingresos</td>
+<td>El sistema debe generar reportes mensuales de ingresos por suscripciones y comisiones</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</details>
+
+<!-- ========== SUB-SECCIÓN 1.3: PENDIENTES DE APROBACIÓN ========== -->
+<details id="seccion-1-3">
+<summary>1.3 REQUISITOS FUNCIONALES - PENDIENTES DE APROBACIÓN</summary>
+<div class="section-content">
+
+<div class="callout callout-warning">
+<h4>⚠️ Requisitos Pendientes de Evaluación</h4>
+<p>Los siguientes requisitos funcionales han sido identificados pero requieren <strong>aprobación adicional</strong> antes de ser incluidos en el roadmap oficial. Estos requisitos presentan complejidad técnica significativa, requieren partnerships externos, o están fuera del core value de una red social de mascotas.</p>
+<p><strong>Estado</strong>: En revisión por el equipo de producto.</p>
+</div>
+
+<h3>Módulo: Gamificación</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gamificación</td>
+<td>RF-178</td>
+<td>Sistema de logros</td>
+<td>El sistema debe implementar logros/achievements para incentivar el engagement</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Gamificación</td>
+<td>RF-179</td>
+<td>Niveles de usuario</td>
+<td>Los usuarios deben poder subir de nivel según su actividad en la plataforma</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Gamificación</td>
+<td>RF-180</td>
+<td>Recompensas por actividad</td>
+<td>El sistema debe otorgar recompensas virtuales por completar ciertas acciones</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Gamificación</td>
+<td>RF-181</td>
+<td>Leaderboard semanal</td>
+<td>El sistema debe mostrar un ranking semanal de usuarios más activos</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Baja</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Verificación Profesional</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Verificación</td>
+<td>RF-172</td>
+<td>Solicitud de verificación</td>
+<td>Los profesionales (veterinarios, criadores) deben poder solicitar verificación de cuenta</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Verificación</td>
+<td>RF-173</td>
+<td>Subir documentación</td>
+<td>Los solicitantes deben poder subir documentación (licencias, certificados)</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Verificación</td>
+<td>RF-174</td>
+<td>Panel de revisión admin</td>
+<td>Los administradores deben poder revisar y aprobar/rechazar solicitudes de verificación</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Verificación</td>
+<td>RF-175</td>
+<td>Notificación de aprobación</td>
+<td>El sistema debe notificar al usuario cuando su verificación es aprobada o rechazada</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Baja</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Gestión de Participantes en Eventos</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Eventos</td>
+<td>RF-194</td>
+<td>Inscripción a eventos</td>
+<td>El usuario debe poder apuntarse/inscribirse a un evento público</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-195</td>
+<td>Cancelar inscripción</td>
+<td>El usuario debe poder cancelar su inscripción a un evento antes de la fecha del evento</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-196</td>
+<td>Lista de participantes (organizador)</td>
+<td>El creador de un evento debe poder ver la lista completa de participantes inscritos</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-197</td>
+<td>Aprobar/Rechazar participantes</td>
+<td>El creador de un evento privado debe poder aprobar o rechazar solicitudes de inscripción</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-198</td>
+<td>Límite de participantes</td>
+<td>El creador debe poder establecer un número máximo de participantes para el evento</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-199</td>
+<td>Notificación de nuevo participante</td>
+<td>El creador debe recibir notificación cuando alguien se inscribe a su evento</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-200</td>
+<td>Estado de inscripción</td>
+<td>El sistema debe mostrar si el usuario ya está inscrito en un evento</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: E-Commerce (Tienda de Productos)</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E-Commerce</td>
+<td>RF-238</td>
+<td>Catálogo de productos</td>
+<td>El usuario debe poder explorar un catálogo de productos para mascotas (comida, juguetes, accesorios)</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>E-Commerce</td>
+<td>RF-239</td>
+<td>Filtros de productos</td>
+<td>El usuario debe poder filtrar productos por categoría, precio, marca, tipo de mascota</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>E-Commerce</td>
+<td>RF-240</td>
+<td>Detalles de producto</td>
+<td>El usuario debe poder ver detalles completos de un producto (descripción, precio, fotos, reseñas)</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>E-Commerce</td>
+<td>RF-241</td>
+<td>Agregar al carrito</td>
+<td>El usuario debe poder agregar productos al carrito de compras</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>E-Commerce</td>
+<td>RF-242</td>
+<td>Gestionar carrito</td>
+<td>El usuario debe poder ver, modificar y eliminar productos del carrito</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>E-Commerce</td>
+<td>RF-243</td>
+<td>Proceso de checkout</td>
+<td>El usuario debe poder completar el proceso de compra con dirección de envío y método de pago</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>E-Commerce</td>
+<td>RF-244</td>
+<td>Métodos de pago</td>
+<td>El sistema debe soportar tarjeta de crédito/débito, PayPal, y otros métodos de pago</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>E-Commerce</td>
+<td>RF-245</td>
+<td>Seguimiento de pedido</td>
+<td>El usuario debe poder ver el estado de su pedido (procesando, enviado, entregado)</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>E-Commerce</td>
+<td>RF-246</td>
+<td>Historial de compras</td>
+<td>El usuario debe poder ver su historial completo de compras</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>E-Commerce</td>
+<td>RF-247</td>
+<td>Favoritos de productos</td>
+<td>El usuario debe poder marcar productos como favoritos para comprar después</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>E-Commerce</td>
+<td>RF-248</td>
+<td>Reseñas de productos</td>
+<td>El usuario debe poder dejar reseñas y valoraciones de productos comprados</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>E-Commerce</td>
+<td>RF-249</td>
+<td>Comisión de marketplace</td>
+<td>El sistema debe aplicar una comisión del 10-15% a las ventas de productos de terceros</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Sistema de Match</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-260</td>
+<td>Activar/desactivar modo match</td>
+<td>El usuario puede activar o desactivar el modo match en configuración</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-261</td>
+<td>Configurar preferencias de match</td>
+<td>El usuario puede configurar preferencias (especie, raza, edad, ubicación) para el match</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-262</td>
+<td>Swipe derecha (like)</td>
+<td>El usuario puede dar swipe derecha para indicar interés en una mascota</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-263</td>
+<td>Swipe izquierda (pasar)</td>
+<td>El usuario puede dar swipe izquierda para pasar a la siguiente mascota</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-264</td>
+<td>Notificación de match mutuo</td>
+<td>El sistema notifica cuando hay un match mutuo entre dos mascotas</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-265</td>
+<td>Chat exclusivo de match</td>
+<td>Los usuarios con match pueden iniciar un chat privado</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-266</td>
+<td>Deshacer último swipe</td>
+<td>El usuario puede deshacer el último swipe realizado</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-267</td>
+<td>Ver perfil completo antes de decidir</td>
+<td>El usuario puede ver el perfil completo de una mascota antes de hacer swipe</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Verificación de Cuenta en Registro</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Verificación</td>
+<td>RF-268</td>
+<td>Envío de código verificación email</td>
+<td>El sistema envía un código de 6 dígitos al email del usuario durante el registro</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Verificación</td>
+<td>RF-269</td>
+<td>Ingreso de código 6 dígitos</td>
+<td>El usuario debe ingresar el código de 6 dígitos recibido por email para verificar su cuenta</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Verificación</td>
+<td>RF-270</td>
+<td>Reenvío de código</td>
+<td>El usuario puede solicitar el reenvío del código de verificación si no lo recibió</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Verificación</td>
+<td>RF-271</td>
+<td>Expiración de código (15 min)</td>
+<td>El código de verificación expira después de 15 minutos por seguridad</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Solicitudes de Mensajes</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mensajería</td>
+<td>RF-272</td>
+<td>Bandeja de solicitudes de mensaje</td>
+<td>El usuario tiene una bandeja separada para ver solicitudes de mensaje de usuarios no seguidos</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Mensajería</td>
+<td>RF-273</td>
+<td>Aceptar solicitud de mensaje</td>
+<td>El usuario puede aceptar una solicitud de mensaje, habilitando el chat</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mensajería</td>
+<td>RF-274</td>
+<td>Rechazar solicitud de mensaje</td>
+<td>El usuario puede rechazar una solicitud de mensaje sin bloquear al usuario</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Mensajería</td>
+<td>RF-275</td>
+<td>Configurar quién puede enviar mensajes</td>
+<td>El usuario puede configurar si todos, solo seguidores, o nadie puede enviarle mensajes directos</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</details>
+
 <hr>
-<h2>1. Requisitos Funcionales</h2>
-<h3>1.1 Autenticación y Registro</h3>
+</div>
+</details>
+
+<!-- SECCIÓN 2: REQUISITOS NO FUNCIONALES -->
+<details id="seccion-2">
+<summary>2. REQUISITOS NO FUNCIONALES</summary>
+<div class="section-content">
+
+<p>Los requisitos no funcionales definen las características de calidad del sistema que no están directamente relacionadas con funcionalidades específicas, sino con aspectos como seguridad, rendimiento, usabilidad y mantenibilidad.</p>
+
+<table>
+<thead>
+<tr>
+<th>Tipo de Requisito</th>
+<th>ID</th>
+<th>Nombre</th>
+<th>Descripción</th>
+<th>Solución Propuesta</th>
+</tr>
+</thead>
+<tbody>
+
+<!-- SEGURIDAD -->
+<tr>
+<td rowspan="5"><strong>Seguridad</strong></td>
+<td>RNF-001</td>
+<td>Autenticación segura</td>
+<td>El sistema debe implementar autenticación segura con tokens JWT</td>
+<td>JWT tokens con expiración de 7 días, refresh tokens, almacenamiento seguro en dispositivo</td>
+</tr>
+<tr>
+<td>RNF-002</td>
+<td>Protección contra ataques</td>
+<td>El sistema debe protegerse contra ataques comunes (XSS, CSRF, SQL Injection)</td>
+<td>Helmet headers, sanitización de inputs, prepared statements en queries, CORS configurado</td>
+</tr>
+<tr>
+<td>RNF-003</td>
+<td>Rate limiting</td>
+<td>El sistema debe limitar la cantidad de peticiones por usuario</td>
+<td>Rate limiting per-user: 100 requests/15 min (login: 5/15 min), implementado en backend</td>
+</tr>
+<tr>
+<td>RNF-004</td>
+<td>Audit logging</td>
+<td>El sistema debe registrar actividades críticas en logs de auditoría</td>
+<td>Sistema de auditoría que registra login, cambios de contraseña, eliminación de cuenta</td>
+</tr>
+<tr>
+<td>RNF-005</td>
+<td>Almacenamiento seguro de contraseñas</td>
+<td>Las contraseñas deben almacenarse de forma segura</td>
+<td>Bcrypt hashing con salt, mínimo 8 caracteres con validación de fortaleza</td>
+</tr>
+
+<!-- RENDIMIENTO -->
+<tr>
+<td rowspan="5"><strong>Rendimiento</strong></td>
+<td>RNF-006</td>
+<td>Tiempo de carga del feed</td>
+<td>El feed principal debe cargar en menos de 2 segundos</td>
+<td>Paginación con 10 posts por página, scroll infinito, caché en memoria con GetX</td>
+</tr>
+<tr>
+<td>RNF-007</td>
+<td>Optimización de imágenes</td>
+<td>Las imágenes deben optimizarse para reducir tiempo de carga</td>
+<td>Cloudinary con múltiples tamaños (small, medium, large), formato WebP, lazy loading</td>
+</tr>
+<tr>
+<td>RNF-008</td>
+<td>Carga de videos</td>
+<td>Los videos deben cargarse de forma optimizada</td>
+<td>Streaming con compresión automática, formato MP4, límite de duración 60 segundos</td>
+</tr>
+<tr>
+<td>RNF-009</td>
+<td>Caché de datos</td>
+<td>Los datos frecuentemente accedidos deben cachearse</td>
+<td>GetX para estado reactivo en memoria, CachedNetworkImage para imágenes</td>
+</tr>
+<tr>
+<td>RNF-010</td>
+<td>Respuesta de API</td>
+<td>Las APIs deben responder en menos de 500ms para operaciones simples</td>
+<td>Índices en base de datos, queries optimizadas, paginación en listados</td>
+</tr>
+
+<!-- USABILIDAD -->
+<tr>
+<td rowspan="6"><strong>Usabilidad</strong></td>
+<td>RNF-011</td>
+<td>Interfaz en español</td>
+<td>El 100% de la interfaz debe estar en español</td>
+<td>Todos los textos, mensajes de error y contenido UI en español</td>
+</tr>
+<tr>
+<td>RNF-012</td>
+<td>Diseño responsivo</td>
+<td>La aplicación debe adaptarse a diferentes tamaños de pantalla</td>
+<td>Flutter responsive design, MediaQuery para adaptación dinámica</td>
+</tr>
+<tr>
+<td>RNF-013</td>
+<td>Accesibilidad</td>
+<td>La aplicación debe ser accesible con contraste y tamaños de fuente legibles</td>
+<td>Contraste mínimo WCAG AA, fuentes escalables, semantic colors</td>
+</tr>
+<tr>
+<td>RNF-014</td>
+<td>Feedback visual</td>
+<td>Las acciones del usuario deben tener feedback visual inmediato</td>
+<td>Animaciones micro-interactions, haptic feedback, bouncy buttons, loading states</td>
+</tr>
+<tr>
+<td>RNF-015</td>
+<td>Dark mode</td>
+<td>La aplicación debe soportar modo oscuro</td>
+<td>Sistema completo de temas (claro, oscuro, automático) con GetX ThemeController</td>
+</tr>
+<tr>
+<td>RNF-016</td>
+<td>Mensajes de error claros</td>
+<td>Los mensajes de error deben ser comprensibles para el usuario</td>
+<td>Mensajes en español, informativos y con sugerencias de solución</td>
+</tr>
+
+<!-- COMPATIBILIDAD -->
+<tr>
+<td rowspan="3"><strong>Compatibilidad</strong></td>
+<td>RNF-017</td>
+<td>Plataformas móviles</td>
+<td>La aplicación debe funcionar en Android e iOS</td>
+<td>Flutter multiplataforma: Android 6.0+ (API 23+) e iOS 12.0+</td>
+</tr>
+<tr>
+<td>RNF-018</td>
+<td>Conectividad</td>
+<td>La aplicación debe funcionar con conectividad intermitente</td>
+<td>Caché de datos para lectura offline, manejo de errores de red con retry</td>
+</tr>
+<tr>
+<td>RNF-019</td>
+<td>Versiones de backend</td>
+<td>El backend debe mantener compatibilidad con versiones anteriores de la app</td>
+<td>Versionado de API, deprecation warnings, breaking changes controlados</td>
+</tr>
+
+<!-- ESCALABILIDAD -->
+<tr>
+<td rowspan="3"><strong>Escalabilidad</strong></td>
+<td>RNF-020</td>
+<td>Base de datos escalable</td>
+<td>La base de datos debe soportar crecimiento de millones de registros</td>
+<td>PostgreSQL con índices optimizados, particionamiento de tablas grandes</td>
+</tr>
+<tr>
+<td>RNF-021</td>
+<td>API escalable</td>
+<td>La arquitectura del backend debe ser escalable horizontalmente</td>
+<td>NestJS con arquitectura modular, stateless API, balanceo de carga posible</td>
+</tr>
+<tr>
+<td>RNF-022</td>
+<td>Almacenamiento de medios escalable</td>
+<td>El almacenamiento de imágenes y videos debe escalar automáticamente</td>
+<td>Cloudinary con CDN global, almacenamiento ilimitado, auto-scaling</td>
+</tr>
+
+<!-- DISPONIBILIDAD -->
+<tr>
+<td rowspan="2"><strong>Disponibilidad</strong></td>
+<td>RNF-023</td>
+<td>Uptime objetivo</td>
+<td>El sistema debe tener un uptime mínimo del 99.5%</td>
+<td>Monitoreo con health checks, redundancia de servicios, plan de contingencia</td>
+</tr>
+<tr>
+<td>RNF-024</td>
+<td>Manejo de errores</td>
+<td>Los errores no deben provocar crashes de la aplicación</td>
+<td>Error boundaries, try-catch en operaciones críticas, mensajes informativos</td>
+</tr>
+
+<!-- NAVEGACIÓN -->
+<tr>
+<td rowspan="3"><strong>Navegación</strong></td>
+<td>RNF-025</td>
+<td>Bottom navigation</td>
+<td>La navegación principal debe ser intuitiva y accesible</td>
+<td>Bottom navigation bar con 5 tabs principales (Home, Explorar, Crear, Notificaciones, Perfil)</td>
+</tr>
+<tr>
+<td>RNF-026</td>
+<td>Persistencia de estado</td>
+<td>El estado de navegación debe mantenerse al cambiar de tabs</td>
+<td>GetX para persistencia de estado, scroll position guardada por tab</td>
+</tr>
+<tr>
+<td>RNF-027</td>
+<td>Transiciones fluidas</td>
+<td>Las transiciones entre pantallas deben ser suaves</td>
+<td>Animaciones nativas de Flutter, transiciones con Hero widgets, duración 300ms</td>
+</tr>
+
+<!-- HARDWARE -->
+<tr>
+<td rowspan="3"><strong>Hardware</strong></td>
+<td>RNF-028</td>
+<td>Acceso a cámara</td>
+<td>La aplicación debe acceder a la cámara del dispositivo</td>
+<td>Permisos de cámara con image_picker, soporte para fotos y videos</td>
+</tr>
+<tr>
+<td>RNF-029</td>
+<td>Geolocalización</td>
+<td>La aplicación debe acceder al GPS para funcionalidades de mapa</td>
+<td>Permisos de ubicación, Google Maps integration para servicios y eventos</td>
+</tr>
+<tr>
+<td>RNF-030</td>
+<td>Almacenamiento local</td>
+<td>La aplicación debe tener espacio para caché y datos temporales</td>
+<td>Mínimo 100MB disponibles, limpieza automática de caché antiguo</td>
+</tr>
+
+<!-- MANTENIBILIDAD -->
+<tr>
+<td rowspan="3"><strong>Mantenibilidad</strong></td>
+<td>RNF-031</td>
+<td>Código documentado</td>
+<td>El código debe estar documentado en funciones críticas</td>
+<td>Comentarios en funciones complejas, README con arquitectura, CLAUDE.md con guías</td>
+</tr>
+<tr>
+<td>RNF-032</td>
+<td>Arquitectura limpia</td>
+<td>El código debe seguir principios de arquitectura limpia</td>
+<td>Separación frontend (Flutter) y backend (NestJS), GetX para estado, Atomic Design</td>
+</tr>
+<tr>
+<td>RNF-033</td>
+<td>Control de versiones</td>
+<td>El código debe versionarse correctamente</td>
+<td>Git con conventional commits, branches feature/bugfix, protección de main</td>
+</tr>
+
+</tbody>
+</table>
+
+<div class="callout callout-success">
+<h4>Cumplimiento de Requisitos No Funcionales</h4>
+<p>Petos App cumple con el <strong>100% de los requisitos no funcionales</strong> en la versión MVP actual:</p>
 <ul>
-<li><strong>RF-001</strong>: El sistema debe permitir registro de usuarios con email y contraseña</li>
-<li><strong>RF-002</strong>: El sistema debe validar la fortaleza de contraseñas (mínimo 8 caracteres, mayúsculas, minúsculas, números)</li>
-<li><strong>RF-003</strong>: El sistema debe permitir login con credenciales registradas</li>
-<li><strong>RF-004</strong>: El sistema debe mantener sesión activa mediante JWT tokens</li>
-<li><strong>RF-005</strong>: El sistema debe permitir recuperación de contraseña vía email</li>
-<li><strong>RF-006</strong>: El registro debe incluir proceso de onboarding en múltiples pasos</li>
-<li><strong>RF-007</strong>: El usuario debe poder registrar al menos una mascota durante el onboarding</li>
+<li>✅ <strong>Seguridad</strong>: JWT auth, rate limiting, bcrypt, audit logging implementados</li>
+<li>✅ <strong>Rendimiento</strong>: Feed < 2s, imágenes optimizadas con Cloudinary, caché con GetX</li>
+<li>✅ <strong>Usabilidad</strong>: 100% en español, dark mode, feedback visual, diseño responsivo</li>
+<li>✅ <strong>Compatibilidad</strong>: Android 6.0+, iOS 12.0+, manejo de conectividad</li>
+<li>✅ <strong>Escalabilidad</strong>: PostgreSQL, NestJS modular, Cloudinary CDN</li>
+<li>✅ <strong>Disponibilidad</strong>: Error handling, health checks, uptime 99.5%+</li>
 </ul>
-<h3>1.2 Gestión de Perfil de Usuario</h3>
-<ul>
-<li><strong>RF-008</strong>: El usuario debe poder ver y editar su perfil (nombre, apellido, biografía, ubicación)</li>
-<li><strong>RF-009</strong>: El usuario debe poder subir y cambiar su foto de perfil (avatar)</li>
-<li><strong>RF-010</strong>: El usuario debe poder ver estadísticas de su perfil (publicaciones, seguidores, seguidos)</li>
-<li><strong>RF-011</strong>: El usuario debe poder ver el perfil de otros usuarios</li>
-<li><strong>RF-012</strong>: El usuario debe poder seguir y dejar de seguir a otros usuarios</li>
-<li><strong>RF-013</strong>: El sistema debe mostrar si el usuario está siguiendo a otro usuario</li>
-</ul>
-<h3>1.3 Gestión de Mascotas</h3>
-<ul>
-<li><strong>RF-014</strong>: El usuario debe poder crear perfiles de mascotas con datos básicos (nombre, tipo, raza, edad, sexo, biografía)</li>
-<li><strong>RF-015</strong>: El usuario debe poder agregar fotos a los perfiles de sus mascotas</li>
-<li><strong>RF-016</strong>: El usuario debe poder editar información de sus mascotas</li>
-<li><strong>RF-017</strong>: El usuario debe poder eliminar mascotas de su cuenta</li>
-<li><strong>RF-018</strong>: El sistema debe permitir múltiples mascotas por usuario</li>
-<li><strong>RF-019</strong>: El perfil de mascota debe mostrar galería de fotos</li>
-<li><strong>RF-020</strong>: El perfil de mascota debe mostrar publicaciones etiquetadas</li>
-</ul>
-<h3>1.4 Registros de Salud de Mascotas</h3>
-<ul>
-<li><strong>RF-021</strong>: El usuario debe poder crear registros de salud para sus mascotas (vacunas, desparasitación, visitas al veterinario)</li>
-<li><strong>RF-022</strong>: El usuario debe poder editar registros de salud existentes</li>
-<li><strong>RF-023</strong>: El usuario debe poder eliminar registros de salud</li>
-<li><strong>RF-024</strong>: El sistema debe permitir activar recordatorios para eventos de salud futuros</li>
-<li><strong>RF-025</strong>: El usuario debe poder registrar datos médicos generales de la mascota (alergias, condiciones médicas, veterinario, seguro)</li>
-</ul>
-<h3>1.5 Publicaciones (Posts)</h3>
-<ul>
-<li><strong>RF-026</strong>: El usuario debe poder crear publicaciones con texto descriptivo</li>
-<li><strong>RF-027</strong>: El usuario debe poder agregar entre 1 y 5 imágenes a una publicación</li>
-<li><strong>RF-028</strong>: El usuario debe poder agregar 1 video a una publicación (excluyente con imágenes)</li>
-<li><strong>RF-029</strong>: El usuario debe poder etiquetar a sus mascotas en publicaciones</li>
-<li><strong>RF-030</strong>: El usuario debe poder dar &quot;me gusta&quot; a publicaciones</li>
-<li><strong>RF-031</strong>: El usuario debe poder comentar publicaciones</li>
-<li><strong>RF-032</strong>: El usuario debe poder eliminar sus propias publicaciones</li>
-<li><strong>RF-033</strong>: El usuario debe poder eliminar comentarios en sus propias publicaciones</li>
-<li><strong>RF-034</strong>: El sistema debe mostrar feed con publicaciones de usuarios seguidos</li>
-<li><strong>RF-035</strong>: El sistema debe permitir scroll infinito en el feed</li>
-</ul>
-<h3>1.6 Historias (Stories)</h3>
-<ul>
-<li><strong>RF-036</strong>: El usuario debe poder crear historias con imagen o video</li>
-<li><strong>RF-037</strong>: El usuario debe poder agregar texto y color de fondo a las historias</li>
-<li><strong>RF-038</strong>: El usuario debe poder ver historias de usuarios seguidos</li>
-<li><strong>RF-039</strong>: Las historias deben tener duración limitada (24 horas)</li>
-<li><strong>RF-040</strong>: El usuario debe poder comentar historias</li>
-<li><strong>RF-041</strong>: El usuario debe poder dar &quot;me gusta&quot; a historias</li>
-<li><strong>RF-042</strong>: El sistema debe mostrar indicador de historias no vistas</li>
-</ul>
-<h3>1.7 Servicios (Marketplace)</h3>
-<ul>
-<li><strong>RF-043</strong>: El usuario debe poder crear servicios con información detallada (título, descripción, categoría, precio, ubicación)</li>
-<li><strong>RF-044</strong>: El usuario debe poder agregar hasta 5 imágenes a un servicio</li>
-<li><strong>RF-045</strong>: El usuario debe poder editar servicios existentes</li>
-<li><strong>RF-046</strong>: El usuario debe poder eliminar sus servicios</li>
-<li><strong>RF-047</strong>: El sistema debe mostrar servicios en un mapa con marcadores</li>
-<li><strong>RF-048</strong>: El usuario debe poder filtrar servicios por categoría, rango de precio y distancia</li>
-<li><strong>RF-049</strong>: El usuario debe poder ver detalles completos de un servicio</li>
-<li><strong>RF-050</strong>: El sistema debe mostrar información de contacto del proveedor del servicio</li>
-</ul>
-<h3>1.8 Eventos</h3>
-<ul>
-<li><strong>RF-051</strong>: El usuario debe poder crear eventos con información detallada (título, descripción, ubicación, fecha y hora)</li>
-<li><strong>RF-052</strong>: El usuario debe poder agregar hasta 5 imágenes a un evento</li>
-<li><strong>RF-053</strong>: El usuario debe poder editar eventos existentes</li>
-<li><strong>RF-054</strong>: El usuario debe poder cancelar eventos</li>
-<li><strong>RF-055</strong>: El usuario debe poder eliminar eventos</li>
-<li><strong>RF-056</strong>: El sistema debe mostrar eventos en un mapa con marcadores</li>
-<li><strong>RF-057</strong>: El usuario debe poder ver detalles completos de un evento</li>
-<li><strong>RF-058</strong>: El sistema debe mostrar lista de eventos organizados por el usuario</li>
-</ul>
-<h3>1.9 Notificaciones</h3>
-<ul>
-<li><strong>RF-059</strong>: El sistema debe notificar cuando alguien da &quot;me gusta&quot; a una publicación</li>
-<li><strong>RF-060</strong>: El sistema debe notificar cuando alguien comenta una publicación</li>
-<li><strong>RF-061</strong>: El sistema debe notificar cuando alguien sigue al usuario</li>
-<li><strong>RF-062</strong>: El usuario debe poder ver todas sus notificaciones</li>
-<li><strong>RF-063</strong>: El usuario debe poder filtrar notificaciones por tipo (todas, no leídas, me gusta, comentarios, seguidores)</li>
-<li><strong>RF-064</strong>: El sistema debe marcar notificaciones como leídas automáticamente al abrirlas</li>
-</ul>
-<h3>1.10 Mensajería (Chat)</h3>
-<ul>
-<li><strong>RF-065</strong>: El usuario debe poder enviar mensajes directos a otros usuarios</li>
-<li><strong>RF-066</strong>: El usuario debe poder ver lista de conversaciones activas</li>
-<li><strong>RF-067</strong>: El sistema debe mostrar último mensaje en lista de conversaciones</li>
-<li><strong>RF-068</strong>: El sistema debe mostrar estado de lectura de mensajes</li>
-<li><strong>RF-069</strong>: El sistema debe ordenar conversaciones por fecha del último mensaje</li>
-</ul>
-<h3>1.11 Reportes y Moderación</h3>
-<ul>
-<li><strong>RF-070</strong>: El usuario debe poder reportar publicaciones inapropiadas</li>
-<li><strong>RF-071</strong>: El usuario debe poder reportar historias inapropiadas</li>
-<li><strong>RF-072</strong>: El sistema debe categorizar reportes (spam, acoso, contenido inapropiado, etc.)</li>
-<li><strong>RF-073</strong>: El sistema debe permitir agregar descripción opcional al reporte</li>
-</ul>
-<h3>1.12 Bloqueo de Usuarios</h3>
-<ul>
-<li><strong>RF-074</strong>: El usuario debe poder bloquear a otros usuarios</li>
-<li><strong>RF-075</strong>: El usuario debe poder ver lista de usuarios bloqueados</li>
-<li><strong>RF-076</strong>: El usuario debe poder desbloquear usuarios</li>
-<li><strong>RF-077</strong>: El sistema debe ocultar contenido de usuarios bloqueados</li>
-</ul>
-<h3>1.13 Configuración</h3>
-<ul>
-<li><strong>RF-078</strong>: El usuario debe poder cambiar su contraseña</li>
-<li><strong>RF-079</strong>: El usuario debe poder seleccionar tema de la aplicación (claro, oscuro, automático)</li>
-<li><strong>RF-080</strong>: El usuario debe poder cambiar idioma de la aplicación</li>
-<li><strong>RF-081</strong>: El usuario debe poder gestionar notificaciones</li>
-<li><strong>RF-082</strong>: El usuario debe poder cerrar sesión</li>
-<li><strong>RF-083</strong>: El usuario debe poder eliminar su cuenta</li>
-</ul>
-<h3>1.14 Seguridad</h3>
-<ul>
-<li><strong>RF-084</strong>: El sistema debe implementar rate limiting por usuario</li>
-<li><strong>RF-085</strong>: El sistema debe validar y sanitizar todos los inputs</li>
-<li><strong>RF-086</strong>: El sistema debe implementar protección contra ataques comunes (XSS, CSRF, SQL Injection)</li>
-<li><strong>RF-087</strong>: El sistema debe registrar actividades importantes en logs de auditoría</li>
-<li><strong>RF-088</strong>: El sistema debe encriptar contraseñas con bcrypt</li>
-<li><strong>RF-089</strong>: El sistema debe validar tamaño y tipo de archivos subidos</li>
-</ul>
-<h3>1.15 Multimedia</h3>
-<ul>
-<li><strong>RF-090</strong>: El sistema debe almacenar imágenes en Cloudinary</li>
-<li><strong>RF-091</strong>: El sistema debe generar múltiples tamaños de imágenes (thumbnail, medium, large)</li>
-<li><strong>RF-092</strong>: El sistema debe optimizar imágenes automáticamente</li>
-<li><strong>RF-093</strong>: El sistema debe soportar videos en publicaciones e historias</li>
-<li><strong>RF-094</strong>: El sistema debe validar duración máxima de videos</li>
-</ul>
-<hr>
-<h2>2. Pantallas y Funcionalidades</h2>
+</div>
+
+</div>
+</details>
+
+
+<!-- SECCIÓN 3: PANTALLAS Y FUNCIONALIDADES -->
+<details id="seccion-3">
+<summary>3. PANTALLAS Y FUNCIONALIDADES</summary>
+<div class="section-content">
 <h3>2.1 Pantalla de Inicio de Sesión (LoginView)</h3>
 <p><strong>Ruta</strong>: <code>/login</code></p>
 <p><strong>Funcionalidades</strong>:</p>
@@ -1181,7 +4709,13 @@
 <li>Mantiene estado de cada pantalla al cambiar tabs</li>
 </ul>
 <hr>
-<h2>3. Flujo de Navegación de la Aplicación</h2>
+</div>
+</details>
+
+<!-- SECCIÓN 4: FLUJO DE NAVEGACIÓN -->
+<details id="seccion-4">
+<summary>4. FLUJO DE NAVEGACIÓN DE LA APLICACIÓN</summary>
+<div class="section-content">
 <h3>3.1 Flujo de Autenticación</h3>
 
                 <div class="code-block">
@@ -1547,7 +5081,13 @@
 /settings/change-password     | ChangePasswordView</code></pre>
                 </div>
             <hr>
-<h2>Notas Finales</h2>
+</div>
+</details>
+
+<!-- SECCIÓN 5: CARACTERÍSTICAS ESPECIALES DE NAVEGACIÓN (Notas Finales) -->
+<details id="seccion-5">
+<summary>5. CARACTERÍSTICAS ESPECIALES DE NAVEGACIÓN</summary>
+<div class="section-content">
 <h3>Características Especiales de Navegación</h3>
 <ol>
 <li><p><strong>Persistencia de Estado en Bottom Navigation</strong>:</p>
@@ -1586,7 +5126,13 @@
 </li>
 </ol>
 <hr>
-<h2>4. ANÁLISIS DEL ESTADO REAL DE LA APP</h2>
+</div>
+</details>
+
+<!-- SECCIÓN 5: ANÁLISIS DEL ESTADO REAL -->
+<details id="seccion-6">
+<summary>6. ANÁLISIS DEL ESTADO REAL DE LA APP</summary>
+<div class="section-content">
 <p><strong>Fecha de análisis</strong>: Enero 2025
 <strong>Versión analizada</strong>: Pre-lanzamiento MVP</p>
 <h3>4.1 Estado General</h3>
@@ -2035,5 +5581,9 @@
 <hr>
 <p><strong>Fin del Documento</strong></p>
 
+</div>
+</details>
+
+</div>
 </body>
 </html>

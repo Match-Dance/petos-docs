@@ -1,853 +1,4738 @@
-# Documentación Técnica - Petos App
-
----
-
-## 1. Requisitos Funcionales
-
-### 1.1 Autenticación y Registro
-- **RF-001**: El sistema debe permitir registro de usuarios con email y contraseña
-- **RF-002**: El sistema debe validar la fortaleza de contraseñas (mínimo 8 caracteres, mayúsculas, minúsculas, números)
-- **RF-003**: El sistema debe permitir login con credenciales registradas
-- **RF-004**: El sistema debe mantener sesión activa mediante JWT tokens
-- **RF-005**: El sistema debe permitir recuperación de contraseña vía email
-- **RF-006**: El registro debe incluir proceso de onboarding en múltiples pasos
-- **RF-007**: El usuario debe poder registrar al menos una mascota durante el onboarding
-
-### 1.2 Gestión de Perfil de Usuario
-- **RF-008**: El usuario debe poder ver y editar su perfil (nombre, apellido, biografía, ubicación)
-- **RF-009**: El usuario debe poder subir y cambiar su foto de perfil (avatar)
-- **RF-010**: El usuario debe poder ver estadísticas de su perfil (publicaciones, seguidores, seguidos)
-- **RF-011**: El usuario debe poder ver el perfil de otros usuarios
-- **RF-012**: El usuario debe poder seguir y dejar de seguir a otros usuarios
-- **RF-013**: El sistema debe mostrar si el usuario está siguiendo a otro usuario
-
-### 1.3 Gestión de Mascotas
-- **RF-014**: El usuario debe poder crear perfiles de mascotas con datos básicos (nombre, tipo, raza, edad, sexo, biografía)
-- **RF-015**: El usuario debe poder agregar fotos a los perfiles de sus mascotas
-- **RF-016**: El usuario debe poder editar información de sus mascotas
-- **RF-017**: El usuario debe poder eliminar mascotas de su cuenta
-- **RF-018**: El sistema debe permitir múltiples mascotas por usuario
-- **RF-019**: El perfil de mascota debe mostrar galería de fotos
-- **RF-020**: El perfil de mascota debe mostrar publicaciones etiquetadas
-
-### 1.4 Registros de Salud de Mascotas
-- **RF-021**: El usuario debe poder crear registros de salud para sus mascotas (vacunas, desparasitación, visitas al veterinario)
-- **RF-022**: El usuario debe poder editar registros de salud existentes
-- **RF-023**: El usuario debe poder eliminar registros de salud
-- **RF-024**: El sistema debe permitir activar recordatorios para eventos de salud futuros
-- **RF-025**: El usuario debe poder registrar datos médicos generales de la mascota (alergias, condiciones médicas, veterinario, seguro)
-
-### 1.5 Publicaciones (Posts)
-- **RF-026**: El usuario debe poder crear publicaciones con texto descriptivo
-- **RF-027**: El usuario debe poder agregar entre 1 y 5 imágenes a una publicación
-- **RF-028**: El usuario debe poder agregar 1 video a una publicación (excluyente con imágenes)
-- **RF-029**: El usuario debe poder etiquetar a sus mascotas en publicaciones
-- **RF-030**: El usuario debe poder dar "me gusta" a publicaciones
-- **RF-031**: El usuario debe poder comentar publicaciones
-- **RF-032**: El usuario debe poder eliminar sus propias publicaciones
-- **RF-033**: El usuario debe poder eliminar comentarios en sus propias publicaciones
-- **RF-034**: El sistema debe mostrar feed con publicaciones de usuarios seguidos
-- **RF-035**: El sistema debe permitir scroll infinito en el feed
-
-### 1.6 Historias (Stories)
-- **RF-036**: El usuario debe poder crear historias con imagen o video
-- **RF-037**: El usuario debe poder agregar texto y color de fondo a las historias
-- **RF-038**: El usuario debe poder ver historias de usuarios seguidos
-- **RF-039**: Las historias deben tener duración limitada (24 horas)
-- **RF-040**: El usuario debe poder comentar historias
-- **RF-041**: El usuario debe poder dar "me gusta" a historias
-- **RF-042**: El sistema debe mostrar indicador de historias no vistas
-
-### 1.7 Servicios (Marketplace)
-- **RF-043**: El usuario debe poder crear servicios con información detallada (título, descripción, categoría, precio, ubicación)
-- **RF-044**: El usuario debe poder agregar hasta 5 imágenes a un servicio
-- **RF-045**: El usuario debe poder editar servicios existentes
-- **RF-046**: El usuario debe poder eliminar sus servicios
-- **RF-047**: El sistema debe mostrar servicios en un mapa con marcadores
-- **RF-048**: El usuario debe poder filtrar servicios por categoría, rango de precio y distancia
-- **RF-049**: El usuario debe poder ver detalles completos de un servicio
-- **RF-050**: El sistema debe mostrar información de contacto del proveedor del servicio
-
-### 1.8 Eventos
-- **RF-051**: El usuario debe poder crear eventos con información detallada (título, descripción, ubicación, fecha y hora)
-- **RF-052**: El usuario debe poder agregar hasta 5 imágenes a un evento
-- **RF-053**: El usuario debe poder editar eventos existentes
-- **RF-054**: El usuario debe poder cancelar eventos
-- **RF-055**: El usuario debe poder eliminar eventos
-- **RF-056**: El sistema debe mostrar eventos en un mapa con marcadores
-- **RF-057**: El usuario debe poder ver detalles completos de un evento
-- **RF-058**: El sistema debe mostrar lista de eventos organizados por el usuario
-
-### 1.9 Notificaciones
-- **RF-059**: El sistema debe notificar cuando alguien da "me gusta" a una publicación
-- **RF-060**: El sistema debe notificar cuando alguien comenta una publicación
-- **RF-061**: El sistema debe notificar cuando alguien sigue al usuario
-- **RF-062**: El usuario debe poder ver todas sus notificaciones
-- **RF-063**: El usuario debe poder filtrar notificaciones por tipo (todas, no leídas, me gusta, comentarios, seguidores)
-- **RF-064**: El sistema debe marcar notificaciones como leídas automáticamente al abrirlas
-
-### 1.10 Mensajería (Chat)
-- **RF-065**: El usuario debe poder enviar mensajes directos a otros usuarios
-- **RF-066**: El usuario debe poder ver lista de conversaciones activas
-- **RF-067**: El sistema debe mostrar último mensaje en lista de conversaciones
-- **RF-068**: El sistema debe mostrar estado de lectura de mensajes
-- **RF-069**: El sistema debe ordenar conversaciones por fecha del último mensaje
-
-### 1.11 Reportes y Moderación
-- **RF-070**: El usuario debe poder reportar publicaciones inapropiadas
-- **RF-071**: El usuario debe poder reportar historias inapropiadas
-- **RF-072**: El sistema debe categorizar reportes (spam, acoso, contenido inapropiado, etc.)
-- **RF-073**: El sistema debe permitir agregar descripción opcional al reporte
-
-### 1.12 Bloqueo de Usuarios
-- **RF-074**: El usuario debe poder bloquear a otros usuarios
-- **RF-075**: El usuario debe poder ver lista de usuarios bloqueados
-- **RF-076**: El usuario debe poder desbloquear usuarios
-- **RF-077**: El sistema debe ocultar contenido de usuarios bloqueados
-
-### 1.13 Configuración
-- **RF-078**: El usuario debe poder cambiar su contraseña
-- **RF-079**: El usuario debe poder seleccionar tema de la aplicación (claro, oscuro, automático)
-- **RF-080**: El usuario debe poder cambiar idioma de la aplicación
-- **RF-081**: El usuario debe poder gestionar notificaciones
-- **RF-082**: El usuario debe poder cerrar sesión
-- **RF-083**: El usuario debe poder eliminar su cuenta
-
-### 1.14 Seguridad
-- **RF-084**: El sistema debe implementar rate limiting por usuario
-- **RF-085**: El sistema debe validar y sanitizar todos los inputs
-- **RF-086**: El sistema debe implementar protección contra ataques comunes (XSS, CSRF, SQL Injection)
-- **RF-087**: El sistema debe registrar actividades importantes en logs de auditoría
-- **RF-088**: El sistema debe encriptar contraseñas con bcrypt
-- **RF-089**: El sistema debe validar tamaño y tipo de archivos subidos
-
-### 1.15 Multimedia
-- **RF-090**: El sistema debe almacenar imágenes en Cloudinary
-- **RF-091**: El sistema debe generar múltiples tamaños de imágenes (thumbnail, medium, large)
-- **RF-092**: El sistema debe optimizar imágenes automáticamente
-- **RF-093**: El sistema debe soportar videos en publicaciones e historias
-- **RF-094**: El sistema debe validar duración máxima de videos
-
----
-
-## 2. Pantallas y Funcionalidades
-
-### 2.1 Pantalla de Inicio de Sesión (LoginView)
-**Ruta**: `/login`
-
-**Funcionalidades**:
-- Campo de entrada para email con validación de formato
-- Campo de entrada para contraseña con opción de mostrar/ocultar
-- Botón "Iniciar Sesión" que valida credenciales
-- Enlace "¿Olvidaste tu contraseña?" para recuperación
-- Enlace "Crear cuenta" para ir a registro
-- Validación en tiempo real de campos
-- Mensajes de error específicos para credenciales incorrectas
-- Indicador de carga durante autenticación
-
-**Navegación**:
-- → Pantalla de Registro (`/register`)
-- → Pantalla de Recuperación de Contraseña (`/forgot-password`)
-- → Pantalla Principal (Home) tras login exitoso
-
----
-
-### 2.2 Pantalla de Registro (RegisterView)
-**Ruta**: `/register`
-
-**Funcionalidades**:
-- Formulario multi-paso con progreso visual
-- **Paso 1 - Datos de Usuario**:
-  - Nombre, apellido, email, contraseña, confirmar contraseña
-  - Validación de fortaleza de contraseña
-  - Validación de coincidencia de contraseñas
-- **Paso 2 - Ubicación**:
-  - Selector de país, ciudad
-  - Validación de campos requeridos
-- **Paso 3 - Registro de Primera Mascota**:
-  - Formulario completo de mascota
-  - Obligatorio para completar registro
-- Botones "Atrás" y "Siguiente" para navegación entre pasos
-- Indicador de progreso (1/3, 2/3, 3/3)
-- Validación de todos los campos antes de enviar
-- Indicador de carga durante registro
-
-**Navegación**:
-- → Pantalla de Login (`/login`) desde enlace "Ya tengo cuenta"
-- → Pantalla Principal (Home) tras registro exitoso
-
----
-
-### 2.3 Pantalla Principal (HomeView)
-**Ruta**: `/home`
-
-**Funcionalidades**:
-- **Barra superior**:
-  - Logo de Petos
-  - Botón de notificaciones con contador de no leídas
-- **Feed de publicaciones**:
-  - Lista de publicaciones de usuarios seguidos
-  - Cada publicación muestra:
-    - Avatar y nombre del autor
-    - Carousel de imágenes (si tiene múltiples)
-    - Video con controles (si es video)
-    - Descripción con "ver más" si es larga
-    - Mascotas etiquetadas (avatares clickeables)
-    - Botones: Me gusta, Comentar, Compartir
-    - Contador de likes y comentarios
-    - Fecha de publicación
-  - Pull-to-refresh para actualizar feed
-  - Scroll infinito con carga automática
-  - Estado vacío con botón "Crear primera publicación"
-- **Botón flotante (+)** para crear nueva publicación
-
-**Navegación**:
-- → Pantalla de Crear Publicación (al tocar botón +)
-- → Pantalla de Perfil de Usuario (al tocar avatar de autor)
-- → Pantalla de Perfil de Mascota (al tocar mascota etiquetada)
-- → Modal de Comentarios (al tocar botón comentar)
-- → Pantalla de Notificaciones (al tocar campana)
-
----
-
-### 2.4 Pantalla de Crear Publicación (CreatePostView)
-**Ruta**: `/create-post`
-
-**Funcionalidades**:
-- Campo de texto para descripción (opcional)
-- Botón "Agregar medios" para seleccionar imágenes o video
-- **AppMediaPicker**:
-  - Vista previa de medios seleccionados
-  - Opción de eliminar medios individuales
-  - Reordenar medios arrastrando
-  - Validación: 1-5 imágenes O 1 video (excluyente)
-  - Indicador visual de límites de medios
-- Selector de mascotas a etiquetar:
-  - Lista de mascotas del usuario con checkboxes
-  - Búsqueda de mascotas propias
-- Botón "Publicar" con indicador de carga
-- Validación: debe haber al menos 1 medio
-- Mensaje de progreso al subir imágenes
-
-**Navegación**:
-- ← Volver a Home (botón atrás o tras publicar exitosamente)
-
----
-
-### 2.5 Pantalla de Comentarios (PostCommentsModal)
-**Tipo**: Modal Bottom Sheet
-
-**Funcionalidades**:
-- Lista de comentarios de la publicación
-- Cada comentario muestra:
-  - Avatar y nombre del autor
-  - Texto del comentario
-  - Fecha relativa (hace X minutos/horas/días)
-  - Botón de eliminar (solo si es autor)
-- Campo de entrada de texto para nuevo comentario
-- Botón "Enviar" para publicar comentario
-- Scroll infinito si hay muchos comentarios
-- Estado vacío "Sin comentarios aún" con mensaje motivador
-- Actualización en tiempo real al agregar comentario
-
-**Navegación**:
-- ← Cerrar modal (arrastrar hacia abajo o tocar fuera)
-
----
-
-### 2.6 Pantalla de Notificaciones (NotificationView)
-**Ruta**: `/notifications`
-
-**Funcionalidades**:
-- **Filtros superiores** (tabs):
-  - Todas
-  - No leídas
-  - Me gusta
-  - Comentarios
-  - Seguidores
-- **Lista de notificaciones**:
-  - Avatar del usuario que generó la notificación
-  - Icono según tipo (corazón, comentario, usuario)
-  - Texto descriptivo ("X le dio me gusta a tu publicación")
-  - Fecha relativa
-  - Thumbnail de publicación (si aplica)
-  - Indicador visual de notificación no leída
-- Pull-to-refresh para actualizar
-- Marcar como leída automáticamente al abrir
-- Estado vacío según filtro activo con mensaje personalizado
-- Botones de acción según contexto
-
-**Navegación**:
-- → Pantalla de Publicación (al tocar notificación de like/comentario)
-- → Pantalla de Perfil de Usuario (al tocar notificación de seguidor)
-- ← Volver a Home
-
----
-
-### 2.7 Pantalla de Historias (StoriesView)
-**Ruta**: `/stories/:userId`
-
-**Funcionalidades**:
-- Vista fullscreen de historia actual
-- **Controles superiores**:
-  - Avatar y nombre del autor
-  - Indicador de progreso de historias (barras)
-  - Botón de cerrar (X)
-  - Tiempo de publicación
-- **Interacciones**:
-  - Tap izquierda: historia anterior
-  - Tap derecha: siguiente historia
-  - Mantener presionado: pausar historia
-  - Deslizar abajo: cerrar
-- Reproducción automática con timer
-- **Barra inferior** (si es historia propia):
-  - Contador de vistas
-- **Barra inferior** (si es de otro usuario):
-  - Campo para enviar mensaje
-  - Botón de me gusta
-- Indicador de carga entre historias
-- Estado vacío "Este usuario no tiene historias"
-
-**Navegación**:
-- → Siguiente historia del mismo usuario
-- → Historias del siguiente usuario (cuando termina las del actual)
-- ← Cerrar y volver a pantalla anterior
-
----
-
-### 2.8 Pantalla de Crear Historia (CreateStoryView)
-**Ruta**: `/create-story`
-
-**Funcionalidades**:
-- Vista previa fullscreen del medio seleccionado (imagen o video)
-- **Editor de texto**:
-  - Campo de texto para agregar mensaje
-  - Selector de color de fondo del texto
-  - Posicionamiento libre del texto (arrastrable)
-  - Ajuste de tamaño del texto
-- **Opciones superiores**:
-  - Botón "Cambiar medio" para seleccionar otra imagen/video
-  - Botón "Color de fondo" para toda la historia
-- Botón "Publicar historia" con indicador de carga
-- Validación: debe tener imagen o video
-
-**Navegación**:
-- ← Cancelar y volver
-- → Volver a Home tras publicar exitosamente
-
----
-
-### 2.9 Pantalla de Explorar (ExploreView)
-**Ruta**: `/explore`
-
-**Funcionalidades**:
-- **Tab "Comunidad"**:
-  - Grid de publicaciones populares
-  - Preview con imagen principal
-  - Indicador de múltiples fotos
-  - Contador de likes
-- **Tab "Mascotas"**:
-  - Swipeable cards estilo Tinder
-  - Cada card muestra:
-    - Fotos de la mascota (carousel)
-    - Nombre, edad, sexo, raza
-    - Ubicación del dueño
-    - Descripción/biografía
-  - Botones: ❌ (Rechazar) y ❤️ (Like)
-  - Animaciones al hacer swipe
-  - Indicador de match cuando hay like mutuo
-  - Estado vacío "No hay más mascotas por ahora"
-- Pull-to-refresh en ambos tabs
-
-**Navegación**:
-- → Pantalla de Detalle de Publicación (al tocar post en Comunidad)
-- → Pantalla de Perfil de Mascota (al tocar info en card)
-- → Modal de Match (cuando hay match mutuo)
-
----
-
-### 2.10 Pantalla de Mapa (MapView)
-**Ruta**: `/map`
-
-**Funcionalidades**:
-- **Tabs superiores**:
-  - Servicios
-  - Eventos
-- **Mapa interactivo**:
-  - Marcadores personalizados según categoría
-  - Clustered markers cuando hay muchos cercanos
-  - Marcador de ubicación del usuario
-  - Controles de zoom
-  - Botón para centrar en ubicación actual
-- **Panel inferior de filtros** (Servicios):
-  - Filtro por categoría (Veterinaria, Grooming, Hotel, Guardería, etc.)
-  - Filtro por rango de precio (min-max)
-  - Filtro por distancia (radio en km)
-  - Botón "Aplicar filtros"
-  - Contador de servicios encontrados
-- **Panel inferior de filtros** (Eventos):
-  - Filtro por rango de fechas
-  - Filtro por distancia
-  - Botón "Aplicar filtros"
-  - Contador de eventos encontrados
-- **Tap en marcador**:
-  - Muestra card de preview con info básica
-  - Botón "Ver detalles" para abrir modal completo
-
-**Navegación**:
-- → Modal de Detalle de Servicio (al tocar "Ver detalles" en servicio)
-- → Modal de Detalle de Evento (al tocar "Ver detalles" en evento)
-- → Pantalla de Crear Servicio (botón +)
-- → Pantalla de Crear Evento (botón +)
-
----
-
-### 2.11 Pantalla de Crear/Editar Servicio (CreateServiceView)
-**Ruta**: `/create-service` o `/edit-service/:id`
-
-**Funcionalidades**:
-- **Formulario con campos**:
-  - Título (requerido)
-  - Descripción (requerido)
-  - Categoría (dropdown: Veterinaria, Grooming, Hotel, Guardería, etc.)
-  - Precio (numérico)
-  - Ubicación (texto descriptivo)
-  - Latitud y Longitud (numéricos, opcional con botón "Usar mi ubicación")
-  - Teléfono de contacto
-  - Email de contacto
-- **AppMediaPicker para imágenes** (hasta 5):
-  - En modo edición, muestra imágenes existentes como URLs
-  - Permite agregar nuevas imágenes locales
-  - Permite eliminar imágenes (URLs o locales)
-  - Vista previa de todas las imágenes
-- Validación de todos los campos requeridos
-- Botón "Guardar" con indicador de carga
-- **Proceso de guardado/actualización**:
-  - Detecta imágenes eliminadas y las borra del backend
-  - Sube nuevas imágenes a Cloudinary con delays (500ms entre cada una)
-  - Actualiza servicio con nuevos datos
-  - Agrega imágenes recién subidas una por una
-- Mensajes de éxito/error con SnackBar
-
-**Navegación**:
-- ← Cancelar y volver al mapa
-- → Volver al mapa tras guardar exitosamente
-
----
-
-### 2.12 Pantalla de Crear/Editar Evento (CreateEventView)
-**Ruta**: `/create-event` o `/edit-event/:id`
-
-**Funcionalidades**:
-- **Formulario con campos**:
-  - Título (requerido)
-  - Descripción (requerido)
-  - Ubicación (texto descriptivo, requerido)
-  - Latitud y Longitud (numéricos, opcional con botón "Usar mi ubicación")
-  - Fecha (selector de fecha)
-  - Hora (selector de hora)
-  - Capacidad máxima (numérico, opcional)
-- **AppMediaPicker para imágenes** (hasta 5):
-  - En modo edición, muestra imágenes existentes como URLs
-  - Permite agregar nuevas imágenes locales
-  - Permite eliminar imágenes
-  - Vista previa de todas las imágenes
-- Validación de todos los campos requeridos
-- Validación: fecha debe ser futura
-- Botón "Guardar Evento" con indicador de carga
-- **Proceso de guardado/actualización** (idéntico a servicios):
-  - Detecta y elimina imágenes removidas
-  - Sube nuevas imágenes con delays anti-rate-limit
-  - Actualiza evento sin imágenes
-  - Agrega imágenes una por una
-- Mensajes de éxito/error
-
-**Navegación**:
-- ← Cancelar y volver al mapa
-- → Volver al mapa tras guardar exitosamente
-
----
-
-### 2.13 Pantalla de Perfil de Usuario (UserProfileView)
-**Ruta**: `/profile/:userId` (o `/profile` para perfil propio)
-
-**Funcionalidades**:
-- **Header del perfil**:
-  - Avatar del usuario
-  - Nombre completo
-  - Username
-  - Biografía
-  - Ubicación
-  - Estadísticas: # Publicaciones, # Seguidores, # Seguidos
-  - Botón "Seguir"/"Siguiendo" (si es otro usuario)
-  - Botón "Editar perfil" (si es perfil propio)
-  - Botón "Mensaje" (si es otro usuario)
-  - Botón de opciones (⋮) con menú:
-    - Reportar usuario
-    - Bloquear usuario
-- **Tabs de contenido**:
-  - **Posts**: Grid de publicaciones del usuario
-  - **Tagged**: Publicaciones donde está etiquetado
-  - **Likes**: Publicaciones que le gustaron (solo perfil propio)
-- Pull-to-refresh en todos los tabs
-- Estados vacíos según tab:
-  - "Sin publicaciones aún"
-  - "No hay publicaciones etiquetadas"
-  - "No hay publicaciones con me gusta"
-
-**Navegación**:
-- → Pantalla de Editar Perfil (al tocar "Editar perfil")
-- → Pantalla de Detalle de Publicación (al tocar publicación)
-- → Pantalla de Seguidores (al tocar "# Seguidores")
-- → Pantalla de Seguidos (al tocar "# Seguidos")
-- → Pantalla de Chat (al tocar "Mensaje")
-- ← Volver atrás
-
----
-
-### 2.14 Pantalla de Editar Perfil (EditProfileView)
-**Ruta**: Desde UserProfileView (modal o pantalla)
-
-**Funcionalidades**:
-- **AvatarPicker**:
-  - Muestra avatar actual (URL remota)
-  - Permite cambiar avatar (File local)
-  - Botón de cámara overlay para cambiar
-  - Preview en tiempo real
-- **Formulario con campos**:
-  - Nombre (requerido)
-  - Apellido (requerido)
-  - Biografía (opcional, máximo 150 caracteres)
-  - País (dropdown)
-  - Ciudad (texto)
-  - Fecha de nacimiento (selector de fecha)
-- Validación de campos requeridos
-- Botón "Guardar cambios" con indicador de carga
-- Botón "Cancelar" para descartar cambios
-- Confirmación si hay cambios sin guardar
-
-**Navegación**:
-- ← Cancelar y volver a perfil
-- → Volver a perfil tras guardar exitosamente
-
----
-
-### 2.15 Pantalla de Gestión de Mascotas (PetManagementView)
-**Ruta**: `/pets`
-
-**Funcionalidades**:
-- Lista de mascotas del usuario
-- **Card de cada mascota**:
-  - Avatar de la mascota
-  - Nombre, tipo, raza
-  - Edad
-  - Botón "Ver perfil"
-  - Botón "Editar"
-  - Botón "Eliminar" con confirmación
-- Botón flotante (+) para agregar nueva mascota
-- Estado vacío "Sin mascotas" con botón "Agregar Mascota"
-- Pull-to-refresh para actualizar lista
-
-**Navegación**:
-- → Modal de Agregar Mascota (al tocar botón +)
-- → Modal de Editar Mascota (al tocar botón editar)
-- → Pantalla de Perfil de Mascota (al tocar "Ver perfil")
-
----
-
-### 2.16 Modal de Agregar/Editar Mascota (PetFormDialog)
-**Tipo**: Dialog Modal
-
-**Funcionalidades**:
-- **AvatarPicker**:
-  - Recorte de imagen en formato 1:1
-  - Preview en tiempo real
-  - Placeholder con icono de mascota
-- **Formulario con campos**:
-  - Nombre (requerido)
-  - Tipo (dropdown: Perro, Gato, Otro)
-  - Raza (dropdown dinámico según tipo seleccionado)
-  - Fecha de nacimiento (selector de fecha)
-  - Sexo (radio buttons: Macho, Hembra)
-  - Biografía (textarea, opcional)
-  - Peso (numérico con unidad kg)
-- **Selector de rasgos/características**:
-  - Chips de rasgos disponibles según tipo de mascota
-  - Multi-selección de rasgos
-  - Colores, tamaños, temperamento, etc.
-- Validación ReactiveForm con revalidación en submit
-- Autovalidación de campos al tocar
-- Botón "Cancelar" (outline)
-- Botón "Guardar" (primary) con indicador de carga
-- Scroll interno para formularios largos
-- **Manejo de imágenes**:
-  - En edición: muestra URL existente si hay
-  - Al guardar sin cambiar imagen: mantiene imagen actual (no la borra)
-  - Al cambiar imagen: sube nueva y actualiza
-
-**Navegación**:
-- ← Cerrar modal (cancelar)
-- → Cerrar y actualizar lista tras guardar exitosamente
-
----
-
-### 2.17 Pantalla de Perfil de Mascota (PetProfileView)
-**Ruta**: `/pet/:petId`
-
-**Funcionalidades**:
-- **Header del perfil**:
-  - Avatar de la mascota (grande)
-  - Nombre, tipo, raza
-  - Edad
-  - Sexo (icono)
-  - Peso
-  - Biografía
-  - Chips de rasgos/características
-  - Botón "Editar" (si es mascota propia)
-  - Estadísticas: # Fotos, # Posts etiquetados
-- **Tabs de contenido**:
-  - **Fotos**: Grid de galería de fotos de la mascota
-  - **Posts**: Publicaciones donde está etiquetada
-  - **Salud**: Registros de salud y datos médicos
-- **Tab Fotos**:
-  - Grid 3 columnas con fotos
-  - Botón flotante (+) para agregar foto
-  - Estado vacío "Sin fotos aún"
-  - Tap en foto abre visor fullscreen con opciones
-- **Tab Posts**:
-  - Grid de publicaciones etiquetadas
-  - Estado vacío "Sin publicaciones aún"
-- **Tab Salud** (solo mascota propia):
-  - **Sección "Datos Médicos"**:
-    - Card con info: Alergias, Condiciones médicas, Veterinario, Seguro
-    - Botón "Editar" para abrir modal
-    - Estado vacío con botón "Agregar datos"
-  - **Sección "Registros de Salud"**:
-    - Lista cronológica de registros (vacunas, desparasitación, visitas)
-    - Card por registro con: Tipo, fecha, notas, recordatorio
-    - Botón "Editar" y "Eliminar" en cada registro
-    - Botón flotante (+) para nuevo registro
-    - Estado vacío "Sin registros aún"
-
-**Navegación**:
-- → Modal de Editar Mascota (al tocar "Editar" en header)
-- → Modal de Agregar Foto (al tocar + en tab Fotos)
-- → Visor de Foto Fullscreen (al tocar foto)
-- → Detalle de Publicación (al tocar post en tab Posts)
-- → Modal de Editar Datos Médicos (al tocar "Editar" en datos médicos)
-- → Modal de Agregar Registro de Salud (al tocar + en registros)
-- → Modal de Editar Registro de Salud (al tocar "Editar" en registro)
-- ← Volver atrás
-
----
-
-### 2.18 Modal de Datos Médicos (EditHealthInfoDialog)
-**Tipo**: Dialog Modal
-
-**Funcionalidades**:
-- **Formulario con campos**:
-  - Alergias (textarea, opcional)
-  - Condiciones médicas (textarea, opcional)
-  - Veterinario (texto, opcional)
-  - Seguro (texto, opcional)
-- Scroll interno
-- Botón "Cancelar"
-- Botón "Guardar" con indicador de carga
-- Validación ReactiveForm con revalidación
-
-**Navegación**:
-- ← Cerrar modal
-- → Cerrar y actualizar tras guardar
-
----
-
-### 2.19 Modal de Agregar Registro de Salud (AddHealthLogDialog)
-**Tipo**: Dialog Modal
-
-**Funcionalidades**:
-- **Formulario con campos**:
-  - Tipo de evento (dropdown: Vacuna, Desparasitación, Visita al Veterinario, Otro)
-  - Fecha (selector de fecha, default hoy)
-  - Notas (textarea, opcional)
-  - **Switch "Activar recordatorio"**:
-    - Al activar, muestra campo de fecha futura
-    - Fecha de recordatorio (selector, debe ser futura)
-- Validación: fecha no puede ser futura (para registro), fecha de recordatorio debe ser futura
-- Botón "Cancelar"
-- Botón "Guardar" con indicador de carga
-- Validación ReactiveForm
-
-**Navegación**:
-- ← Cerrar modal
-- → Cerrar y actualizar lista tras guardar
-
----
-
-### 2.20 Modal de Editar Registro de Salud (EditHealthLogDialog)
-**Tipo**: Dialog Modal
-
-**Funcionalidades**:
-- Igual que AddHealthLogDialog pero con datos precargados
-- Campos editables:
-  - Tipo de evento
-  - Fecha
-  - Notas
-  - Activar/desactivar recordatorio
-  - Fecha de recordatorio (si está activado)
-- Validación ReactiveForm con revalidación
-- Botón "Cancelar"
-- Botón "Guardar cambios" con indicador de carga
-
-**Navegación**:
-- ← Cerrar modal
-- → Cerrar y actualizar tras guardar
-
----
-
-### 2.21 Pantalla de Chat/Mensajería (ChatsView)
-**Ruta**: `/chats`
-
-**Funcionalidades**:
-- Lista de conversaciones activas
-- **Card de cada conversación**:
-  - Avatar del otro usuario
-  - Nombre del usuario
-  - Último mensaje (preview)
-  - Fecha/hora del último mensaje
-  - Indicador de no leído (badge con contador)
-  - Estado online/offline del usuario
-- Búsqueda de conversaciones
-- Pull-to-refresh para actualizar
-- Estado vacío "No hay conversaciones" con sugerencia de explorar comunidad
-- Ordenamiento por fecha del último mensaje (más reciente arriba)
-
-**Navegación**:
-- → Pantalla de Conversación (al tocar conversación)
-- ← Volver atrás
-
----
-
-### 2.22 Pantalla de Conversación (ChatPage)
-**Ruta**: `/chat/:userId`
-
-**Funcionalidades**:
-- **Header**:
-  - Avatar del otro usuario
-  - Nombre del usuario
-  - Estado online/offline
-  - Botón de opciones (⋮) con menú:
-    - Ver perfil
-    - Bloquear usuario
-- **Lista de mensajes**:
-  - Mensajes agrupados por fecha
-  - Cada mensaje muestra:
-    - Avatar (si es del otro usuario)
-    - Texto del mensaje
-    - Hora de envío
-    - Estado de lectura (✓✓ azul si leído, ✓✓ gris si entregado)
-  - Mensajes propios alineados a la derecha (color primario)
-  - Mensajes del otro alineados a la izquierda (gris)
-  - Scroll automático al último mensaje
-  - Estado vacío "Sin mensajes aún" con sugerencia de enviar primer mensaje
-- **Barra inferior**:
-  - Campo de texto para escribir mensaje
-  - Botón de enviar (deshabilitado si texto vacío)
-  - Indicador "Escribiendo..." cuando el otro usuario está escribiendo
-- Actualización en tiempo real de mensajes
-
-**Navegación**:
-- → Pantalla de Perfil de Usuario (al tocar "Ver perfil")
-- ← Volver a lista de conversaciones
-
----
-
-### 2.23 Pantalla de Configuración (SettingsView)
-**Ruta**: `/settings`
-
-**Funcionalidades**:
-- **Sección "Cuenta"**:
-  - Cambiar contraseña
-  - Idioma (Español, English)
-  - Eliminar cuenta (con confirmación)
-- **Sección "Privacidad"**:
-  - Usuarios bloqueados (con contador)
-  - Perfil público/privado (switch)
-  - Quien puede ver mis historias (dropdown: Todos, Solo seguidores)
-  - Quien puede comentar mis posts (dropdown: Todos, Solo seguidores, Nadie)
-- **Sección "Notificaciones"**:
-  - Push notifications (switch)
-  - Notificaciones de likes (switch)
-  - Notificaciones de comentarios (switch)
-  - Notificaciones de nuevos seguidores (switch)
-  - Notificaciones de mensajes (switch)
-- **Sección "Apariencia"**:
-  - Tema (dropdown: Claro, Oscuro, Automático)
-- **Sección "Soporte"**:
-  - Centro de ayuda
-  - Reportar un problema
-  - Términos y condiciones
-  - Política de privacidad
-- **Acción destructiva**:
-  - Cerrar sesión (con confirmación)
-
-**Navegación**:
-- → Pantalla de Cambiar Contraseña
-- → Pantalla de Usuarios Bloqueados
-- → Pantalla de Centro de Ayuda
-- → Pantalla de Reportar Problema
-- → Pantalla de Login (tras cerrar sesión)
-- ← Volver atrás
-
----
-
-### 2.24 Pantalla de Usuarios Bloqueados (BlockedUsersView)
-**Ruta**: `/settings/blocked-users`
-
-**Funcionalidades**:
-- Lista de usuarios bloqueados
-- **Card de cada usuario**:
-  - Avatar del usuario
-  - Nombre del usuario
-  - Botón "Desbloquear"
-- Confirmación antes de desbloquear
-- Estado vacío "No has bloqueado a nadie"
-- Pull-to-refresh para actualizar
-
-**Navegación**:
-- ← Volver a configuración
-
----
-
-### 2.25 Bottom Navigation Bar (Todas las pantallas principales)
-**Presente en**: Home, Explore, Map, Chats, Profile
-
-**Funcionalidades**:
-- 5 tabs con iconos y labels:
-  1. **Inicio** (Home): Icono casa
-  2. **Explorar** (Explore): Icono lupa/brújula
-  3. **Mapa** (Map): Icono mapa/pin
-  4. **Chats** (Chats): Icono mensaje con badge contador
-  5. **Perfil** (Profile): Avatar del usuario
-- Indicador visual del tab activo (color primario)
-- Animación de transición entre tabs
-- Badge de notificaciones en Chats si hay mensajes no leídos
-
-**Navegación**:
-- Permite cambiar entre las 5 pantallas principales
-- Mantiene estado de cada pantalla al cambiar tabs
-
----
-
-## 3. Flujo de Navegación de la Aplicación
-
-### 3.1 Flujo de Autenticación
-
-```
-[Splash Screen]
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PETOS - Análisis Funcional</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    /* Paleta de colores simplificada */
+    --primary-color: #4A90E2;
+    --primary-dark: #2E5C8A;
+    --secondary-color: #7ED321;
+    --accent-color: #FFD700;
+    --success-color: #51CF66;
+    --text-primary: #2C3E50;
+    --text-secondary: #7F8C8D;
+    --bg-light: #F8F9FA;
+    --bg-white: #FFFFFF;
+    --border-color: #E9ECEF;
+    --shadow: 0 2px 8px rgba(0,0,0,0.1);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', 'Segoe UI', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.8;
+    color: var(--text-primary);
+    background: #f0f2f5;
+    padding: 0;
+    margin: 0;
+    font-size: 16px;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 60px;
+  }
+
+  /* ============================================
+     HEADER Y PORTADA
+     ============================================ */
+
+  .header {
+    background: white;
+    color: var(--text-primary);
+    padding: 80px 60px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+  }
+
+  .header h1 {
+    font-size: 3em;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+    position: relative;
+    color: var(--text-primary);
+  }
+
+  .header .subtitle {
+    font-size: 1.2em;
+    font-weight: 400;
+    margin-top: 15px;
+    color: var(--text-secondary);
+    position: relative;
+    letter-spacing: 0;
+  }
+
+  .header-meta {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+  }
+
+  .header-meta-item {
+    background: #f8f9fa;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+    color: var(--text-secondary);
+  }
+
+  .header-meta-item strong {
+    font-weight: 700;
+  }
+
+  /* ============================================
+     ÍNDICE
+     ============================================ */
+
+  .toc {
+    background: white;
+    padding: 40px 50px;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 40px;
+    border: none;
+  }
+
+  .toc h2 {
+    color: var(--text-primary);
+    font-size: 1.8em;
+    font-weight: 700;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e9ecef;
+    letter-spacing: -0.5px;
+  }
+
+  .toc ul {
+    list-style: none;
+    counter-reset: toc-counter;
+  }
+
+  .toc li {
+    counter-increment: toc-counter;
+    margin: 18px 0;
+    padding-left: 50px;
+    position: relative;
+    font-size: 1.1em;
+  }
+
+  .toc li::before {
+    content: counter(toc-counter);
+    position: absolute;
+    left: 0;
+    background: var(--primary-color);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85em;
+    font-weight: 600;
+  }
+
+  .toc a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+
+  .toc a:hover {
+    color: var(--primary-color);
+  }
+
+  /* ============================================
+     SECCIONES COLAPSABLES
+     ============================================ */
+
+  details {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 30px;
+    overflow: hidden;
+    border: none;
+    transition: all 0.3s ease;
+  }
+
+  details:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  summary {
+    background: white;
+    color: var(--text-primary);
+    padding: 25px 40px;
+    cursor: pointer;
+    font-size: 1.5em;
+    font-weight: 600;
+    list-style: none;
+    user-select: none;
+    position: relative;
+    transition: all 0.3s ease;
+    letter-spacing: -0.5px;
+    border-bottom: 1px solid #f0f2f5;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::after {
+    content: '▼';
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%) rotate(0deg);
+    transition: transform 0.3s;
+    font-size: 0.6em;
+    color: var(--text-secondary);
+  }
+
+  details[open] summary::after {
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  summary:hover {
+    background: #f8f9fa;
+  }
+
+  .section-content {
+    padding: 40px;
+  }
+
+  .section-separator {
+    height: 1px;
+    background: #e9ecef;
+    margin: 30px 0;
+  }
+
+  /* ============================================
+     TÍTULOS
+     ============================================ */
+
+  h2 {
+    color: var(--text-primary);
+    font-size: 1.8em;
+    font-weight: 600;
+    margin-top: 40px;
+    margin-bottom: 25px;
+    padding-bottom: 0;
+    border-bottom: none;
+    letter-spacing: -0.5px;
+  }
+
+  h3 {
+    color: var(--text-primary);
+    font-size: 1.4em;
+    font-weight: 600;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    padding-left: 0;
+    border-left: none;
+    letter-spacing: -0.3px;
+  }
+
+  h4 {
+    color: var(--text-primary);
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-top: 25px;
+    margin-bottom: 15px;
+  }
+
+  /* ============================================
+     TABLAS
+     ============================================ */
+
+  table {
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin: 30px 0;
+    border-collapse: collapse;
+    border: none;
+  }
+
+  thead {
+    background: #f8f9fa;
+  }
+
+  th {
+    padding: 16px 20px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.9em;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--text-secondary) !important;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f2f5;
+    font-size: 0.95em;
+    color: var(--text-primary);
+  }
+
+  /* Ancho de columnas solo para la primera tabla (Funcionalidades Implementadas) */
+  .table-funcionalidades th:nth-child(1),
+  .table-funcionalidades td:nth-child(1) {
+    width: 20%;
+  }
+
+  .table-funcionalidades th:nth-child(2),
+  .table-funcionalidades td:nth-child(2) {
+    width: 55%;
+  }
+
+  .table-funcionalidades th:nth-child(3),
+  .table-funcionalidades td:nth-child(3) {
+    width: 25%;
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    transition: all 0.2s ease;
+  }
+
+  tbody tr:hover {
+    background-color: #f8f9fa;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* ============================================
+     BLOCKQUOTES Y CALLOUTS
+     ============================================ */
+
+  blockquote {
+    background: #f8f9fa;
+    border-left: 4px solid var(--primary-color);
+    padding: 25px 30px;
+    margin: 25px 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 1em;
+    color: var(--text-secondary);
+    position: relative;
+    line-height: 1.7;
+  }
+
+  .callout {
+    background: #e3f2fd;
+    border-left: 4px solid var(--primary-color);
+    padding: 20px 25px;
+    margin: 25px 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.95em;
+    line-height: 1.7;
+  }
+
+  .callout-warning {
+    border-left-color: var(--primary-color);
+    background: #e3f2fd;
+  }
+
+  .callout-success {
+    border-left-color: var(--success-color);
+    background: #f0f9ff;
+  }
+
+  /* ============================================
+     BADGES Y ETIQUETAS
+     ============================================ */
+
+  /* Opción 3 - Solo borde (limpio y minimalista) */
+  .badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.85em;
+    margin: 2px 4px;
+    transition: all 0.2s ease;
+    background: transparent;
+    border: 1.5px solid #e1e4e8;
+    color: #586069;
+  }
+
+  .badge-implementado {
+    /* ✅ Implementado */
+  }
+
+  .badge-pendiente {
+    /* 📋 V2.0 */
+  }
+
+  .badge-progress {
+    /* ⏳ En Desarrollo */
+  }
+
+  /* ============================================
+     GRÁFICOS
+     ============================================ */
+
+  .chart-container {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin: 30px 0;
+    border: none;
+  }
+
+  .chart-container h3 {
+    border-left: none;
+    padding-left: 0;
+    margin-top: 0;
+    text-align: left;
+    color: var(--text-primary);
+    margin-bottom: 30px;
+    font-size: 1.4em;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+
+  .chart-wrapper {
+    position: relative;
+    height: 400px;
+    margin-top: 20px;
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+  }
+
+  .chart-wrapper-small {
+    position: relative;
+    height: 300px;
+    margin-top: 20px;
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+  }
+
+  /* Layout de gráfica + tabla dentro del mismo card */
+  .chart-table-card {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin: 30px 0;
+    display: flex;
+    gap: 40px;
+    align-items: stretch;
+  }
+
+  .chart-table-card .chart-column {
+    flex: 0 0 35%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chart-table-card .table-column {
+    flex: 1;
+  }
+
+  .chart-table-card .chart-column h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+  }
+
+  .chart-table-card .chart-wrapper {
+    height: auto;
+    flex: 1;
+    min-height: 250px;
+    margin-top: 0;
+  }
+
+  .chart-table-card table {
+    margin: 0;
+    box-shadow: none;
+  }
+
+  .chart-table-card .chart-source {
+    font-size: 0.85em;
+    margin-top: 20px;
+    color: var(--text-secondary);
+    text-align: left;
+  }
+
+  /* ============================================
+     LISTAS
+     ============================================ */
+
+  ul, ol {
+    padding-left: 30px;
+    margin: 20px 0;
+  }
+
+  li {
+    margin: 12px 0;
+    line-height: 1.7;
+    font-size: 0.95em;
+  }
+
+  ul li::marker {
+    color: var(--primary-color);
+  }
+
+  ol li::marker {
+    color: var(--primary-color);
+    font-weight: 600;
+  }
+
+  /* ============================================
+     SEPARADORES
+     ============================================ */
+
+  hr {
+    border: none;
+    height: 1px;
+    background: #e9ecef;
+    margin: 30px 0;
+  }
+
+  /* ============================================
+     PÁRRAFOS Y TEXTO
+     ============================================ */
+
+  p {
+    margin: 15px 0;
+    line-height: 1.7;
+    font-size: 0.95em;
+    color: var(--text-primary);
+  }
+
+  strong {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  /* ============================================
+     ICONOS MATERIAL (Unicode)
+     ============================================ */
+
+  .material-icon {
+    font-family: 'Segoe UI Symbol', 'Material Icons', sans-serif;
+    font-size: 1.2em;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+
+  /* ============================================
+     RESPONSIVE
+     ============================================ */
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 20px;
+    }
+
+    .header {
+      padding: 60px 30px;
+      border-radius: 20px;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      letter-spacing: -1.5px;
+    }
+
+    .header .subtitle {
+      font-size: 1.3em;
+    }
+
+    .header-meta {
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .toc {
+      padding: 40px 30px;
+      border-radius: 20px;
+    }
+
+    .toc h2 {
+      font-size: 1.8em;
+    }
+
+    summary {
+      font-size: 1.5em;
+      padding: 25px 30px;
+    }
+
+    .section-content {
+      padding: 40px 30px;
+    }
+
+    h2 {
+      font-size: 2em;
+    }
+
+    h3 {
+      font-size: 1.5em;
+    }
+
+    table {
+      font-size: 0.9em;
+    }
+
+    th, td {
+      padding: 15px 12px;
+    }
+
+    .chart-container {
+      padding: 40px 30px;
+    }
+
+    .chart-wrapper {
+      height: 300px;
+      padding: 20px;
+    }
+
+    .chart-wrapper-small {
+      height: 250px;
+    }
+
+    blockquote {
+      padding: 30px 35px;
+      font-size: 1.1em;
+    }
+
+    .callout {
+      padding: 30px 35px;
+    }
+  }
+
+  /* ============================================
+     UTILIDADES
+     ============================================ */
+
+  .text-center {
+    text-align: center;
+  }
+
+  .mt-4 {
+    margin-top: 40px;
+  }
+
+  .mb-4 {
+    margin-bottom: 40px;
+  }
+
+  .highlight-box {
+    background: white;
+    border-radius: 12px;
+    padding: 30px 40px;
+    margin: 30px 0;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.15);
+    border: 2px solid var(--primary-color);
+    position: relative;
+  }
+
+  .highlight-box p {
+    position: relative;
+    z-index: 1;
+    font-size: 0.95em;
+    line-height: 1.7;
+    margin: 10px 0;
+    color: var(--text-primary);
+  }
+
+  .highlight-box p strong {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  /* Estilos adicionales para código */
+  pre {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    overflow-x: auto;
+    margin: 20px 0;
+    border: 1px solid #e9ecef;
+  }
+
+  code {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9em;
+    color: var(--text-primary);
+  }
+
+  p code {
+    background: #f8f9fa;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #e83e8c;
+    font-size: 0.85em;
+  }
+
+  /* Clase section para secciones principales */
+  .section {
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📊 ANÁLISIS FUNCIONAL - PETOS APP</h1>
+  <p class="subtitle">Documentación técnica de requisitos y funcionalidades de la red social de mascotas</p>
+  <div class="header-meta">
+    <div class="header-meta-item"><strong>Fecha:</strong> Enero 2025</div>
+    <div class="header-meta-item"><strong>Versión:</strong> 1.0</div>
+    <div class="header-meta-item"><strong>Tipo:</strong> Análisis Funcional</div>
+    <div class="header-meta-item"><strong>Alcance:</strong> Frontend Flutter + Backend NestJS</div>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="toc">
+  <h2>📋 Tabla de Contenidos</h2>
+  <ul>
+    <li><a href="#seccion-1">1. Requisitos Funcionales</a>
+      <ul style="list-style: none; margin-left: 20px; margin-top: 10px;">
+        <li><a href="#seccion-1-1">1.1 MVP (Implementados) - 106 RFs</a></li>
+        <li><a href="#seccion-1-2">1.2 V2.0 (Planificados) - Febrero 2026</a></li>
+        <li><a href="#seccion-1-3">1.3 Pendientes de Aprobacion</a></li>
+      </ul>
+    </li>
+    <li><a href="#seccion-2">2. Requisitos No Funcionales</a></li>
+    <li><a href="#seccion-3">3. Pantallas y Funcionalidades</a></li>
+    <li><a href="#seccion-4">4. Flujo de Navegación</a></li>
+    <li><a href="#seccion-5">5. Características Especiales de Navegación</a></li>
+    <li><a href="#seccion-6">6. Análisis del Estado Real de la App</a></li>
+  </ul>
+</div>
+
+<!-- SECCIÓN 1: REQUISITOS FUNCIONALES -->
+<details id="seccion-1" open>
+<summary>1. REQUISITOS FUNCIONALES</summary>
+<div class="section-content">
+
+<p>Los requisitos funcionales definen las funcionalidades específicas que debe implementar Petos App para satisfacer las necesidades de los usuarios. Se dividen en dos categorías:</p>
+
+<ul>
+<li><strong>MVP (Implementados)</strong>: Requisitos funcionales RF-001 a RF-094 completamente implementados y en producción.</li>
+<li><strong>V2.0 (Planificados - Febrero 2026)</strong>: Requisitos funcionales planificados para la version de monetizacion.</li>
+<li><strong>Pendientes de Aprobacion</strong>: Requisitos funcionales identificados que requieren evaluacion adicional antes de incluirlos en el roadmap oficial.</li>
+</ul>
+
+<!-- ========== SUB-SECCIÓN 1.1: RF MVP ========== -->
+<details id="seccion-1-1" open>
+<summary>1.1 REQUISITOS FUNCIONALES MVP (Implementados)</summary>
+<div class="section-content">
+
+<h3>Módulo: Autenticación y Registro</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Autenticación</td>
+<td>RF-001</td>
+<td>Registro de usuarios</td>
+<td>El sistema debe permitir registro de usuarios con email y contraseña</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-002</td>
+<td>Validación de contraseñas</td>
+<td>El sistema debe validar la fortaleza de contraseñas (mínimo 8 caracteres, mayúsculas, minúsculas, números)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-003</td>
+<td>Login de usuarios</td>
+<td>El sistema debe permitir login con credenciales registradas</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-004</td>
+<td>Sesión con JWT</td>
+<td>El sistema debe mantener sesión activa mediante JWT tokens</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-005</td>
+<td>Recuperación de contraseña</td>
+<td>El sistema debe permitir recuperación de contraseña vía email</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-006</td>
+<td>Onboarding multi-paso</td>
+<td>El registro debe incluir proceso de onboarding en múltiples pasos</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-007</td>
+<td>Registro de mascota en onboarding</td>
+<td>El usuario debe poder registrar al menos una mascota durante el onboarding</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Gestión de Perfil de Usuario</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Perfil Usuario</td>
+<td>RF-008</td>
+<td>Ver y editar perfil</td>
+<td>El usuario debe poder ver y editar su perfil (nombre, apellido, biografía, ubicación)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Perfil Usuario</td>
+<td>RF-009</td>
+<td>Avatar de usuario</td>
+<td>El usuario debe poder subir y cambiar su foto de perfil (avatar)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Perfil Usuario</td>
+<td>RF-010</td>
+<td>Estadísticas de perfil</td>
+<td>El usuario debe poder ver estadísticas de su perfil (publicaciones, seguidores, seguidos)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Perfil Usuario</td>
+<td>RF-011</td>
+<td>Ver otros perfiles</td>
+<td>El usuario debe poder ver el perfil de otros usuarios</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Perfil Usuario</td>
+<td>RF-012</td>
+<td>Seguir/Dejar de seguir</td>
+<td>El usuario debe poder seguir y dejar de seguir a otros usuarios</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Perfil Usuario</td>
+<td>RF-013</td>
+<td>Estado de seguimiento</td>
+<td>El sistema debe mostrar si el usuario está siguiendo a otro usuario</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Gestión de Mascotas</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mascotas</td>
+<td>RF-014</td>
+<td>Crear perfil de mascota</td>
+<td>El usuario debe poder crear perfiles de mascotas con datos básicos (nombre, tipo, raza, edad, sexo, biografía)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mascotas</td>
+<td>RF-015</td>
+<td>Fotos de mascota</td>
+<td>El usuario debe poder agregar fotos a los perfiles de sus mascotas</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mascotas</td>
+<td>RF-016</td>
+<td>Editar mascota</td>
+<td>El usuario debe poder editar información de sus mascotas</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mascotas</td>
+<td>RF-017</td>
+<td>Eliminar mascota</td>
+<td>El usuario debe poder eliminar mascotas de su cuenta</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Mascotas</td>
+<td>RF-018</td>
+<td>Múltiples mascotas</td>
+<td>El sistema debe permitir múltiples mascotas por usuario</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mascotas</td>
+<td>RF-019</td>
+<td>Galería de fotos</td>
+<td>El perfil de mascota debe mostrar galería de fotos</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Mascotas</td>
+<td>RF-020</td>
+<td>Publicaciones etiquetadas</td>
+<td>El perfil de mascota debe mostrar publicaciones etiquetadas</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Registros de Salud de Mascotas</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Salud</td>
+<td>RF-021</td>
+<td>Crear registro de salud</td>
+<td>El usuario debe poder crear registros de salud para sus mascotas (vacunas, desparasitación, visitas al veterinario)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Salud</td>
+<td>RF-022</td>
+<td>Editar registro de salud</td>
+<td>El usuario debe poder editar registros de salud existentes</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Salud</td>
+<td>RF-023</td>
+<td>Eliminar registro de salud</td>
+<td>El usuario debe poder eliminar registros de salud</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Salud</td>
+<td>RF-024</td>
+<td>Recordatorios de salud</td>
+<td>El sistema debe permitir activar recordatorios para eventos de salud futuros</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Salud</td>
+<td>RF-025</td>
+<td>Datos médicos generales</td>
+<td>El usuario debe poder registrar datos médicos generales de la mascota (alergias, condiciones médicas, veterinario, seguro)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Publicaciones (Posts)</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Publicaciones</td>
+<td>RF-026</td>
+<td>Crear publicación con texto</td>
+<td>El usuario debe poder crear publicaciones con texto descriptivo</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicaciones</td>
+<td>RF-027</td>
+<td>Agregar imágenes (1-5)</td>
+<td>El usuario debe poder agregar entre 1 y 5 imágenes a una publicación</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicaciones</td>
+<td>RF-028</td>
+<td>Agregar video (1)</td>
+<td>El usuario debe poder agregar 1 video a una publicación (excluyente con imágenes)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicaciones</td>
+<td>RF-029</td>
+<td>Etiquetar mascotas</td>
+<td>El usuario debe poder etiquetar a sus mascotas en publicaciones</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Publicaciones</td>
+<td>RF-030</td>
+<td>Me gusta en publicaciones</td>
+<td>El usuario debe poder dar "me gusta" a publicaciones</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicaciones</td>
+<td>RF-031</td>
+<td>Comentar publicaciones</td>
+<td>El usuario debe poder comentar publicaciones</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicaciones</td>
+<td>RF-034</td>
+<td>Feed de publicaciones</td>
+<td>El sistema debe mostrar feed con publicaciones de usuarios seguidos</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicaciones</td>
+<td>RF-035</td>
+<td>Scroll infinito</td>
+<td>El sistema debe permitir scroll infinito en el feed</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Historias (Stories)</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Historias</td>
+<td>RF-036</td>
+<td>Crear historia con imagen/video</td>
+<td>El usuario debe poder crear historias con imagen o video</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Historias</td>
+<td>RF-037</td>
+<td>Ver historias de seguidos</td>
+<td>El usuario debe poder ver historias de usuarios seguidos</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Historias</td>
+<td>RF-038</td>
+<td>Duración 24 horas</td>
+<td>Las historias deben tener duración limitada (24 horas)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Historias</td>
+<td>RF-039</td>
+<td>Comentar historias</td>
+<td>El usuario debe poder comentar historias</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Historias</td>
+<td>RF-040</td>
+<td>Me gusta en historias</td>
+<td>El usuario debe poder dar "me gusta" a historias</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Servicios (Marketplace)</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Servicios</td>
+<td>RF-041</td>
+<td>Crear servicio</td>
+<td>El usuario debe poder crear servicios con información detallada (título, descripción, categoría, precio, ubicación)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Servicios</td>
+<td>RF-042</td>
+<td>Imágenes de servicio (hasta 5)</td>
+<td>El usuario debe poder agregar hasta 5 imágenes a un servicio</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Servicios</td>
+<td>RF-043</td>
+<td>Editar servicio</td>
+<td>El usuario debe poder editar servicios existentes</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Servicios</td>
+<td>RF-044</td>
+<td>Eliminar servicio</td>
+<td>El usuario debe poder eliminar sus servicios</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Servicios</td>
+<td>RF-045</td>
+<td>Mapa de servicios</td>
+<td>El sistema debe mostrar servicios en un mapa con marcadores</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Servicios</td>
+<td>RF-046</td>
+<td>Filtros de servicios</td>
+<td>El usuario debe poder filtrar servicios por categoría, rango de precio y distancia</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Servicios</td>
+<td>RF-047</td>
+<td>Detalles de servicio</td>
+<td>El usuario debe poder ver detalles completos de un servicio</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Servicios</td>
+<td>RF-048</td>
+<td>Información de contacto</td>
+<td>El sistema debe mostrar información de contacto del proveedor del servicio</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Eventos</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Eventos</td>
+<td>RF-049</td>
+<td>Crear evento</td>
+<td>El usuario debe poder crear eventos con información detallada (título, descripción, ubicación, fecha y hora)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-050</td>
+<td>Imágenes de evento (hasta 5)</td>
+<td>El usuario debe poder agregar hasta 5 imágenes a un evento</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-051</td>
+<td>Editar evento</td>
+<td>El usuario debe poder editar eventos existentes</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-052</td>
+<td>Filtros de eventos</td>
+<td>El usuario debe poder filtrar eventos por categoría</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-053</td>
+<td>Eliminar evento</td>
+<td>El usuario debe poder eliminar eventos</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-054</td>
+<td>Mapa de eventos</td>
+<td>El sistema debe mostrar eventos en un mapa con marcadores</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-055</td>
+<td>Detalles de evento</td>
+<td>El usuario debe poder ver detalles completos de un evento</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-056</td>
+<td>Lista de eventos propios</td>
+<td>El sistema debe mostrar lista de eventos organizados por el usuario</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Notificaciones</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Notificaciones</td>
+<td>RF-057</td>
+<td>Sistema de push notifications</td>
+<td>El sistema debe implementar push notifications para iOS y Android</td>
+<td><span class="badge badge-desarrollo">🔄 En Desarrollo</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Notificaciones</td>
+<td>RF-058</td>
+<td>Ver y eliminar notificaciones</td>
+<td>El usuario debe poder ver y eliminar todas sus notificaciones</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Notificaciones</td>
+<td>RF-059</td>
+<td>Push para notificaciones sociales</td>
+<td>Los usuarios deben recibir push para likes, mensajes, comentarios y nuevos seguidores</td>
+<td><span class="badge badge-desarrollo">🔄 En Desarrollo</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Notificaciones</td>
+<td>RF-060</td>
+<td>Filtrar notificaciones</td>
+<td>El usuario debe poder filtrar notificaciones por (no leídas, leídas, Todo, Social (likes, comentarios), Solicitudes (de mensajes, de seguimiento), Eventos (actualizaciones, recordatorios). La pestaña "Todo" está activa por defecto)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Notificaciones</td>
+<td>RF-061</td>
+<td>Marcar como leída automáticamente</td>
+<td>El sistema debe marcar notificaciones como leídas automáticamente al abrirlas</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Notificaciones</td>
+<td>RF-062</td>
+<td>Push para recordatorios de salud</td>
+<td>Los usuarios deben recibir push notifications para recordatorios de salud de mascotas</td>
+<td><span class="badge badge-desarrollo">🔄 En Desarrollo</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Notificaciones</td>
+<td>RF-063</td>
+<td>Configurar tipos de push</td>
+<td>Los usuarios deben poder configurar qué tipos de push notifications desean recibir</td>
+<td><span class="badge badge-desarrollo">🔄 En Desarrollo</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Notificaciones</td>
+<td>RF-064</td>
+<td>Horario de no molestar</td>
+<td>Los usuarios deben poder configurar horario de "no molestar" para push notifications</td>
+<td><span class="badge badge-desarrollo">🔄 En Desarrollo</span></td>
+<td>Baja</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Mensajería (Chat)</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mensajería</td>
+<td>RF-065</td>
+<td>Enviar mensajes directos</td>
+<td>El usuario debe poder enviar mensajes directos a otros usuarios</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mensajería</td>
+<td>RF-066</td>
+<td>Lista de conversaciones</td>
+<td>El usuario debe poder ver lista de conversaciones activas</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mensajería</td>
+<td>RF-067</td>
+<td>Último mensaje</td>
+<td>El sistema debe mostrar último mensaje en lista de conversaciones</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Mensajería</td>
+<td>RF-068</td>
+<td>Estado de lectura</td>
+<td>El sistema debe mostrar estado de lectura de mensajes</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Mensajería</td>
+<td>RF-069</td>
+<td>Ordenar conversaciones</td>
+<td>El sistema debe ordenar conversaciones por fecha del último mensaje</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Baja</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Reportes y Moderación</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reportes</td>
+<td>RF-070</td>
+<td>Reportar publicaciones</td>
+<td>El usuario debe poder reportar contenido inapropiado (publicaciones, historias, usuarios, comentarios)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Reportes</td>
+<td>RF-071</td>
+<td>Categorizar reportes</td>
+<td>El sistema debe categorizar reportes (spam, acoso, contenido inapropiado, etc.)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Reportes</td>
+<td>RF-072</td>
+<td>Descripción de reporte</td>
+<td>El sistema debe permitir agregar descripción opcional al reporte</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Baja</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Bloqueo de Usuarios</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bloqueo</td>
+<td>RF-073</td>
+<td>Bloquear usuarios</td>
+<td>El usuario debe poder bloquear a otros usuarios</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Bloqueo</td>
+<td>RF-074</td>
+<td>Lista de bloqueados</td>
+<td>El usuario debe poder ver lista de usuarios bloqueados</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Bloqueo</td>
+<td>RF-075</td>
+<td>Desbloquear usuarios</td>
+<td>El usuario debe poder desbloquear usuarios</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Bloqueo</td>
+<td>RF-076</td>
+<td>Ocultar contenido bloqueado</td>
+<td>El sistema debe ocultar contenido de usuarios bloqueados</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Configuración</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Configuración</td>
+<td>RF-077</td>
+<td>Cerrar sesión</td>
+<td>El usuario debe poder cerrar sesión</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>RF-078</td>
+<td>Eliminar cuenta</td>
+<td>El usuario debe poder eliminar su cuenta</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Seguridad</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Seguridad</td>
+<td>RF-079</td>
+<td>Rate limiting</td>
+<td>El sistema debe implementar rate limiting por usuario</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Seguridad</td>
+<td>RF-080</td>
+<td>Validación de inputs</td>
+<td>El sistema debe validar y sanitizar todos los inputs</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Seguridad</td>
+<td>RF-081</td>
+<td>Protección contra ataques</td>
+<td>El sistema debe implementar protección contra ataques comunes (XSS, CSRF, SQL Injection)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Seguridad</td>
+<td>RF-082</td>
+<td>Logs de auditoría</td>
+<td>El sistema debe registrar actividades importantes en logs de auditoría</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Seguridad</td>
+<td>RF-083</td>
+<td>Encriptación de contraseñas</td>
+<td>El sistema debe encriptar contraseñas con bcrypt</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Seguridad</td>
+<td>RF-084</td>
+<td>Validación de archivos</td>
+<td>El sistema debe validar tamaño y tipo de archivos subidos</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Multimedia</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Multimedia</td>
+<td>RF-085</td>
+<td>Almacenamiento en Cloudinary</td>
+<td>El sistema debe almacenar imágenes en Cloudinary</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Multimedia</td>
+<td>RF-086</td>
+<td>Múltiples tamaños de imagen</td>
+<td>El sistema debe generar múltiples tamaños de imágenes (thumbnail, medium, large)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Multimedia</td>
+<td>RF-087</td>
+<td>Optimización automática</td>
+<td>El sistema debe optimizar imágenes automáticamente</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Multimedia</td>
+<td>RF-088</td>
+<td>Soporte de videos</td>
+<td>El sistema debe soportar videos en publicaciones e historias</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Multimedia</td>
+<td>RF-089</td>
+<td>Validación de videos</td>
+<td>El sistema debe validar duración máxima de videos</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Búsqueda</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Búsqueda</td>
+<td>RF-090</td>
+<td>Buscar usuarios</td>
+<td>Los usuarios deben poder buscar otros usuarios por nombre o ubicación</td>
+<td><span class="badge badge-desarrollo">🔄 En Desarrollo</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Búsqueda</td>
+<td>RF-091</td>
+<td>Buscar mascotas</td>
+<td>Los usuarios deben poder buscar mascotas por nombre, tipo o raza</td>
+<td><span class="badge badge-desarrollo">🔄 En Desarrollo</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</details>
+
+<!-- ========== SUB-SECCIÓN 1.2: RF V2.0 ========== -->
+<details id="seccion-1-2">
+<summary>1.2 REQUISITOS FUNCIONALES V2.0 (Planificados - Febrero 2026)</summary>
+<div class="section-content">
+
+<div class="callout callout-warning">
+<h4>Roadmap de Monetización - V2.0</h4>
+<p>Los siguientes requisitos funcionales están planificados para la versión de monetización (V2.0) con lanzamiento previsto en <strong>Febrero 2026</strong>. Incluyen funcionalidades premium, planes de negocio, sistema de publicidad y herramientas avanzadas para profesionales.</p>
+
+<div class="callout callout-success" style="margin-top: 30px;">
+<h4>✅ Orden de Prioridad de Implementación V2.0</h4>
+<ol style="margin: 15px 0; padding-left: 20px;">
+<li style="margin: 8px 0;"><strong>Suscripciones Premium</strong> - Monetización principal</li>
+<li style="margin: 8px 0;"><strong>Planes de Negocio</strong> - Comisiones del marketplace</li>
+<li style="margin: 8px 0;"><strong>Booking de Servicios</strong> - Cierre del ciclo de transacción</li>
+<li style="margin: 8px 0;"><strong>Alerta de Mascota Perdida</strong> - Diferenciador viral con impacto social</li>
+<li style="margin: 8px 0;"><strong>Sistema de Publicidad</strong> - Ingresos pasivos</li>
+</ol>
+<p style="margin-top: 15px;"><strong>Roadmap estimado</strong>: Febrero 2026</p>
+</div>
+</div>
+
+<h3>Módulo: Publicaciones</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Publicaciones</td>
+<td>RF-032</td>
+<td>Eliminar publicación propia</td>
+<td>El usuario debe poder eliminar sus propias publicaciones</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Publicaciones</td>
+<td>RF-033</td>
+<td>Eliminar comentarios propios</td>
+<td>El usuario debe poder eliminar comentarios en sus propias publicaciones</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Historias</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Historias</td>
+<td>RF-037</td>
+<td>Texto y color en historias</td>
+<td>El usuario debe poder agregar texto y color de fondo a las historias</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Historias</td>
+<td>RF-042</td>
+<td>Indicador de historias no vistas</td>
+<td>El sistema debe mostrar indicador de historias no vistas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Eventos</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Eventos</td>
+<td>RF-054</td>
+<td>Cancelar evento</td>
+<td>El usuario debe poder cancelar eventos</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Notificaciones</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Notificaciones</td>
+<td>RF-059</td>
+<td>Notificación de me gusta</td>
+<td>El sistema debe notificar cuando alguien da "me gusta" a una publicación</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Notificaciones</td>
+<td>RF-060</td>
+<td>Notificación de comentario</td>
+<td>El sistema debe notificar cuando alguien comenta una publicación</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Notificaciones</td>
+<td>RF-061</td>
+<td>Notificación de seguidor</td>
+<td>El sistema debe notificar cuando alguien sigue al usuario</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Configuración</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Configuración</td>
+<td>RF-078</td>
+<td>Cambiar contraseña</td>
+<td>El usuario debe poder cambiar su contraseña</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>RF-079</td>
+<td>Seleccionar tema</td>
+<td>El usuario debe poder seleccionar tema de la aplicación (claro, oscuro, automático)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>RF-080</td>
+<td>Cambiar idioma</td>
+<td>El usuario debe poder cambiar idioma de la aplicación</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>RF-081</td>
+<td>Gestionar notificaciones</td>
+<td>El usuario debe poder gestionar notificaciones</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Suscripciones Premium</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Premium</td>
+<td>RF-095</td>
+<td>Sistema de planes (Free/Premium)</td>
+<td>El sistema debe gestionar dos tipos de planes: Free y Premium (€4.59/mes)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-096</td>
+<td>Integración con Stripe</td>
+<td>El sistema debe integrarse con Stripe para procesar pagos de suscripciones</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-097</td>
+<td>UI de selección de plan</td>
+<td>El usuario debe poder ver y seleccionar un plan de suscripción</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-098</td>
+<td>Checkout de pago</td>
+<td>El usuario debe poder completar el proceso de pago de suscripción Premium</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-099</td>
+<td>Límite de historias en plan Free</td>
+<td>Los usuarios Free deben tener un límite de 3 historias por día</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-100</td>
+<td>Historias ilimitadas en Premium</td>
+<td>Los usuarios Premium deben poder crear historias ilimitadas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-101</td>
+<td>Límite de 1 mascota en plan Free</td>
+<td>Los usuarios Free deben poder tener solo 1 perfil de mascota</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-102</td>
+<td>Hasta 5 mascotas en Premium</td>
+<td>Los usuarios Premium deben poder tener hasta 5 perfiles de mascotas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-103</td>
+<td>Push notifications para Premium</td>
+<td>Los usuarios Premium deben recibir notificaciones push avanzadas de recordatorios de salud</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-105</td>
+<td>Sin publicidad para Premium</td>
+<td>Los usuarios Premium no deben ver publicidad en la aplicación</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-106</td>
+<td>Gestión de suscripción</td>
+<td>El usuario Premium debe poder gestionar su suscripción (ver detalles, cambiar plan, cancelar)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-107</td>
+<td>Renovación automática</td>
+<td>Las suscripciones Premium deben renovarse automáticamente cada mes</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-108</td>
+<td>Cancelación de suscripción</td>
+<td>El usuario debe poder cancelar su suscripción Premium en cualquier momento</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-109</td>
+<td>Período de gracia</td>
+<td>El sistema debe ofrecer un período de gracia de 3 días tras fallo de pago</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-110</td>
+<td>Historial de pagos</td>
+<td>El usuario Premium debe poder ver su historial de pagos y facturas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-111</td>
+<td>Notificación de renovación</td>
+<td>El sistema debe notificar al usuario 3 días antes de la renovación de suscripción</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-112</td>
+<td>Notificación de fallo de pago</td>
+<td>El sistema debe notificar al usuario si falla un pago de suscripción</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Premium</td>
+<td>RF-113</td>
+<td>Downgrade automático</td>
+<td>El sistema debe bajar automáticamente a plan Free tras cancelación o fallo de pago prolongado</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Planes de Negocio</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Negocio</td>
+<td>RF-114</td>
+<td>Sistema de planes de negocio</td>
+<td>El sistema debe gestionar tres planes de negocio: Básico (€0), Pro (€26.68/mes) y Premium (€91.08/mes)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-115</td>
+<td>Comisión por venta - Básico</td>
+<td>El sistema debe cobrar 15% de comisión en ventas para usuarios con plan Básico</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-116</td>
+<td>Comisión por venta - Pro</td>
+<td>El sistema debe cobrar 10% de comisión en ventas para usuarios con plan Pro</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-117</td>
+<td>Comisión por venta - Premium</td>
+<td>El sistema debe cobrar 5% de comisión en ventas para usuarios con plan Premium</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-118</td>
+<td>Límite de fotos por plan</td>
+<td>El plan Básico permite 5 fotos, Pro 20 fotos por servicio/evento</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-120</td>
+<td>UI de selección de plan de negocio</td>
+<td>El usuario debe poder ver y seleccionar un plan de negocio</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-121</td>
+<td>Upgrade de plan de negocio</td>
+<td>El usuario debe poder hacer upgrade de su plan de negocio (Básico → Pro → Premium)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-122</td>
+<td>Downgrade de plan de negocio</td>
+<td>El usuario debe poder hacer downgrade de su plan de negocio con confirmación</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-123</td>
+<td>Dashboard de negocio</td>
+<td>Los usuarios con plan de negocio deben tener acceso a un dashboard con estadísticas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-124</td>
+<td>Historial de comisiones</td>
+<td>El usuario debe poder ver el historial de comisiones cobradas por el sistema</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-125</td>
+<td>Sistema de facturación</td>
+<td>El sistema debe generar facturas mensuales para los planes de negocio</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-126</td>
+<td>Notificación de venta</td>
+<td>El sistema debe notificar al negocio cuando se registra una venta</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-127</td>
+<td>Reporte de ingresos</td>
+<td>Los negocios deben poder generar reportes de ingresos y comisiones</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Negocio</td>
+<td>RF-128</td>
+<td>Integración con sistema de pagos</td>
+<td>El sistema debe integrarse con pasarela de pagos para cobrar comisiones automáticamente</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Sistema de Publicidad</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Publicidad</td>
+<td>RF-129</td>
+<td>Mostrar anuncios en feed Free</td>
+<td>El sistema debe mostrar anuncios publicitarios en el feed para usuarios Free</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-130</td>
+<td>Integración con AdMob</td>
+<td>El sistema debe integrarse con Google AdMob para servir anuncios</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-131</td>
+<td>Anuncios nativos en feed</td>
+<td>Los anuncios deben aparecer como posts nativos cada 5 publicaciones en el feed</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-132</td>
+<td>Banner ads en servicios</td>
+<td>El sistema debe mostrar banner ads en la vista de mapa de servicios para usuarios Free</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-133</td>
+<td>Control de frecuencia de ads</td>
+<td>El sistema debe controlar la frecuencia de anuncios para no saturar al usuario</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-134</td>
+<td>Publicidad de negocios Premium</td>
+<td>Los negocios con plan Premium deben poder promocionar sus servicios en el feed</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-135</td>
+<td>Crear campaña publicitaria</td>
+<td>Los negocios Premium deben poder crear campañas publicitarias con presupuesto y duración</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-136</td>
+<td>Targeting por ubicación</td>
+<td>Las campañas publicitarias deben poder segmentarse por ubicación geográfica</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-137</td>
+<td>Targeting por tipo de mascota</td>
+<td>Las campañas publicitarias deben poder segmentarse por tipo de mascota del usuario</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-138</td>
+<td>Dashboard de campaña</td>
+<td>Los negocios deben poder ver estadísticas de sus campañas publicitarias (impresiones, clics, CTR)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-139</td>
+<td>Pausar/Reanudar campaña</td>
+<td>Los negocios deben poder pausar y reanudar campañas publicitarias</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-140</td>
+<td>Presupuesto diario de campaña</td>
+<td>Las campañas publicitarias deben tener un presupuesto diario configurable</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-141</td>
+<td>Sistema de pago por impresión</td>
+<td>El sistema debe cobrar por CPM (costo por mil impresiones) en campañas publicitarias</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-142</td>
+<td>Reportar anuncio</td>
+<td>Los usuarios deben poder reportar anuncios inapropiados</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-143</td>
+<td>Historial de inversión</td>
+<td>Los negocios deben poder ver el historial de inversión en publicidad</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Publicidad</td>
+<td>RF-144</td>
+<td>ROI de campañas</td>
+<td>El sistema debe calcular y mostrar el ROI (retorno de inversión) de las campañas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Badges y Analytics</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Analytics</td>
+<td>RF-145</td>
+<td>Analytics de perfil Premium</td>
+<td>Los usuarios Premium deben tener acceso a analytics de su perfil (vistas, engagement, alcance)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Analytics</td>
+<td>RF-146</td>
+<td>Vistas de perfil</td>
+<td>El sistema debe rastrear y mostrar el número de vistas del perfil del usuario</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Analytics</td>
+<td>RF-147</td>
+<td>Engagement por publicación</td>
+<td>Los usuarios Premium deben ver métricas de engagement (likes, comentarios, shares) por publicación</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Analytics</td>
+<td>RF-148</td>
+<td>Alcance de publicaciones</td>
+<td>El sistema debe calcular y mostrar el alcance de cada publicación (usuarios únicos alcanzados)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Analytics</td>
+<td>RF-149</td>
+<td>Gráficos de crecimiento</td>
+<td>Los usuarios Premium deben ver gráficos de crecimiento de seguidores y engagement</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Analytics</td>
+<td>RF-153</td>
+<td>Badge verificado para usuarios</td>
+<td>El sistema debe mostrar badge verificado azul para usuarios Premium</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Analytics</td>
+<td>RF-154</td>
+<td>Badge verificado para negocios</td>
+<td>El sistema debe mostrar badge verificado dorado para negocios verificados</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Analytics</td>
+<td>RF-155</td>
+<td>Badge de profesional veterinario</td>
+<td>El sistema debe mostrar badge especial para veterinarios verificados</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Analytics</td>
+<td>RF-156</td>
+<td>Badge de criador verificado</td>
+<td>El sistema debe mostrar badge especial para criadores verificados</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Posicionamiento</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Posicionamiento</td>
+<td>RF-158</td>
+<td>Destacar en búsqueda - Plan Pro</td>
+<td>Los servicios con plan Pro deben aparecer destacados en resultados de búsqueda</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Posicionamiento</td>
+<td>RF-159</td>
+<td>Posicionamiento TOP - Plan Premium</td>
+<td>Los servicios con plan Premium deben aparecer en posiciones TOP del mapa y listados</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Posicionamiento</td>
+<td>RF-160</td>
+<td>Indicador de destacado</td>
+<td>Los servicios destacados deben tener un indicador visual (estrella o badge)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Booking de Servicios</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Booking</td>
+<td>RF-161</td>
+<td>Sistema de reservas</td>
+<td>Los usuarios deben poder reservar servicios directamente desde la app</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Booking</td>
+<td>RF-162</td>
+<td>Calendario de disponibilidad</td>
+<td>Los proveedores deben poder configurar su calendario de disponibilidad</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Booking</td>
+<td>RF-163</td>
+<td>Confirmación de reserva</td>
+<td>El proveedor debe poder confirmar o rechazar reservas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Booking</td>
+<td>RF-164</td>
+<td>Notificación de reserva</td>
+<td>Tanto el cliente como el proveedor deben recibir notificaciones sobre reservas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Booking</td>
+<td>RF-165</td>
+<td>Historial de reservas</td>
+<td>Los usuarios deben poder ver su historial de reservas (realizadas y recibidas)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Soporte Prioritario</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Soporte</td>
+<td>RF-176</td>
+<td>Canal de soporte Premium</td>
+<td>Los usuarios Premium y negocios deben tener acceso a un canal de soporte prioritario</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Búsqueda Avanzada</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Búsqueda</td>
+<td>RF-185</td>
+<td>Filtros avanzados</td>
+<td>La búsqueda debe tener filtros avanzados (ubicación, tipo de mascota, verificado, etc.)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Autenticación con Terceros</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Autenticación</td>
+<td>RF-190</td>
+<td>Login con Google</td>
+<td>El usuario debe poder iniciar sesión usando su cuenta de Google (OAuth 2.0)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-191</td>
+<td>Login con Apple</td>
+<td>El usuario debe poder iniciar sesión usando Apple Sign-In</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-192</td>
+<td>Vincular cuenta social</td>
+<td>El usuario debe poder vincular su cuenta existente con Google/Apple desde configuración</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-193</td>
+<td>Registro con cuenta social</td>
+<td>El usuario debe poder registrarse directamente usando Google/Apple sin email/contraseña</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Alerta de Mascota Perdida</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mascotas Perdidas</td>
+<td>RF-201</td>
+<td>Marcar mascota como perdida</td>
+<td>El dueño debe poder marcar una mascota como "Perdida" desde el perfil de la mascota</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mascotas Perdidas</td>
+<td>RF-202</td>
+<td>Alerta a usuarios cercanos</td>
+<td>El sistema debe enviar alerta push a usuarios dentro de un radio configurable cuando se marca una mascota como perdida</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mascotas Perdidas</td>
+<td>RF-203</td>
+<td>Información de contacto</td>
+<td>La alerta de mascota perdida debe incluir foto, descripción, ubicación aproximada y datos de contacto del dueño</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mascotas Perdidas</td>
+<td>RF-204</td>
+<td>Mapa de mascotas perdidas</td>
+<td>El sistema debe mostrar un mapa con todas las mascotas perdidas activas en la zona del usuario</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Mascotas Perdidas</td>
+<td>RF-205</td>
+<td>Reportar avistamiento</td>
+<td>Los usuarios deben poder reportar un avistamiento de una mascota perdida con foto y ubicación</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mascotas Perdidas</td>
+<td>RF-206</td>
+<td>Notificación de avistamiento</td>
+<td>El dueño debe recibir notificación cuando alguien reporta un avistamiento de su mascota perdida</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mascotas Perdidas</td>
+<td>RF-207</td>
+<td>Marcar como encontrada</td>
+<td>El dueño debe poder marcar la mascota como "Encontrada" para desactivar las alertas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mascotas Perdidas</td>
+<td>RF-208</td>
+<td>Historial de mascotas perdidas</td>
+<td>El sistema debe mantener un historial de mascotas perdidas y encontradas para estadísticas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Valoraciones y Reseñas de Servicios</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reseñas</td>
+<td>RF-209</td>
+<td>Dejar valoración</td>
+<td>El usuario debe poder dejar una valoración (1-5 estrellas) a un servicio que ha utilizado</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Reseñas</td>
+<td>RF-210</td>
+<td>Escribir reseña</td>
+<td>El usuario debe poder escribir una reseña de texto (máximo 500 caracteres) y agregar hasta 3 fotos</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Reseñas</td>
+<td>RF-212</td>
+<td>Editar valoración</td>
+<td>El usuario debe poder editar su valoración y reseña dentro de 30 días de haberla publicado</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Reseñas</td>
+<td>RF-213</td>
+<td>Eliminar valoración propia</td>
+<td>El usuario debe poder eliminar su propia valoración y reseña en cualquier momento</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Reseñas</td>
+<td>RF-214</td>
+<td>Calificación promedio</td>
+<td>El sistema debe calcular y mostrar la calificación promedio del servicio (1-5 estrellas)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Reseñas</td>
+<td>RF-215</td>
+<td>Número total de reseñas</td>
+<td>El perfil del servicio debe mostrar el número total de reseñas recibidas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Reseñas</td>
+<td>RF-216</td>
+<td>Ordenar reseñas</td>
+<td>El usuario debe poder ordenar reseñas por: Más recientes, Más útiles, Mejor valoradas, Peor valoradas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Reseñas</td>
+<td>RF-217</td>
+<td>Marcar reseña como útil</td>
+<td>Los usuarios deben poder marcar reseñas de otros como "Útil"</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Reseñas</td>
+<td>RF-218</td>
+<td>Responder a reseñas (negocio)</td>
+<td>El dueño del servicio debe poder responder a las reseñas de los clientes</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Reseñas</td>
+<td>RF-219</td>
+<td>Reportar reseña inapropiada</td>
+<td>Los usuarios deben poder reportar reseñas que consideren spam o inapropiadas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Reseñas</td>
+<td>RF-220</td>
+<td>Verificar compra</td>
+<td>El sistema debe verificar que el usuario ha utilizado el servicio antes de permitir valoración</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Unicidad de Nombres</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unicidad</td>
+<td>RF-221</td>
+<td>Username único de usuario</td>
+<td>El nombre de usuario (handle) de cada perfil de usuario y mascota debe ser único en toda la plataforma</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Unicidad</td>
+<td>RF-222</td>
+<td>Validación de username</td>
+<td>El sistema debe validar en tiempo real si el username está disponible al registrarse o cambiarlo</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Unicidad</td>
+<td>RF-224</td>
+<td>Formato de username</td>
+<td>Los usernames deben seguir un formato específico (solo letras, números, guión bajo, mínimo 3 caracteres)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Unicidad</td>
+<td>RF-225</td>
+<td>Cambio de username</td>
+<td>El usuario debe poder cambiar su username (limitado a 1 vez cada 30 días para evitar abuso)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Privacidad de Ubicación</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Privacidad</td>
+<td>RF-226</td>
+<td>Ubicación aproximada</td>
+<td>La ubicación exacta del usuario nunca debe compartirse públicamente, solo ciudad o región</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Privacidad</td>
+<td>RF-227</td>
+<td>Distancias relativas</td>
+<td>Las funciones de cercanía deben mostrar distancias relativas (ej. "a menos de 1 km") en lugar de coordenadas precisas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Privacidad</td>
+<td>RF-228</td>
+<td>Ocultar ubicación en posts</td>
+<td>El usuario debe poder elegir si mostrar u ocultar la ubicación al crear una publicación o historia</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Privacidad</td>
+<td>RF-229</td>
+<td>Configuración de privacidad de ubicación</td>
+<td>El usuario debe poder configurar el nivel de privacidad de su ubicación (Pública/Ciudad/Oculta)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Privacidad</td>
+<td>RF-230</td>
+<td>Zona segura</td>
+<td>El usuario debe poder definir una "zona segura" (ej. su hogar) que nunca se muestra en el mapa</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Integración con Collar de Actividad</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Wearables</td>
+<td>RF-231</td>
+<td>Sincronizar collar de actividad</td>
+<td>El usuario debe poder sincronizar el collar de actividad de su mascota (Fitbark, Whistle, etc.) con la app</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Wearables</td>
+<td>RF-232</td>
+<td>Monitoreo de ejercicio</td>
+<td>El sistema debe mostrar las estadísticas de ejercicio diario de la mascota (pasos, distancia, calorías)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Wearables</td>
+<td>RF-233</td>
+<td>Monitoreo de sueño</td>
+<td>El sistema debe mostrar las estadísticas de sueño de la mascota (horas dormidas, calidad del sueño)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Wearables</td>
+<td>RF-234</td>
+<td>Objetivos de actividad</td>
+<td>El usuario debe poder establecer objetivos de actividad diaria para su mascota</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Wearables</td>
+<td>RF-235</td>
+<td>Alertas de inactividad</td>
+<td>El sistema debe alertar al usuario si la mascota está inactiva por un período prolongado</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Wearables</td>
+<td>RF-236</td>
+<td>Historial de actividad</td>
+<td>El usuario debe poder ver el historial de actividad de su mascota (gráficas semanales/mensuales)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Wearables</td>
+<td>RF-237</td>
+<td>Exportar datos de actividad</td>
+<td>El usuario debe poder exportar los datos de actividad de la mascota en formato CSV/PDF</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Registro de Paseos</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Paseos</td>
+<td>RF-250</td>
+<td>Iniciar registro de paseo</td>
+<td>El usuario debe poder iniciar el registro de un paseo usando el GPS del teléfono</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Paseos</td>
+<td>RF-251</td>
+<td>Pausar/Reanudar paseo</td>
+<td>El usuario debe poder pausar y reanudar el registro del paseo</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Paseos</td>
+<td>RF-252</td>
+<td>Finalizar paseo</td>
+<td>El usuario debe poder finalizar el paseo y ver el resumen (duración, distancia, ruta)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Paseos</td>
+<td>RF-253</td>
+<td>Mapa de ruta</td>
+<td>El sistema debe mostrar el mapa con la ruta completa del paseo realizado</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Paseos</td>
+<td>RF-254</td>
+<td>Estadísticas de paseo</td>
+<td>El sistema debe calcular y mostrar: duración, distancia total, velocidad promedio, calorías quemadas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Paseos</td>
+<td>RF-255</td>
+<td>Historial de paseos</td>
+<td>El usuario debe poder ver el historial de todos los paseos realizados con su mascota</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Paseos</td>
+<td>RF-256</td>
+<td>Compartir paseo</td>
+<td>El usuario debe poder compartir el paseo realizado como publicación en el feed</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Paseos</td>
+<td>RF-257</td>
+<td>Objetivos de paseo</td>
+<td>El usuario debe poder establecer objetivos semanales de paseos</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Paseos</td>
+<td>RF-258</td>
+<td>Notificación de objetivo</td>
+<td>El sistema debe notificar al usuario cuando alcance sus objetivos de paseo semanales</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Paseos</td>
+<td>RF-259</td>
+<td>Integración con collar</td>
+<td>Los datos de paseos deben sincronizarse con el collar de actividad si está vinculado</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Métricas de Negocio</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Métricas</td>
+<td>RF-186</td>
+<td>Dashboard de KPIs</td>
+<td>Los administradores deben tener acceso a dashboard con KPIs de la plataforma</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Métricas</td>
+<td>RF-187</td>
+<td>Reportes de ingresos</td>
+<td>El sistema debe generar reportes mensuales de ingresos por suscripciones y comisiones</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</details>
+
+<!-- ========== SUB-SECCIÓN 1.3: PENDIENTES DE APROBACIÓN ========== -->
+<details id="seccion-1-3">
+<summary>1.3 REQUISITOS FUNCIONALES - PENDIENTES DE APROBACIÓN</summary>
+<div class="section-content">
+
+<div class="callout callout-warning">
+<h4>⚠️ Requisitos Pendientes de Evaluación</h4>
+<p>Los siguientes requisitos funcionales han sido identificados pero requieren <strong>aprobación adicional</strong> antes de ser incluidos en el roadmap oficial. Estos requisitos presentan complejidad técnica significativa, requieren partnerships externos, o están fuera del core value de una red social de mascotas.</p>
+<p><strong>Estado</strong>: En revisión por el equipo de producto.</p>
+</div>
+
+<h3>Módulo: Gamificación</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gamificación</td>
+<td>RF-178</td>
+<td>Sistema de logros</td>
+<td>El sistema debe implementar logros/achievements para incentivar el engagement</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Gamificación</td>
+<td>RF-179</td>
+<td>Niveles de usuario</td>
+<td>Los usuarios deben poder subir de nivel según su actividad en la plataforma</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Gamificación</td>
+<td>RF-180</td>
+<td>Recompensas por actividad</td>
+<td>El sistema debe otorgar recompensas virtuales por completar ciertas acciones</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Gamificación</td>
+<td>RF-181</td>
+<td>Leaderboard semanal</td>
+<td>El sistema debe mostrar un ranking semanal de usuarios más activos</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Baja</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Verificación Profesional</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Verificación</td>
+<td>RF-172</td>
+<td>Solicitud de verificación</td>
+<td>Los profesionales (veterinarios, criadores) deben poder solicitar verificación de cuenta</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Verificación</td>
+<td>RF-173</td>
+<td>Subir documentación</td>
+<td>Los solicitantes deben poder subir documentación (licencias, certificados)</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Verificación</td>
+<td>RF-174</td>
+<td>Panel de revisión admin</td>
+<td>Los administradores deben poder revisar y aprobar/rechazar solicitudes de verificación</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Verificación</td>
+<td>RF-175</td>
+<td>Notificación de aprobación</td>
+<td>El sistema debe notificar al usuario cuando su verificación es aprobada o rechazada</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Baja</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Gestión de Participantes en Eventos</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Eventos</td>
+<td>RF-194</td>
+<td>Inscripción a eventos</td>
+<td>El usuario debe poder apuntarse/inscribirse a un evento público</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-195</td>
+<td>Cancelar inscripción</td>
+<td>El usuario debe poder cancelar su inscripción a un evento antes de la fecha del evento</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-196</td>
+<td>Lista de participantes (organizador)</td>
+<td>El creador de un evento debe poder ver la lista completa de participantes inscritos</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-197</td>
+<td>Aprobar/Rechazar participantes</td>
+<td>El creador de un evento privado debe poder aprobar o rechazar solicitudes de inscripción</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-198</td>
+<td>Límite de participantes</td>
+<td>El creador debe poder establecer un número máximo de participantes para el evento</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-199</td>
+<td>Notificación de nuevo participante</td>
+<td>El creador debe recibir notificación cuando alguien se inscribe a su evento</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Eventos</td>
+<td>RF-200</td>
+<td>Estado de inscripción</td>
+<td>El sistema debe mostrar si el usuario ya está inscrito en un evento</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: E-Commerce (Tienda de Productos)</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E-Commerce</td>
+<td>RF-238</td>
+<td>Catálogo de productos</td>
+<td>El usuario debe poder explorar un catálogo de productos para mascotas (comida, juguetes, accesorios)</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>E-Commerce</td>
+<td>RF-239</td>
+<td>Filtros de productos</td>
+<td>El usuario debe poder filtrar productos por categoría, precio, marca, tipo de mascota</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>E-Commerce</td>
+<td>RF-240</td>
+<td>Detalles de producto</td>
+<td>El usuario debe poder ver detalles completos de un producto (descripción, precio, fotos, reseñas)</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>E-Commerce</td>
+<td>RF-241</td>
+<td>Agregar al carrito</td>
+<td>El usuario debe poder agregar productos al carrito de compras</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>E-Commerce</td>
+<td>RF-242</td>
+<td>Gestionar carrito</td>
+<td>El usuario debe poder ver, modificar y eliminar productos del carrito</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>E-Commerce</td>
+<td>RF-243</td>
+<td>Proceso de checkout</td>
+<td>El usuario debe poder completar el proceso de compra con dirección de envío y método de pago</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>E-Commerce</td>
+<td>RF-244</td>
+<td>Métodos de pago</td>
+<td>El sistema debe soportar tarjeta de crédito/débito, PayPal, y otros métodos de pago</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>E-Commerce</td>
+<td>RF-245</td>
+<td>Seguimiento de pedido</td>
+<td>El usuario debe poder ver el estado de su pedido (procesando, enviado, entregado)</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>E-Commerce</td>
+<td>RF-246</td>
+<td>Historial de compras</td>
+<td>El usuario debe poder ver su historial completo de compras</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>E-Commerce</td>
+<td>RF-247</td>
+<td>Favoritos de productos</td>
+<td>El usuario debe poder marcar productos como favoritos para comprar después</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>E-Commerce</td>
+<td>RF-248</td>
+<td>Reseñas de productos</td>
+<td>El usuario debe poder dejar reseñas y valoraciones de productos comprados</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>E-Commerce</td>
+<td>RF-249</td>
+<td>Comisión de marketplace</td>
+<td>El sistema debe aplicar una comisión del 10-15% a las ventas de productos de terceros</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Sistema de Match</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-260</td>
+<td>Activar/desactivar modo match</td>
+<td>El usuario puede activar o desactivar el modo match en configuración</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-261</td>
+<td>Configurar preferencias de match</td>
+<td>El usuario puede configurar preferencias (especie, raza, edad, ubicación) para el match</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-262</td>
+<td>Swipe derecha (like)</td>
+<td>El usuario puede dar swipe derecha para indicar interés en una mascota</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-263</td>
+<td>Swipe izquierda (pasar)</td>
+<td>El usuario puede dar swipe izquierda para pasar a la siguiente mascota</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-264</td>
+<td>Notificación de match mutuo</td>
+<td>El sistema notifica cuando hay un match mutuo entre dos mascotas</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-265</td>
+<td>Chat exclusivo de match</td>
+<td>Los usuarios con match pueden iniciar un chat privado</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-266</td>
+<td>Deshacer último swipe</td>
+<td>El usuario puede deshacer el último swipe realizado</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-267</td>
+<td>Ver perfil completo antes de decidir</td>
+<td>El usuario puede ver el perfil completo de una mascota antes de hacer swipe</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Verificación de Cuenta en Registro</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Verificación</td>
+<td>RF-268</td>
+<td>Envío de código verificación email</td>
+<td>El sistema envía un código de 6 dígitos al email del usuario durante el registro</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Verificación</td>
+<td>RF-269</td>
+<td>Ingreso de código 6 dígitos</td>
+<td>El usuario debe ingresar el código de 6 dígitos recibido por email para verificar su cuenta</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Verificación</td>
+<td>RF-270</td>
+<td>Reenvío de código</td>
+<td>El usuario puede solicitar el reenvío del código de verificación si no lo recibió</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Verificación</td>
+<td>RF-271</td>
+<td>Expiración de código (15 min)</td>
+<td>El código de verificación expira después de 15 minutos por seguridad</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Solicitudes de Mensajes</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mensajería</td>
+<td>RF-272</td>
+<td>Bandeja de solicitudes de mensaje</td>
+<td>El usuario tiene una bandeja separada para ver solicitudes de mensaje de usuarios no seguidos</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Mensajería</td>
+<td>RF-273</td>
+<td>Aceptar solicitud de mensaje</td>
+<td>El usuario puede aceptar una solicitud de mensaje, habilitando el chat</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mensajería</td>
+<td>RF-274</td>
+<td>Rechazar solicitud de mensaje</td>
+<td>El usuario puede rechazar una solicitud de mensaje sin bloquear al usuario</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Mensajería</td>
+<td>RF-275</td>
+<td>Configurar quién puede enviar mensajes</td>
+<td>El usuario puede configurar si todos, solo seguidores, o nadie puede enviarle mensajes directos</td>
+<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</details>
+
+<hr>
+</div>
+</details>
+
+<!-- SECCIÓN 2: REQUISITOS NO FUNCIONALES -->
+<details id="seccion-2">
+<summary>2. REQUISITOS NO FUNCIONALES</summary>
+<div class="section-content">
+
+<p>Los requisitos no funcionales definen las características de calidad del sistema que no están directamente relacionadas con funcionalidades específicas, sino con aspectos como seguridad, rendimiento, usabilidad y mantenibilidad.</p>
+
+<table>
+<thead>
+<tr>
+<th>Tipo de Requisito</th>
+<th>ID</th>
+<th>Nombre</th>
+<th>Descripción</th>
+<th>Solución Propuesta</th>
+</tr>
+</thead>
+<tbody>
+
+<!-- SEGURIDAD -->
+<tr>
+<td rowspan="5"><strong>Seguridad</strong></td>
+<td>RNF-001</td>
+<td>Autenticación segura</td>
+<td>El sistema debe implementar autenticación segura con tokens JWT</td>
+<td>JWT tokens con expiración de 7 días, refresh tokens, almacenamiento seguro en dispositivo</td>
+</tr>
+<tr>
+<td>RNF-002</td>
+<td>Protección contra ataques</td>
+<td>El sistema debe protegerse contra ataques comunes (XSS, CSRF, SQL Injection)</td>
+<td>Helmet headers, sanitización de inputs, prepared statements en queries, CORS configurado</td>
+</tr>
+<tr>
+<td>RNF-003</td>
+<td>Rate limiting</td>
+<td>El sistema debe limitar la cantidad de peticiones por usuario</td>
+<td>Rate limiting per-user: 100 requests/15 min (login: 5/15 min), implementado en backend</td>
+</tr>
+<tr>
+<td>RNF-004</td>
+<td>Audit logging</td>
+<td>El sistema debe registrar actividades críticas en logs de auditoría</td>
+<td>Sistema de auditoría que registra login, cambios de contraseña, eliminación de cuenta</td>
+</tr>
+<tr>
+<td>RNF-005</td>
+<td>Almacenamiento seguro de contraseñas</td>
+<td>Las contraseñas deben almacenarse de forma segura</td>
+<td>Bcrypt hashing con salt, mínimo 8 caracteres con validación de fortaleza</td>
+</tr>
+
+<!-- RENDIMIENTO -->
+<tr>
+<td rowspan="5"><strong>Rendimiento</strong></td>
+<td>RNF-006</td>
+<td>Tiempo de carga del feed</td>
+<td>El feed principal debe cargar en menos de 2 segundos</td>
+<td>Paginación con 10 posts por página, scroll infinito, caché en memoria con GetX</td>
+</tr>
+<tr>
+<td>RNF-007</td>
+<td>Optimización de imágenes</td>
+<td>Las imágenes deben optimizarse para reducir tiempo de carga</td>
+<td>Cloudinary con múltiples tamaños (small, medium, large), formato WebP, lazy loading</td>
+</tr>
+<tr>
+<td>RNF-008</td>
+<td>Carga de videos</td>
+<td>Los videos deben cargarse de forma optimizada</td>
+<td>Streaming con compresión automática, formato MP4, límite de duración 60 segundos</td>
+</tr>
+<tr>
+<td>RNF-009</td>
+<td>Caché de datos</td>
+<td>Los datos frecuentemente accedidos deben cachearse</td>
+<td>GetX para estado reactivo en memoria, CachedNetworkImage para imágenes</td>
+</tr>
+<tr>
+<td>RNF-010</td>
+<td>Respuesta de API</td>
+<td>Las APIs deben responder en menos de 500ms para operaciones simples</td>
+<td>Índices en base de datos, queries optimizadas, paginación en listados</td>
+</tr>
+
+<!-- USABILIDAD -->
+<tr>
+<td rowspan="6"><strong>Usabilidad</strong></td>
+<td>RNF-011</td>
+<td>Interfaz en español</td>
+<td>El 100% de la interfaz debe estar en español</td>
+<td>Todos los textos, mensajes de error y contenido UI en español</td>
+</tr>
+<tr>
+<td>RNF-012</td>
+<td>Diseño responsivo</td>
+<td>La aplicación debe adaptarse a diferentes tamaños de pantalla</td>
+<td>Flutter responsive design, MediaQuery para adaptación dinámica</td>
+</tr>
+<tr>
+<td>RNF-013</td>
+<td>Accesibilidad</td>
+<td>La aplicación debe ser accesible con contraste y tamaños de fuente legibles</td>
+<td>Contraste mínimo WCAG AA, fuentes escalables, semantic colors</td>
+</tr>
+<tr>
+<td>RNF-014</td>
+<td>Feedback visual</td>
+<td>Las acciones del usuario deben tener feedback visual inmediato</td>
+<td>Animaciones micro-interactions, haptic feedback, bouncy buttons, loading states</td>
+</tr>
+<tr>
+<td>RNF-015</td>
+<td>Dark mode</td>
+<td>La aplicación debe soportar modo oscuro</td>
+<td>Sistema completo de temas (claro, oscuro, automático) con GetX ThemeController</td>
+</tr>
+<tr>
+<td>RNF-016</td>
+<td>Mensajes de error claros</td>
+<td>Los mensajes de error deben ser comprensibles para el usuario</td>
+<td>Mensajes en español, informativos y con sugerencias de solución</td>
+</tr>
+
+<!-- COMPATIBILIDAD -->
+<tr>
+<td rowspan="3"><strong>Compatibilidad</strong></td>
+<td>RNF-017</td>
+<td>Plataformas móviles</td>
+<td>La aplicación debe funcionar en Android e iOS</td>
+<td>Flutter multiplataforma: Android 6.0+ (API 23+) e iOS 12.0+</td>
+</tr>
+<tr>
+<td>RNF-018</td>
+<td>Conectividad</td>
+<td>La aplicación debe funcionar con conectividad intermitente</td>
+<td>Caché de datos para lectura offline, manejo de errores de red con retry</td>
+</tr>
+<tr>
+<td>RNF-019</td>
+<td>Versiones de backend</td>
+<td>El backend debe mantener compatibilidad con versiones anteriores de la app</td>
+<td>Versionado de API, deprecation warnings, breaking changes controlados</td>
+</tr>
+
+<!-- ESCALABILIDAD -->
+<tr>
+<td rowspan="3"><strong>Escalabilidad</strong></td>
+<td>RNF-020</td>
+<td>Base de datos escalable</td>
+<td>La base de datos debe soportar crecimiento de millones de registros</td>
+<td>PostgreSQL con índices optimizados, particionamiento de tablas grandes</td>
+</tr>
+<tr>
+<td>RNF-021</td>
+<td>API escalable</td>
+<td>La arquitectura del backend debe ser escalable horizontalmente</td>
+<td>NestJS con arquitectura modular, stateless API, balanceo de carga posible</td>
+</tr>
+<tr>
+<td>RNF-022</td>
+<td>Almacenamiento de medios escalable</td>
+<td>El almacenamiento de imágenes y videos debe escalar automáticamente</td>
+<td>Cloudinary con CDN global, almacenamiento ilimitado, auto-scaling</td>
+</tr>
+
+<!-- DISPONIBILIDAD -->
+<tr>
+<td rowspan="2"><strong>Disponibilidad</strong></td>
+<td>RNF-023</td>
+<td>Uptime objetivo</td>
+<td>El sistema debe tener un uptime mínimo del 99.5%</td>
+<td>Monitoreo con health checks, redundancia de servicios, plan de contingencia</td>
+</tr>
+<tr>
+<td>RNF-024</td>
+<td>Manejo de errores</td>
+<td>Los errores no deben provocar crashes de la aplicación</td>
+<td>Error boundaries, try-catch en operaciones críticas, mensajes informativos</td>
+</tr>
+
+<!-- NAVEGACIÓN -->
+<tr>
+<td rowspan="3"><strong>Navegación</strong></td>
+<td>RNF-025</td>
+<td>Bottom navigation</td>
+<td>La navegación principal debe ser intuitiva y accesible</td>
+<td>Bottom navigation bar con 5 tabs principales (Home, Explorar, Crear, Notificaciones, Perfil)</td>
+</tr>
+<tr>
+<td>RNF-026</td>
+<td>Persistencia de estado</td>
+<td>El estado de navegación debe mantenerse al cambiar de tabs</td>
+<td>GetX para persistencia de estado, scroll position guardada por tab</td>
+</tr>
+<tr>
+<td>RNF-027</td>
+<td>Transiciones fluidas</td>
+<td>Las transiciones entre pantallas deben ser suaves</td>
+<td>Animaciones nativas de Flutter, transiciones con Hero widgets, duración 300ms</td>
+</tr>
+
+<!-- HARDWARE -->
+<tr>
+<td rowspan="3"><strong>Hardware</strong></td>
+<td>RNF-028</td>
+<td>Acceso a cámara</td>
+<td>La aplicación debe acceder a la cámara del dispositivo</td>
+<td>Permisos de cámara con image_picker, soporte para fotos y videos</td>
+</tr>
+<tr>
+<td>RNF-029</td>
+<td>Geolocalización</td>
+<td>La aplicación debe acceder al GPS para funcionalidades de mapa</td>
+<td>Permisos de ubicación, Google Maps integration para servicios y eventos</td>
+</tr>
+<tr>
+<td>RNF-030</td>
+<td>Almacenamiento local</td>
+<td>La aplicación debe tener espacio para caché y datos temporales</td>
+<td>Mínimo 100MB disponibles, limpieza automática de caché antiguo</td>
+</tr>
+
+<!-- MANTENIBILIDAD -->
+<tr>
+<td rowspan="3"><strong>Mantenibilidad</strong></td>
+<td>RNF-031</td>
+<td>Código documentado</td>
+<td>El código debe estar documentado en funciones críticas</td>
+<td>Comentarios en funciones complejas, README con arquitectura, CLAUDE.md con guías</td>
+</tr>
+<tr>
+<td>RNF-032</td>
+<td>Arquitectura limpia</td>
+<td>El código debe seguir principios de arquitectura limpia</td>
+<td>Separación frontend (Flutter) y backend (NestJS), GetX para estado, Atomic Design</td>
+</tr>
+<tr>
+<td>RNF-033</td>
+<td>Control de versiones</td>
+<td>El código debe versionarse correctamente</td>
+<td>Git con conventional commits, branches feature/bugfix, protección de main</td>
+</tr>
+
+</tbody>
+</table>
+
+<div class="callout callout-success">
+<h4>Cumplimiento de Requisitos No Funcionales</h4>
+<p>Petos App cumple con el <strong>100% de los requisitos no funcionales</strong> en la versión MVP actual:</p>
+<ul>
+<li>✅ <strong>Seguridad</strong>: JWT auth, rate limiting, bcrypt, audit logging implementados</li>
+<li>✅ <strong>Rendimiento</strong>: Feed < 2s, imágenes optimizadas con Cloudinary, caché con GetX</li>
+<li>✅ <strong>Usabilidad</strong>: 100% en español, dark mode, feedback visual, diseño responsivo</li>
+<li>✅ <strong>Compatibilidad</strong>: Android 6.0+, iOS 12.0+, manejo de conectividad</li>
+<li>✅ <strong>Escalabilidad</strong>: PostgreSQL, NestJS modular, Cloudinary CDN</li>
+<li>✅ <strong>Disponibilidad</strong>: Error handling, health checks, uptime 99.5%+</li>
+</ul>
+</div>
+
+</div>
+</details>
+
+
+<!-- SECCIÓN 3: PANTALLAS Y FUNCIONALIDADES -->
+<details id="seccion-3">
+<summary>3. PANTALLAS Y FUNCIONALIDADES</summary>
+<div class="section-content">
+<h3>2.1 Pantalla de Inicio de Sesión (LoginView)</h3>
+<p><strong>Ruta</strong>: <code>/login</code></p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li>Campo de entrada para email con validación de formato</li>
+<li>Campo de entrada para contraseña con opción de mostrar/ocultar</li>
+<li>Botón &quot;Iniciar Sesión&quot; que valida credenciales</li>
+<li>Enlace &quot;¿Olvidaste tu contraseña?&quot; para recuperación</li>
+<li>Enlace &quot;Crear cuenta&quot; para ir a registro</li>
+<li>Validación en tiempo real de campos</li>
+<li>Mensajes de error específicos para credenciales incorrectas</li>
+<li>Indicador de carga durante autenticación</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>→ Pantalla de Registro (<code>/register</code>)</li>
+<li>→ Pantalla de Recuperación de Contraseña (<code>/forgot-password</code>)</li>
+<li>→ Pantalla Principal (Home) tras login exitoso</li>
+</ul>
+<hr>
+<h3>2.2 Pantalla de Registro (RegisterView)</h3>
+<p><strong>Ruta</strong>: <code>/register</code></p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li>Formulario multi-paso con progreso visual</li>
+<li><strong>Paso 1 - Datos de Usuario</strong>:<ul>
+<li>Nombre, apellido, email, contraseña, confirmar contraseña</li>
+<li>Validación de fortaleza de contraseña</li>
+<li>Validación de coincidencia de contraseñas</li>
+</ul>
+</li>
+<li><strong>Paso 2 - Ubicación</strong>:<ul>
+<li>Selector de país, ciudad</li>
+<li>Validación de campos requeridos</li>
+</ul>
+</li>
+<li><strong>Paso 3 - Registro de Primera Mascota</strong>:<ul>
+<li>Formulario completo de mascota</li>
+<li>Obligatorio para completar registro</li>
+</ul>
+</li>
+<li>Botones &quot;Atrás&quot; y &quot;Siguiente&quot; para navegación entre pasos</li>
+<li>Indicador de progreso (1/3, 2/3, 3/3)</li>
+<li>Validación de todos los campos antes de enviar</li>
+<li>Indicador de carga durante registro</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>→ Pantalla de Login (<code>/login</code>) desde enlace &quot;Ya tengo cuenta&quot;</li>
+<li>→ Pantalla Principal (Home) tras registro exitoso</li>
+</ul>
+<hr>
+<h3>2.3 Pantalla Principal (HomeView)</h3>
+<p><strong>Ruta</strong>: <code>/home</code></p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li><strong>Barra superior</strong>:<ul>
+<li>Logo de Petos</li>
+<li>Botón de notificaciones con contador de no leídas</li>
+</ul>
+</li>
+<li><strong>Feed de publicaciones</strong>:<ul>
+<li>Lista de publicaciones de usuarios seguidos</li>
+<li>Cada publicación muestra:<ul>
+<li>Avatar y nombre del autor</li>
+<li>Carousel de imágenes (si tiene múltiples)</li>
+<li>Video con controles (si es video)</li>
+<li>Descripción con &quot;ver más&quot; si es larga</li>
+<li>Mascotas etiquetadas (avatares clickeables)</li>
+<li>Botones: Me gusta, Comentar, Compartir</li>
+<li>Contador de likes y comentarios</li>
+<li>Fecha de publicación</li>
+</ul>
+</li>
+<li>Pull-to-refresh para actualizar feed</li>
+<li>Scroll infinito con carga automática</li>
+<li>Estado vacío con botón &quot;Crear primera publicación&quot;</li>
+</ul>
+</li>
+<li><strong>Botón flotante (+)</strong> para crear nueva publicación</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>→ Pantalla de Crear Publicación (al tocar botón +)</li>
+<li>→ Pantalla de Perfil de Usuario (al tocar avatar de autor)</li>
+<li>→ Pantalla de Perfil de Mascota (al tocar mascota etiquetada)</li>
+<li>→ Modal de Comentarios (al tocar botón comentar)</li>
+<li>→ Pantalla de Notificaciones (al tocar campana)</li>
+</ul>
+<hr>
+<h3>2.4 Pantalla de Crear Publicación (CreatePostView)</h3>
+<p><strong>Ruta</strong>: <code>/create-post</code></p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li>Campo de texto para descripción (opcional)</li>
+<li>Botón &quot;Agregar medios&quot; para seleccionar imágenes o video</li>
+<li><strong>AppMediaPicker</strong>:<ul>
+<li>Vista previa de medios seleccionados</li>
+<li>Opción de eliminar medios individuales</li>
+<li>Reordenar medios arrastrando</li>
+<li>Validación: 1-5 imágenes O 1 video (excluyente)</li>
+<li>Indicador visual de límites de medios</li>
+</ul>
+</li>
+<li>Selector de mascotas a etiquetar:<ul>
+<li>Lista de mascotas del usuario con checkboxes</li>
+<li>Búsqueda de mascotas propias</li>
+</ul>
+</li>
+<li>Botón &quot;Publicar&quot; con indicador de carga</li>
+<li>Validación: debe haber al menos 1 medio</li>
+<li>Mensaje de progreso al subir imágenes</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>← Volver a Home (botón atrás o tras publicar exitosamente)</li>
+</ul>
+<hr>
+<h3>2.5 Pantalla de Comentarios (PostCommentsModal)</h3>
+<p><strong>Tipo</strong>: Modal Bottom Sheet</p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li>Lista de comentarios de la publicación</li>
+<li>Cada comentario muestra:<ul>
+<li>Avatar y nombre del autor</li>
+<li>Texto del comentario</li>
+<li>Fecha relativa (hace X minutos/horas/días)</li>
+<li>Botón de eliminar (solo si es autor)</li>
+</ul>
+</li>
+<li>Campo de entrada de texto para nuevo comentario</li>
+<li>Botón &quot;Enviar&quot; para publicar comentario</li>
+<li>Scroll infinito si hay muchos comentarios</li>
+<li>Estado vacío &quot;Sin comentarios aún&quot; con mensaje motivador</li>
+<li>Actualización en tiempo real al agregar comentario</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>← Cerrar modal (arrastrar hacia abajo o tocar fuera)</li>
+</ul>
+<hr>
+<h3>2.6 Pantalla de Notificaciones (NotificationView)</h3>
+<p><strong>Ruta</strong>: <code>/notifications</code></p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li><strong>Filtros superiores</strong> (tabs):<ul>
+<li>Todas</li>
+<li>No leídas</li>
+<li>Me gusta</li>
+<li>Comentarios</li>
+<li>Seguidores</li>
+</ul>
+</li>
+<li><strong>Lista de notificaciones</strong>:<ul>
+<li>Avatar del usuario que generó la notificación</li>
+<li>Icono según tipo (corazón, comentario, usuario)</li>
+<li>Texto descriptivo (&quot;X le dio me gusta a tu publicación&quot;)</li>
+<li>Fecha relativa</li>
+<li>Thumbnail de publicación (si aplica)</li>
+<li>Indicador visual de notificación no leída</li>
+</ul>
+</li>
+<li>Pull-to-refresh para actualizar</li>
+<li>Marcar como leída automáticamente al abrir</li>
+<li>Estado vacío según filtro activo con mensaje personalizado</li>
+<li>Botones de acción según contexto</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>→ Pantalla de Publicación (al tocar notificación de like/comentario)</li>
+<li>→ Pantalla de Perfil de Usuario (al tocar notificación de seguidor)</li>
+<li>← Volver a Home</li>
+</ul>
+<hr>
+<h3>2.7 Pantalla de Historias (StoriesView)</h3>
+<p><strong>Ruta</strong>: <code>/stories/:userId</code></p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li>Vista fullscreen de historia actual</li>
+<li><strong>Controles superiores</strong>:<ul>
+<li>Avatar y nombre del autor</li>
+<li>Indicador de progreso de historias (barras)</li>
+<li>Botón de cerrar (X)</li>
+<li>Tiempo de publicación</li>
+</ul>
+</li>
+<li><strong>Interacciones</strong>:<ul>
+<li>Tap izquierda: historia anterior</li>
+<li>Tap derecha: siguiente historia</li>
+<li>Mantener presionado: pausar historia</li>
+<li>Deslizar abajo: cerrar</li>
+</ul>
+</li>
+<li>Reproducción automática con timer</li>
+<li><strong>Barra inferior</strong> (si es historia propia):<ul>
+<li>Contador de vistas</li>
+</ul>
+</li>
+<li><strong>Barra inferior</strong> (si es de otro usuario):<ul>
+<li>Campo para enviar mensaje</li>
+<li>Botón de me gusta</li>
+</ul>
+</li>
+<li>Indicador de carga entre historias</li>
+<li>Estado vacío &quot;Este usuario no tiene historias&quot;</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>→ Siguiente historia del mismo usuario</li>
+<li>→ Historias del siguiente usuario (cuando termina las del actual)</li>
+<li>← Cerrar y volver a pantalla anterior</li>
+</ul>
+<hr>
+<h3>2.8 Pantalla de Crear Historia (CreateStoryView)</h3>
+<p><strong>Ruta</strong>: <code>/create-story</code></p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li>Vista previa fullscreen del medio seleccionado (imagen o video)</li>
+<li><strong>Editor de texto</strong>:<ul>
+<li>Campo de texto para agregar mensaje</li>
+<li>Selector de color de fondo del texto</li>
+<li>Posicionamiento libre del texto (arrastrable)</li>
+<li>Ajuste de tamaño del texto</li>
+</ul>
+</li>
+<li><strong>Opciones superiores</strong>:<ul>
+<li>Botón &quot;Cambiar medio&quot; para seleccionar otra imagen/video</li>
+<li>Botón &quot;Color de fondo&quot; para toda la historia</li>
+</ul>
+</li>
+<li>Botón &quot;Publicar historia&quot; con indicador de carga</li>
+<li>Validación: debe tener imagen o video</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>← Cancelar y volver</li>
+<li>→ Volver a Home tras publicar exitosamente</li>
+</ul>
+<hr>
+<h3>2.9 Pantalla de Explorar (ExploreView)</h3>
+<p><strong>Ruta</strong>: <code>/explore</code></p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li><strong>Tab &quot;Comunidad&quot;</strong>:<ul>
+<li>Grid de publicaciones populares</li>
+<li>Preview con imagen principal</li>
+<li>Indicador de múltiples fotos</li>
+<li>Contador de likes</li>
+</ul>
+</li>
+<li><strong>Tab &quot;Mascotas&quot;</strong>:<ul>
+<li>Swipeable cards estilo Tinder</li>
+<li>Cada card muestra:<ul>
+<li>Fotos de la mascota (carousel)</li>
+<li>Nombre, edad, sexo, raza</li>
+<li>Ubicación del dueño</li>
+<li>Descripción/biografía</li>
+</ul>
+</li>
+<li>Botones: ❌ (Rechazar) y ❤️ (Like)</li>
+<li>Animaciones al hacer swipe</li>
+<li>Indicador de match cuando hay like mutuo</li>
+<li>Estado vacío &quot;No hay más mascotas por ahora&quot;</li>
+</ul>
+</li>
+<li>Pull-to-refresh en ambos tabs</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>→ Pantalla de Detalle de Publicación (al tocar post en Comunidad)</li>
+<li>→ Pantalla de Perfil de Mascota (al tocar info en card)</li>
+<li>→ Modal de Match (cuando hay match mutuo)</li>
+</ul>
+<hr>
+<h3>2.10 Pantalla de Mapa (MapView)</h3>
+<p><strong>Ruta</strong>: <code>/map</code></p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li><strong>Tabs superiores</strong>:<ul>
+<li>Servicios</li>
+<li>Eventos</li>
+</ul>
+</li>
+<li><strong>Mapa interactivo</strong>:<ul>
+<li>Marcadores personalizados según categoría</li>
+<li>Clustered markers cuando hay muchos cercanos</li>
+<li>Marcador de ubicación del usuario</li>
+<li>Controles de zoom</li>
+<li>Botón para centrar en ubicación actual</li>
+</ul>
+</li>
+<li><strong>Panel inferior de filtros</strong> (Servicios):<ul>
+<li>Filtro por categoría (Veterinaria, Grooming, Hotel, Guardería, etc.)</li>
+<li>Filtro por rango de precio (min-max)</li>
+<li>Filtro por distancia (radio en km)</li>
+<li>Botón &quot;Aplicar filtros&quot;</li>
+<li>Contador de servicios encontrados</li>
+</ul>
+</li>
+<li><strong>Panel inferior de filtros</strong> (Eventos):<ul>
+<li>Filtro por rango de fechas</li>
+<li>Filtro por distancia</li>
+<li>Botón &quot;Aplicar filtros&quot;</li>
+<li>Contador de eventos encontrados</li>
+</ul>
+</li>
+<li><strong>Tap en marcador</strong>:<ul>
+<li>Muestra card de preview con info básica</li>
+<li>Botón &quot;Ver detalles&quot; para abrir modal completo</li>
+</ul>
+</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>→ Modal de Detalle de Servicio (al tocar &quot;Ver detalles&quot; en servicio)</li>
+<li>→ Modal de Detalle de Evento (al tocar &quot;Ver detalles&quot; en evento)</li>
+<li>→ Pantalla de Crear Servicio (botón +)</li>
+<li>→ Pantalla de Crear Evento (botón +)</li>
+</ul>
+<hr>
+<h3>2.11 Pantalla de Crear/Editar Servicio (CreateServiceView)</h3>
+<p><strong>Ruta</strong>: <code>/create-service</code> o <code>/edit-service/:id</code></p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li><strong>Formulario con campos</strong>:<ul>
+<li>Título (requerido)</li>
+<li>Descripción (requerido)</li>
+<li>Categoría (dropdown: Veterinaria, Grooming, Hotel, Guardería, etc.)</li>
+<li>Precio (numérico)</li>
+<li>Ubicación (texto descriptivo)</li>
+<li>Latitud y Longitud (numéricos, opcional con botón &quot;Usar mi ubicación&quot;)</li>
+<li>Teléfono de contacto</li>
+<li>Email de contacto</li>
+</ul>
+</li>
+<li><strong>AppMediaPicker para imágenes</strong> (hasta 5):<ul>
+<li>En modo edición, muestra imágenes existentes como URLs</li>
+<li>Permite agregar nuevas imágenes locales</li>
+<li>Permite eliminar imágenes (URLs o locales)</li>
+<li>Vista previa de todas las imágenes</li>
+</ul>
+</li>
+<li>Validación de todos los campos requeridos</li>
+<li>Botón &quot;Guardar&quot; con indicador de carga</li>
+<li><strong>Proceso de guardado/actualización</strong>:<ul>
+<li>Detecta imágenes eliminadas y las borra del backend</li>
+<li>Sube nuevas imágenes a Cloudinary con delays (500ms entre cada una)</li>
+<li>Actualiza servicio con nuevos datos</li>
+<li>Agrega imágenes recién subidas una por una</li>
+</ul>
+</li>
+<li>Mensajes de éxito/error con SnackBar</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>← Cancelar y volver al mapa</li>
+<li>→ Volver al mapa tras guardar exitosamente</li>
+</ul>
+<hr>
+<h3>2.12 Pantalla de Crear/Editar Evento (CreateEventView)</h3>
+<p><strong>Ruta</strong>: <code>/create-event</code> o <code>/edit-event/:id</code></p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li><strong>Formulario con campos</strong>:<ul>
+<li>Título (requerido)</li>
+<li>Descripción (requerido)</li>
+<li>Ubicación (texto descriptivo, requerido)</li>
+<li>Latitud y Longitud (numéricos, opcional con botón &quot;Usar mi ubicación&quot;)</li>
+<li>Fecha (selector de fecha)</li>
+<li>Hora (selector de hora)</li>
+<li>Capacidad máxima (numérico, opcional)</li>
+</ul>
+</li>
+<li><strong>AppMediaPicker para imágenes</strong> (hasta 5):<ul>
+<li>En modo edición, muestra imágenes existentes como URLs</li>
+<li>Permite agregar nuevas imágenes locales</li>
+<li>Permite eliminar imágenes</li>
+<li>Vista previa de todas las imágenes</li>
+</ul>
+</li>
+<li>Validación de todos los campos requeridos</li>
+<li>Validación: fecha debe ser futura</li>
+<li>Botón &quot;Guardar Evento&quot; con indicador de carga</li>
+<li><strong>Proceso de guardado/actualización</strong> (idéntico a servicios):<ul>
+<li>Detecta y elimina imágenes removidas</li>
+<li>Sube nuevas imágenes con delays anti-rate-limit</li>
+<li>Actualiza evento sin imágenes</li>
+<li>Agrega imágenes una por una</li>
+</ul>
+</li>
+<li>Mensajes de éxito/error</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>← Cancelar y volver al mapa</li>
+<li>→ Volver al mapa tras guardar exitosamente</li>
+</ul>
+<hr>
+<h3>2.13 Pantalla de Perfil de Usuario (UserProfileView)</h3>
+<p><strong>Ruta</strong>: <code>/profile/:userId</code> (o <code>/profile</code> para perfil propio)</p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li><strong>Header del perfil</strong>:<ul>
+<li>Avatar del usuario</li>
+<li>Nombre completo</li>
+<li>Username</li>
+<li>Biografía</li>
+<li>Ubicación</li>
+<li>Estadísticas: # Publicaciones, # Seguidores, # Seguidos</li>
+<li>Botón &quot;Seguir&quot;/&quot;Siguiendo&quot; (si es otro usuario)</li>
+<li>Botón &quot;Editar perfil&quot; (si es perfil propio)</li>
+<li>Botón &quot;Mensaje&quot; (si es otro usuario)</li>
+<li>Botón de opciones (⋮) con menú:<ul>
+<li>Reportar usuario</li>
+<li>Bloquear usuario</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Tabs de contenido</strong>:<ul>
+<li><strong>Posts</strong>: Grid de publicaciones del usuario</li>
+<li><strong>Tagged</strong>: Publicaciones donde está etiquetado</li>
+<li><strong>Likes</strong>: Publicaciones que le gustaron (solo perfil propio)</li>
+</ul>
+</li>
+<li>Pull-to-refresh en todos los tabs</li>
+<li>Estados vacíos según tab:<ul>
+<li>&quot;Sin publicaciones aún&quot;</li>
+<li>&quot;No hay publicaciones etiquetadas&quot;</li>
+<li>&quot;No hay publicaciones con me gusta&quot;</li>
+</ul>
+</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>→ Pantalla de Editar Perfil (al tocar &quot;Editar perfil&quot;)</li>
+<li>→ Pantalla de Detalle de Publicación (al tocar publicación)</li>
+<li>→ Pantalla de Seguidores (al tocar &quot;# Seguidores&quot;)</li>
+<li>→ Pantalla de Seguidos (al tocar &quot;# Seguidos&quot;)</li>
+<li>→ Pantalla de Chat (al tocar &quot;Mensaje&quot;)</li>
+<li>← Volver atrás</li>
+</ul>
+<hr>
+<h3>2.14 Pantalla de Editar Perfil (EditProfileView)</h3>
+<p><strong>Ruta</strong>: Desde UserProfileView (modal o pantalla)</p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li><strong>AvatarPicker</strong>:<ul>
+<li>Muestra avatar actual (URL remota)</li>
+<li>Permite cambiar avatar (File local)</li>
+<li>Botón de cámara overlay para cambiar</li>
+<li>Preview en tiempo real</li>
+</ul>
+</li>
+<li><strong>Formulario con campos</strong>:<ul>
+<li>Nombre (requerido)</li>
+<li>Apellido (requerido)</li>
+<li>Biografía (opcional, máximo 150 caracteres)</li>
+<li>País (dropdown)</li>
+<li>Ciudad (texto)</li>
+<li>Fecha de nacimiento (selector de fecha)</li>
+</ul>
+</li>
+<li>Validación de campos requeridos</li>
+<li>Botón &quot;Guardar cambios&quot; con indicador de carga</li>
+<li>Botón &quot;Cancelar&quot; para descartar cambios</li>
+<li>Confirmación si hay cambios sin guardar</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>← Cancelar y volver a perfil</li>
+<li>→ Volver a perfil tras guardar exitosamente</li>
+</ul>
+<hr>
+<h3>2.15 Pantalla de Gestión de Mascotas (PetManagementView)</h3>
+<p><strong>Ruta</strong>: <code>/pets</code></p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li>Lista de mascotas del usuario</li>
+<li><strong>Card de cada mascota</strong>:<ul>
+<li>Avatar de la mascota</li>
+<li>Nombre, tipo, raza</li>
+<li>Edad</li>
+<li>Botón &quot;Ver perfil&quot;</li>
+<li>Botón &quot;Editar&quot;</li>
+<li>Botón &quot;Eliminar&quot; con confirmación</li>
+</ul>
+</li>
+<li>Botón flotante (+) para agregar nueva mascota</li>
+<li>Estado vacío &quot;Sin mascotas&quot; con botón &quot;Agregar Mascota&quot;</li>
+<li>Pull-to-refresh para actualizar lista</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>→ Modal de Agregar Mascota (al tocar botón +)</li>
+<li>→ Modal de Editar Mascota (al tocar botón editar)</li>
+<li>→ Pantalla de Perfil de Mascota (al tocar &quot;Ver perfil&quot;)</li>
+</ul>
+<hr>
+<h3>2.16 Modal de Agregar/Editar Mascota (PetFormDialog)</h3>
+<p><strong>Tipo</strong>: Dialog Modal</p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li><strong>AvatarPicker</strong>:<ul>
+<li>Recorte de imagen en formato 1:1</li>
+<li>Preview en tiempo real</li>
+<li>Placeholder con icono de mascota</li>
+</ul>
+</li>
+<li><strong>Formulario con campos</strong>:<ul>
+<li>Nombre (requerido)</li>
+<li>Tipo (dropdown: Perro, Gato, Otro)</li>
+<li>Raza (dropdown dinámico según tipo seleccionado)</li>
+<li>Fecha de nacimiento (selector de fecha)</li>
+<li>Sexo (radio buttons: Macho, Hembra)</li>
+<li>Biografía (textarea, opcional)</li>
+<li>Peso (numérico con unidad kg)</li>
+</ul>
+</li>
+<li><strong>Selector de rasgos/características</strong>:<ul>
+<li>Chips de rasgos disponibles según tipo de mascota</li>
+<li>Multi-selección de rasgos</li>
+<li>Colores, tamaños, temperamento, etc.</li>
+</ul>
+</li>
+<li>Validación ReactiveForm con revalidación en submit</li>
+<li>Autovalidación de campos al tocar</li>
+<li>Botón &quot;Cancelar&quot; (outline)</li>
+<li>Botón &quot;Guardar&quot; (primary) con indicador de carga</li>
+<li>Scroll interno para formularios largos</li>
+<li><strong>Manejo de imágenes</strong>:<ul>
+<li>En edición: muestra URL existente si hay</li>
+<li>Al guardar sin cambiar imagen: mantiene imagen actual (no la borra)</li>
+<li>Al cambiar imagen: sube nueva y actualiza</li>
+</ul>
+</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>← Cerrar modal (cancelar)</li>
+<li>→ Cerrar y actualizar lista tras guardar exitosamente</li>
+</ul>
+<hr>
+<h3>2.17 Pantalla de Perfil de Mascota (PetProfileView)</h3>
+<p><strong>Ruta</strong>: <code>/pet/:petId</code></p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li><strong>Header del perfil</strong>:<ul>
+<li>Avatar de la mascota (grande)</li>
+<li>Nombre, tipo, raza</li>
+<li>Edad</li>
+<li>Sexo (icono)</li>
+<li>Peso</li>
+<li>Biografía</li>
+<li>Chips de rasgos/características</li>
+<li>Botón &quot;Editar&quot; (si es mascota propia)</li>
+<li>Estadísticas: # Fotos, # Posts etiquetados</li>
+</ul>
+</li>
+<li><strong>Tabs de contenido</strong>:<ul>
+<li><strong>Fotos</strong>: Grid de galería de fotos de la mascota</li>
+<li><strong>Posts</strong>: Publicaciones donde está etiquetada</li>
+<li><strong>Salud</strong>: Registros de salud y datos médicos</li>
+</ul>
+</li>
+<li><strong>Tab Fotos</strong>:<ul>
+<li>Grid 3 columnas con fotos</li>
+<li>Botón flotante (+) para agregar foto</li>
+<li>Estado vacío &quot;Sin fotos aún&quot;</li>
+<li>Tap en foto abre visor fullscreen con opciones</li>
+</ul>
+</li>
+<li><strong>Tab Posts</strong>:<ul>
+<li>Grid de publicaciones etiquetadas</li>
+<li>Estado vacío &quot;Sin publicaciones aún&quot;</li>
+</ul>
+</li>
+<li><strong>Tab Salud</strong> (solo mascota propia):<ul>
+<li><strong>Sección &quot;Datos Médicos&quot;</strong>:<ul>
+<li>Card con info: Alergias, Condiciones médicas, Veterinario, Seguro</li>
+<li>Botón &quot;Editar&quot; para abrir modal</li>
+<li>Estado vacío con botón &quot;Agregar datos&quot;</li>
+</ul>
+</li>
+<li><strong>Sección &quot;Registros de Salud&quot;</strong>:<ul>
+<li>Lista cronológica de registros (vacunas, desparasitación, visitas)</li>
+<li>Card por registro con: Tipo, fecha, notas, recordatorio</li>
+<li>Botón &quot;Editar&quot; y &quot;Eliminar&quot; en cada registro</li>
+<li>Botón flotante (+) para nuevo registro</li>
+<li>Estado vacío &quot;Sin registros aún&quot;</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>→ Modal de Editar Mascota (al tocar &quot;Editar&quot; en header)</li>
+<li>→ Modal de Agregar Foto (al tocar + en tab Fotos)</li>
+<li>→ Visor de Foto Fullscreen (al tocar foto)</li>
+<li>→ Detalle de Publicación (al tocar post en tab Posts)</li>
+<li>→ Modal de Editar Datos Médicos (al tocar &quot;Editar&quot; en datos médicos)</li>
+<li>→ Modal de Agregar Registro de Salud (al tocar + en registros)</li>
+<li>→ Modal de Editar Registro de Salud (al tocar &quot;Editar&quot; en registro)</li>
+<li>← Volver atrás</li>
+</ul>
+<hr>
+<h3>2.18 Modal de Datos Médicos (EditHealthInfoDialog)</h3>
+<p><strong>Tipo</strong>: Dialog Modal</p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li><strong>Formulario con campos</strong>:<ul>
+<li>Alergias (textarea, opcional)</li>
+<li>Condiciones médicas (textarea, opcional)</li>
+<li>Veterinario (texto, opcional)</li>
+<li>Seguro (texto, opcional)</li>
+</ul>
+</li>
+<li>Scroll interno</li>
+<li>Botón &quot;Cancelar&quot;</li>
+<li>Botón &quot;Guardar&quot; con indicador de carga</li>
+<li>Validación ReactiveForm con revalidación</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>← Cerrar modal</li>
+<li>→ Cerrar y actualizar tras guardar</li>
+</ul>
+<hr>
+<h3>2.19 Modal de Agregar Registro de Salud (AddHealthLogDialog)</h3>
+<p><strong>Tipo</strong>: Dialog Modal</p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li><strong>Formulario con campos</strong>:<ul>
+<li>Tipo de evento (dropdown: Vacuna, Desparasitación, Visita al Veterinario, Otro)</li>
+<li>Fecha (selector de fecha, default hoy)</li>
+<li>Notas (textarea, opcional)</li>
+<li><strong>Switch &quot;Activar recordatorio&quot;</strong>:<ul>
+<li>Al activar, muestra campo de fecha futura</li>
+<li>Fecha de recordatorio (selector, debe ser futura)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Validación: fecha no puede ser futura (para registro), fecha de recordatorio debe ser futura</li>
+<li>Botón &quot;Cancelar&quot;</li>
+<li>Botón &quot;Guardar&quot; con indicador de carga</li>
+<li>Validación ReactiveForm</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>← Cerrar modal</li>
+<li>→ Cerrar y actualizar lista tras guardar</li>
+</ul>
+<hr>
+<h3>2.20 Modal de Editar Registro de Salud (EditHealthLogDialog)</h3>
+<p><strong>Tipo</strong>: Dialog Modal</p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li>Igual que AddHealthLogDialog pero con datos precargados</li>
+<li>Campos editables:<ul>
+<li>Tipo de evento</li>
+<li>Fecha</li>
+<li>Notas</li>
+<li>Activar/desactivar recordatorio</li>
+<li>Fecha de recordatorio (si está activado)</li>
+</ul>
+</li>
+<li>Validación ReactiveForm con revalidación</li>
+<li>Botón &quot;Cancelar&quot;</li>
+<li>Botón &quot;Guardar cambios&quot; con indicador de carga</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>← Cerrar modal</li>
+<li>→ Cerrar y actualizar tras guardar</li>
+</ul>
+<hr>
+<h3>2.21 Pantalla de Chat/Mensajería (ChatsView)</h3>
+<p><strong>Ruta</strong>: <code>/chats</code></p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li>Lista de conversaciones activas</li>
+<li><strong>Card de cada conversación</strong>:<ul>
+<li>Avatar del otro usuario</li>
+<li>Nombre del usuario</li>
+<li>Último mensaje (preview)</li>
+<li>Fecha/hora del último mensaje</li>
+<li>Indicador de no leído (badge con contador)</li>
+<li>Estado online/offline del usuario</li>
+</ul>
+</li>
+<li>Búsqueda de conversaciones</li>
+<li>Pull-to-refresh para actualizar</li>
+<li>Estado vacío &quot;No hay conversaciones&quot; con sugerencia de explorar comunidad</li>
+<li>Ordenamiento por fecha del último mensaje (más reciente arriba)</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>→ Pantalla de Conversación (al tocar conversación)</li>
+<li>← Volver atrás</li>
+</ul>
+<hr>
+<h3>2.22 Pantalla de Conversación (ChatPage)</h3>
+<p><strong>Ruta</strong>: <code>/chat/:userId</code></p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li><strong>Header</strong>:<ul>
+<li>Avatar del otro usuario</li>
+<li>Nombre del usuario</li>
+<li>Estado online/offline</li>
+<li>Botón de opciones (⋮) con menú:<ul>
+<li>Ver perfil</li>
+<li>Bloquear usuario</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Lista de mensajes</strong>:<ul>
+<li>Mensajes agrupados por fecha</li>
+<li>Cada mensaje muestra:<ul>
+<li>Avatar (si es del otro usuario)</li>
+<li>Texto del mensaje</li>
+<li>Hora de envío</li>
+<li>Estado de lectura (✓✓ azul si leído, ✓✓ gris si entregado)</li>
+</ul>
+</li>
+<li>Mensajes propios alineados a la derecha (color primario)</li>
+<li>Mensajes del otro alineados a la izquierda (gris)</li>
+<li>Scroll automático al último mensaje</li>
+<li>Estado vacío &quot;Sin mensajes aún&quot; con sugerencia de enviar primer mensaje</li>
+</ul>
+</li>
+<li><strong>Barra inferior</strong>:<ul>
+<li>Campo de texto para escribir mensaje</li>
+<li>Botón de enviar (deshabilitado si texto vacío)</li>
+<li>Indicador &quot;Escribiendo...&quot; cuando el otro usuario está escribiendo</li>
+</ul>
+</li>
+<li>Actualización en tiempo real de mensajes</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>→ Pantalla de Perfil de Usuario (al tocar &quot;Ver perfil&quot;)</li>
+<li>← Volver a lista de conversaciones</li>
+</ul>
+<hr>
+<h3>2.23 Pantalla de Configuración (SettingsView)</h3>
+<p><strong>Ruta</strong>: <code>/settings</code></p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li><strong>Sección &quot;Cuenta&quot;</strong>:<ul>
+<li>Cambiar contraseña</li>
+<li>Idioma (Español, English)</li>
+<li>Eliminar cuenta (con confirmación)</li>
+</ul>
+</li>
+<li><strong>Sección &quot;Privacidad&quot;</strong>:<ul>
+<li>Usuarios bloqueados (con contador)</li>
+<li>Perfil público/privado (switch)</li>
+<li>Quien puede ver mis historias (dropdown: Todos, Solo seguidores)</li>
+<li>Quien puede comentar mis posts (dropdown: Todos, Solo seguidores, Nadie)</li>
+</ul>
+</li>
+<li><strong>Sección &quot;Notificaciones&quot;</strong>:<ul>
+<li>Push notifications (switch)</li>
+<li>Notificaciones de likes (switch)</li>
+<li>Notificaciones de comentarios (switch)</li>
+<li>Notificaciones de nuevos seguidores (switch)</li>
+<li>Notificaciones de mensajes (switch)</li>
+</ul>
+</li>
+<li><strong>Sección &quot;Apariencia&quot;</strong>:<ul>
+<li>Tema (dropdown: Claro, Oscuro, Automático)</li>
+</ul>
+</li>
+<li><strong>Sección &quot;Soporte&quot;</strong>:<ul>
+<li>Centro de ayuda</li>
+<li>Reportar un problema</li>
+<li>Términos y condiciones</li>
+<li>Política de privacidad</li>
+</ul>
+</li>
+<li><strong>Acción destructiva</strong>:<ul>
+<li>Cerrar sesión (con confirmación)</li>
+</ul>
+</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>→ Pantalla de Cambiar Contraseña</li>
+<li>→ Pantalla de Usuarios Bloqueados</li>
+<li>→ Pantalla de Centro de Ayuda</li>
+<li>→ Pantalla de Reportar Problema</li>
+<li>→ Pantalla de Login (tras cerrar sesión)</li>
+<li>← Volver atrás</li>
+</ul>
+<hr>
+<h3>2.24 Pantalla de Usuarios Bloqueados (BlockedUsersView)</h3>
+<p><strong>Ruta</strong>: <code>/settings/blocked-users</code></p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li>Lista de usuarios bloqueados</li>
+<li><strong>Card de cada usuario</strong>:<ul>
+<li>Avatar del usuario</li>
+<li>Nombre del usuario</li>
+<li>Botón &quot;Desbloquear&quot;</li>
+</ul>
+</li>
+<li>Confirmación antes de desbloquear</li>
+<li>Estado vacío &quot;No has bloqueado a nadie&quot;</li>
+<li>Pull-to-refresh para actualizar</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>← Volver a configuración</li>
+</ul>
+<hr>
+<h3>2.25 Bottom Navigation Bar (Todas las pantallas principales)</h3>
+<p><strong>Presente en</strong>: Home, Explore, Map, Chats, Profile</p>
+<p><strong>Funcionalidades</strong>:</p>
+<ul>
+<li>5 tabs con iconos y labels:<ol>
+<li><strong>Inicio</strong> (Home): Icono casa</li>
+<li><strong>Explorar</strong> (Explore): Icono lupa/brújula</li>
+<li><strong>Mapa</strong> (Map): Icono mapa/pin</li>
+<li><strong>Chats</strong> (Chats): Icono mensaje con badge contador</li>
+<li><strong>Perfil</strong> (Profile): Avatar del usuario</li>
+</ol>
+</li>
+<li>Indicador visual del tab activo (color primario)</li>
+<li>Animación de transición entre tabs</li>
+<li>Badge de notificaciones en Chats si hay mensajes no leídos</li>
+</ul>
+<p><strong>Navegación</strong>:</p>
+<ul>
+<li>Permite cambiar entre las 5 pantallas principales</li>
+<li>Mantiene estado de cada pantalla al cambiar tabs</li>
+</ul>
+<hr>
+</div>
+</details>
+
+<!-- SECCIÓN 4: FLUJO DE NAVEGACIÓN -->
+<details id="seccion-4">
+<summary>4. FLUJO DE NAVEGACIÓN DE LA APLICACIÓN</summary>
+<div class="section-content">
+<h3>3.1 Flujo de Autenticación</h3>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">plaintext</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-plaintext">[Splash Screen]
      |
      ├─→ (No autenticado) → [Login]
      |                         |
-     |                         ├─→ "Crear cuenta" → [Registro Multi-paso]
+     |                         ├─→ &quot;Crear cuenta&quot; → [Registro Multi-paso]
      |                         |                         |
      |                         |                         ├─→ Paso 1: Datos Usuario
      |                         |                         ├─→ Paso 2: Ubicación
@@ -855,19 +4740,27 @@
      |                         |                                   |
      |                         |                                   └─→ [Home Feed]
      |                         |
-     |                         └─→ "¿Olvidaste contraseña?" → [Recuperar Contraseña]
+     |                         └─→ &quot;¿Olvidaste contraseña?&quot; → [Recuperar Contraseña]
      |                                                              |
      |                                                              └─→ [Login]
      |
-     └─→ (Autenticado) → [Home Feed]
-```
+     └─→ (Autenticado) → [Home Feed]</code></pre>
+                </div>
+            <h3>3.2 Flujo Principal (Bottom Navigation)</h3>
 
-### 3.2 Flujo Principal (Bottom Navigation)
-
-```
-[Bottom Navigation Bar]
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">plaintext</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-plaintext">[Bottom Navigation Bar]
      |
-     ├─→ Tab "Inicio" → [Home Feed]
+     ├─→ Tab &quot;Inicio&quot; → [Home Feed]
      |                      |
      |                      ├─→ Botón (+) → [Crear Publicación] → [Home Feed]
      |                      ├─→ Tap Avatar → [Perfil de Usuario]
@@ -875,113 +4768,129 @@
      |                      ├─→ Tap Notificaciones → [Notificaciones]
      |                      └─→ Tap Mascota Etiquetada → [Perfil de Mascota]
      |
-     ├─→ Tab "Explorar" → [Explorar]
+     ├─→ Tab &quot;Explorar&quot; → [Explorar]
      |                        |
-     |                        ├─→ Sub-tab "Comunidad" → Grid Publicaciones
+     |                        ├─→ Sub-tab &quot;Comunidad&quot; → Grid Publicaciones
      |                        |                              |
      |                        |                              └─→ Tap Post → [Detalle Publicación]
      |                        |
-     |                        └─→ Sub-tab "Mascotas" → Swipeable Cards
+     |                        └─→ Sub-tab &quot;Mascotas&quot; → Swipeable Cards
      |                                                      |
      |                                                      ├─→ Swipe Right (❤️) → Match → [Modal Match]
      |                                                      └─→ Tap Info → [Perfil de Mascota]
      |
-     ├─→ Tab "Mapa" → [Mapa con Marcadores]
+     ├─→ Tab &quot;Mapa&quot; → [Mapa con Marcadores]
      |                    |
-     |                    ├─→ Sub-tab "Servicios" → [Mapa de Servicios]
+     |                    ├─→ Sub-tab &quot;Servicios&quot; → [Mapa de Servicios]
      |                    |                              |
      |                    |                              ├─→ Tap Marcador → Preview → [Detalle Servicio]
      |                    |                              └─→ Botón (+) → [Crear Servicio]
      |                    |                                                    |
      |                    |                                                    └─→ [Mapa]
      |                    |
-     |                    └─→ Sub-tab "Eventos" → [Mapa de Eventos]
+     |                    └─→ Sub-tab &quot;Eventos&quot; → [Mapa de Eventos]
      |                                                |
      |                                                ├─→ Tap Marcador → Preview → [Detalle Evento]
      |                                                └─→ Botón (+) → [Crear Evento]
      |                                                                    |
      |                                                                    └─→ [Mapa]
      |
-     ├─→ Tab "Chats" → [Lista de Conversaciones]
+     ├─→ Tab &quot;Chats&quot; → [Lista de Conversaciones]
      |                      |
      |                      └─→ Tap Conversación → [Chat con Usuario]
      |                                                   |
-     |                                                   └─→ "Ver perfil" → [Perfil de Usuario]
+     |                                                   └─→ &quot;Ver perfil&quot; → [Perfil de Usuario]
      |
-     └─→ Tab "Perfil" → [Perfil Propio]
+     └─→ Tab &quot;Perfil&quot; → [Perfil Propio]
                             |
-                            ├─→ "Editar perfil" → [Editar Perfil]
+                            ├─→ &quot;Editar perfil&quot; → [Editar Perfil]
                             |                          |
                             |                          └─→ [Perfil Propio]
                             |
-                            ├─→ Tab "Posts" → Grid Publicaciones
-                            ├─→ Tab "Tagged" → Grid Publicaciones Etiquetadas
-                            ├─→ Tab "Likes" → Grid Publicaciones con Me Gusta
+                            ├─→ Tab &quot;Posts&quot; → Grid Publicaciones
+                            ├─→ Tab &quot;Tagged&quot; → Grid Publicaciones Etiquetadas
+                            ├─→ Tab &quot;Likes&quot; → Grid Publicaciones con Me Gusta
                             |
                             ├─→ Menú (⋮) → Opciones
                             |                  |
-                            |                  ├─→ "Mis Mascotas" → [Gestión de Mascotas]
-                            |                  ├─→ "Configuración" → [Configuración]
-                            |                  └─→ "Cerrar sesión" → [Login]
+                            |                  ├─→ &quot;Mis Mascotas&quot; → [Gestión de Mascotas]
+                            |                  ├─→ &quot;Configuración&quot; → [Configuración]
+                            |                  └─→ &quot;Cerrar sesión&quot; → [Login]
                             |
-                            └─→ Tap # Seguidores/Seguidos → [Lista Seguidores/Seguidos]
-```
+                            └─→ Tap # Seguidores/Seguidos → [Lista Seguidores/Seguidos]</code></pre>
+                </div>
+            <h3>3.3 Flujo de Gestión de Mascotas</h3>
 
-### 3.3 Flujo de Gestión de Mascotas
-
-```
-[Gestión de Mascotas]
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">plaintext</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-plaintext">[Gestión de Mascotas]
      |
      ├─→ Botón (+) → [Modal Agregar Mascota]
      |                    |
-     |                    ├─→ "Cancelar" → [Gestión de Mascotas]
-     |                    └─→ "Guardar" → [Gestión de Mascotas] (actualizada)
+     |                    ├─→ &quot;Cancelar&quot; → [Gestión de Mascotas]
+     |                    └─→ &quot;Guardar&quot; → [Gestión de Mascotas] (actualizada)
      |
-     ├─→ "Ver perfil" → [Perfil de Mascota]
+     ├─→ &quot;Ver perfil&quot; → [Perfil de Mascota]
      |                       |
-     |                       ├─→ "Editar" (header) → [Modal Editar Mascota]
+     |                       ├─→ &quot;Editar&quot; (header) → [Modal Editar Mascota]
      |                       |                            |
      |                       |                            └─→ [Perfil de Mascota] (actualizado)
      |                       |
-     |                       ├─→ Tab "Fotos"
+     |                       ├─→ Tab &quot;Fotos&quot;
      |                       |       |
      |                       |       ├─→ Botón (+) → [Agregar Foto] → [Perfil Mascota]
      |                       |       └─→ Tap Foto → [Visor Fullscreen]
      |                       |
-     |                       ├─→ Tab "Posts" → Grid Publicaciones
+     |                       ├─→ Tab &quot;Posts&quot; → Grid Publicaciones
      |                       |
-     |                       └─→ Tab "Salud" (solo mascota propia)
+     |                       └─→ Tab &quot;Salud&quot; (solo mascota propia)
      |                               |
-     |                               ├─→ Sección "Datos Médicos"
+     |                               ├─→ Sección &quot;Datos Médicos&quot;
      |                               |       |
-     |                               |       ├─→ "Agregar datos" → [Modal Datos Médicos]
-     |                               |       └─→ "Editar" → [Modal Datos Médicos]
+     |                               |       ├─→ &quot;Agregar datos&quot; → [Modal Datos Médicos]
+     |                               |       └─→ &quot;Editar&quot; → [Modal Datos Médicos]
      |                               |
-     |                               └─→ Sección "Registros de Salud"
+     |                               └─→ Sección &quot;Registros de Salud&quot;
      |                                       |
      |                                       ├─→ Botón (+) → [Modal Agregar Registro]
      |                                       |                    |
      |                                       |                    └─→ [Perfil Mascota]
      |                                       |
-     |                                       └─→ "Editar" → [Modal Editar Registro]
+     |                                       └─→ &quot;Editar&quot; → [Modal Editar Registro]
      |                                                           |
      |                                                           └─→ [Perfil Mascota]
      |
-     └─→ "Editar" (en card) → [Modal Editar Mascota]
+     └─→ &quot;Editar&quot; (en card) → [Modal Editar Mascota]
                                    |
-                                   └─→ [Gestión de Mascotas] (actualizada)
-```
+                                   └─→ [Gestión de Mascotas] (actualizada)</code></pre>
+                </div>
+            <h3>3.4 Flujo de Historias (Stories)</h3>
 
-### 3.4 Flujo de Historias (Stories)
-
-```
-[Home Feed - Barra de Historias]
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">plaintext</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-plaintext">[Home Feed - Barra de Historias]
      |
-     ├─→ Tap "Tu historia" → [Crear Historia]
+     ├─→ Tap &quot;Tu historia&quot; → [Crear Historia]
      |                            |
      |                            ├─→ Seleccionar Foto/Video → Editor
      |                            ├─→ Agregar Texto, Color
-     |                            └─→ "Publicar" → [Home Feed]
+     |                            └─→ &quot;Publicar&quot; → [Home Feed]
      |
      └─→ Tap Historia de Usuario → [Visor de Historias]
                                         |
@@ -992,43 +4901,59 @@
                                         ├─→ Campo Mensaje → Enviar → [Chat con Usuario]
                                         └─→ Auto-avance → Historias del Siguiente Usuario
                                                                |
-                                                               └─→ (sin más historias) → [Home Feed]
-```
+                                                               └─→ (sin más historias) → [Home Feed]</code></pre>
+                </div>
+            <h3>3.5 Flujo de Configuración</h3>
 
-### 3.5 Flujo de Configuración
-
-```
-[Perfil Propio]
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">plaintext</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-plaintext">[Perfil Propio]
      |
-     └─→ Menú (⋮) → "Configuración" → [Configuración]
+     └─→ Menú (⋮) → &quot;Configuración&quot; → [Configuración]
                                            |
-                                           ├─→ "Cambiar contraseña" → [Cambiar Contraseña]
+                                           ├─→ &quot;Cambiar contraseña&quot; → [Cambiar Contraseña]
                                            |                                |
                                            |                                └─→ [Configuración]
                                            |
-                                           ├─→ "Usuarios bloqueados" → [Lista Usuarios Bloqueados]
+                                           ├─→ &quot;Usuarios bloqueados&quot; → [Lista Usuarios Bloqueados]
                                            |                                    |
-                                           |                                    └─→ "Desbloquear" → [Lista Usuarios Bloqueados]
+                                           |                                    └─→ &quot;Desbloquear&quot; → [Lista Usuarios Bloqueados]
                                            |
-                                           ├─→ "Idioma" → Selector → [Configuración]
-                                           ├─→ "Tema" → Selector → [Configuración]
+                                           ├─→ &quot;Idioma&quot; → Selector → [Configuración]
+                                           ├─→ &quot;Tema&quot; → Selector → [Configuración]
                                            |
-                                           ├─→ "Centro de ayuda" → [Centro de Ayuda]
-                                           ├─→ "Reportar problema" → [Reportar Problema]
+                                           ├─→ &quot;Centro de ayuda&quot; → [Centro de Ayuda]
+                                           ├─→ &quot;Reportar problema&quot; → [Reportar Problema]
                                            |
-                                           ├─→ "Eliminar cuenta" → Confirmación
+                                           ├─→ &quot;Eliminar cuenta&quot; → Confirmación
                                            |                             |
                                            |                             └─→ (confirmado) → [Login]
                                            |
-                                           └─→ "Cerrar sesión" → Confirmación
+                                           └─→ &quot;Cerrar sesión&quot; → Confirmación
                                                                       |
-                                                                      └─→ (confirmado) → [Login]
-```
+                                                                      └─→ (confirmado) → [Login]</code></pre>
+                </div>
+            <h3>3.6 Flujo de Notificaciones</h3>
 
-### 3.6 Flujo de Notificaciones
-
-```
-[Home Feed]
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">plaintext</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-plaintext">[Home Feed]
      |
      └─→ Tap Campana → [Notificaciones]
                             |
@@ -1044,20 +4969,28 @@
                             |
                             └─→ Tap Notificación de Seguidor
                                     |
-                                    └─→ [Perfil del Usuario que siguió]
-```
+                                    └─→ [Perfil del Usuario que siguió]</code></pre>
+                </div>
+            <h3>3.7 Flujo de Crear Publicación</h3>
 
-### 3.7 Flujo de Crear Publicación
-
-```
-[Home Feed]
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">plaintext</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-plaintext">[Home Feed]
      |
      └─→ Botón Flotante (+) → [Crear Publicación]
                                     |
-                                    ├─→ "Agregar medios" → Bottom Sheet
+                                    ├─→ &quot;Agregar medios&quot; → Bottom Sheet
                                     |                           |
-                                    |                           ├─→ "Tomar Foto" → Cámara → Preview
-                                    |                           └─→ "Galería" → Selector → Preview
+                                    |                           ├─→ &quot;Tomar Foto&quot; → Cámara → Preview
+                                    |                           └─→ &quot;Galería&quot; → Selector → Preview
                                     |
                                     ├─→ Seleccionar 1-5 Fotos (validación)
                                     ├─→ O Seleccionar 1 Video (excluyente)
@@ -1066,43 +4999,59 @@
                                     |
                                     ├─→ Selector de Mascotas → Lista Checkboxes
                                     |
-                                    ├─→ "Cancelar" → Confirmación → [Home Feed]
+                                    ├─→ &quot;Cancelar&quot; → Confirmación → [Home Feed]
                                     |
-                                    └─→ "Publicar" → Validación
+                                    └─→ &quot;Publicar&quot; → Validación
                                                         |
                                                         ├─→ (sin medios) → Error
-                                                        └─→ (válido) → Subir → [Home Feed] (actualizado)
-```
+                                                        └─→ (válido) → Subir → [Home Feed] (actualizado)</code></pre>
+                </div>
+            <h3>3.8 Flujo de Perfil de Otro Usuario</h3>
 
-### 3.8 Flujo de Perfil de Otro Usuario
-
-```
-[Home Feed o Explorar]
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">plaintext</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-plaintext">[Home Feed o Explorar]
      |
      └─→ Tap Avatar/Nombre → [Perfil de Otro Usuario]
                                    |
-                                   ├─→ "Seguir"/"Dejar de seguir" → Actualiza estado
+                                   ├─→ &quot;Seguir&quot;/&quot;Dejar de seguir&quot; → Actualiza estado
                                    |
-                                   ├─→ "Mensaje" → [Chat con Usuario]
+                                   ├─→ &quot;Mensaje&quot; → [Chat con Usuario]
                                    |
                                    ├─→ Menú (⋮)
                                    |       |
-                                   |       ├─→ "Reportar usuario" → [Modal Reporte]
-                                   |       └─→ "Bloquear usuario" → Confirmación → [Home Feed]
+                                   |       ├─→ &quot;Reportar usuario&quot; → [Modal Reporte]
+                                   |       └─→ &quot;Bloquear usuario&quot; → Confirmación → [Home Feed]
                                    |
-                                   ├─→ Tab "Posts" → Grid Publicaciones
+                                   ├─→ Tab &quot;Posts&quot; → Grid Publicaciones
                                    |                     |
                                    |                     └─→ Tap Post → [Detalle Publicación]
                                    |
-                                   └─→ Tab "Tagged" → Grid Publicaciones Etiquetadas
+                                   └─→ Tab &quot;Tagged&quot; → Grid Publicaciones Etiquetadas
                                                           |
-                                                          └─→ Tap Post → [Detalle Publicación]
-```
+                                                          └─→ Tap Post → [Detalle Publicación]</code></pre>
+                </div>
+            <h3>3.9 Rutas Principales de la Aplicación</h3>
 
-### 3.9 Rutas Principales de la Aplicación
-
-```
-Ruta                          | Pantalla
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">plaintext</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-plaintext">Ruta                          | Pantalla
 ------------------------------|------------------------------------------
 /                             | SplashScreen
 /login                        | LoginView
@@ -1129,353 +5078,512 @@ Ruta                          | Pantalla
 /pet/:petId                   | PetProfileView
 /settings                     | SettingsView
 /settings/blocked-users       | BlockedUsersView
-/settings/change-password     | ChangePasswordView
-```
+/settings/change-password     | ChangePasswordView</code></pre>
+                </div>
+            <hr>
+</div>
+</details>
 
----
+<!-- SECCIÓN 5: CARACTERÍSTICAS ESPECIALES DE NAVEGACIÓN (Notas Finales) -->
+<details id="seccion-5">
+<summary>5. CARACTERÍSTICAS ESPECIALES DE NAVEGACIÓN</summary>
+<div class="section-content">
+<h3>Características Especiales de Navegación</h3>
+<ol>
+<li><p><strong>Persistencia de Estado en Bottom Navigation</strong>:</p>
+<ul>
+<li>Cada tab del Bottom Navigation (Home, Explore, Map, Chats, Profile) mantiene su propio estado</li>
+<li>Al cambiar entre tabs, la pantalla anterior preserva su scroll position y datos</li>
+</ul>
+</li>
+<li><p><strong>Modales vs Pantallas Completas</strong>:</p>
+<ul>
+<li><strong>Modals (Dialog)</strong>: Formularios cortos (agregar mascota, editar datos médicos, agregar registro salud)</li>
+<li><strong>Bottom Sheets</strong>: Comentarios, opciones rápidas, selección de fuente de imagen</li>
+<li><strong>Pantallas completas</strong>: Crear publicación, crear evento, crear servicio, editar perfil</li>
+</ul>
+</li>
+<li><p><strong>Navegación con Datos</strong>:</p>
+<ul>
+<li>Cuando se navega con parámetros (<code>:id</code>, <code>:userId</code>, <code>:petId</code>), se pasan IDs numéricos</li>
+<li>Las pantallas realizan fetch de datos usando esos IDs</li>
+<li>Uso de GetX para gestión de estado y navegación reactiva</li>
+</ul>
+</li>
+<li><p><strong>Pull-to-Refresh Universal</strong>:</p>
+<ul>
+<li>Todas las listas (feed, notificaciones, mascotas, etc.) soportan pull-to-refresh</li>
+<li>Actualiza datos del backend al arrastrar hacia abajo</li>
+</ul>
+</li>
+<li><p><strong>Confirmaciones antes de Acciones Destructivas</strong>:</p>
+<ul>
+<li>Eliminar publicación/mascota/registro → Confirmación</li>
+<li>Bloquear usuario → Confirmación</li>
+<li>Cerrar sesión → Confirmación</li>
+<li>Eliminar cuenta → Confirmación con advertencia</li>
+</ul>
+</li>
+</ol>
+<hr>
+</div>
+</details>
 
-## Notas Finales
+<!-- SECCIÓN 5: ANÁLISIS DEL ESTADO REAL -->
+<details id="seccion-6">
+<summary>6. ANÁLISIS DEL ESTADO REAL DE LA APP</summary>
+<div class="section-content">
+<p><strong>Fecha de análisis</strong>: Enero 2025
+<strong>Versión analizada</strong>: Pre-lanzamiento MVP</p>
+<h3>4.1 Estado General</h3>
+<p><strong>✅ Funcionalidades Core Completamente Implementadas</strong> (90% del MVP):</p>
+<ul>
+<li>✅ Sistema de autenticación completo (login, registro multi-paso, JWT)</li>
+<li>✅ Gestión de perfiles de usuario (edición, visualización, estadísticas)</li>
+<li>✅ Gestión completa de mascotas (CRUD, perfiles, galería de fotos)</li>
+<li>✅ Registros de salud de mascotas (vacunas, desparasitación, recordatorios)</li>
+<li>✅ Sistema de publicaciones (crear, ver, feed, me gusta, comentarios)</li>
+<li>✅ Sistema de historias (crear, ver, 24h duración, interacciones)</li>
+<li>✅ Sistema social completo (seguir, seguidores, likes, comentarios)</li>
+<li>✅ Notificaciones (sistema de eventos backend listo para push)</li>
+<li>✅ Sistema de bloqueo de usuarios (completo)</li>
+<li>✅ Sistema de reportes en perfiles (frontend implementado)</li>
+<li>✅ Servicios marketplace (CRUD completo, mapa, filtros)</li>
+<li>✅ Eventos (CRUD completo, mapa, visualización)</li>
+<li>✅ Mensajería/Chat (conversaciones, mensajes en tiempo real)</li>
+<li>✅ Dark mode (claro, oscuro, automático)</li>
+<li>✅ Seguridad robusta (rate limiting, sanitización, audit logging)</li>
+</ul>
+<hr>
+<h3>4.2 🚨 Problemas Críticos Detectados</h3>
+<h4>4.2.1 Navegación Profunda Excesiva (CRÍTICO)</h4>
+<p><strong>Problema</strong>: El usuario puede quedar &quot;atrapado&quot; en stacks de navegación de 6-7+ niveles sin forma fácil de volver al inicio.</p>
+<p><strong>Ejemplos problemáticos reales</strong>:</p>
 
-### Características Especiales de Navegación
-
-1. **Persistencia de Estado en Bottom Navigation**:
-   - Cada tab del Bottom Navigation (Home, Explore, Map, Chats, Profile) mantiene su propio estado
-   - Al cambiar entre tabs, la pantalla anterior preserva su scroll position y datos
-
-2. **Modales vs Pantallas Completas**:
-   - **Modals (Dialog)**: Formularios cortos (agregar mascota, editar datos médicos, agregar registro salud)
-   - **Bottom Sheets**: Comentarios, opciones rápidas, selección de fuente de imagen
-   - **Pantallas completas**: Crear publicación, crear evento, crear servicio, editar perfil
-
-3. **Navegación con Datos**:
-   - Cuando se navega con parámetros (`:id`, `:userId`, `:petId`), se pasan IDs numéricos
-   - Las pantallas realizan fetch de datos usando esos IDs
-   - Uso de GetX para gestión de estado y navegación reactiva
-
-4. **Pull-to-Refresh Universal**:
-   - Todas las listas (feed, notificaciones, mascotas, etc.) soportan pull-to-refresh
-   - Actualiza datos del backend al arrastrar hacia abajo
-
-5. **Confirmaciones antes de Acciones Destructivas**:
-   - Eliminar publicación/mascota/registro → Confirmación
-   - Bloquear usuario → Confirmación
-   - Cerrar sesión → Confirmación
-   - Eliminar cuenta → Confirmación con advertencia
-
----
-
-## 4. ANÁLISIS DEL ESTADO REAL DE LA APP
-
-**Fecha de análisis**: Enero 2025
-**Versión analizada**: Pre-lanzamiento MVP
-
-### 4.1 Estado General
-
-**✅ Funcionalidades Core Completamente Implementadas** (90% del MVP):
-- ✅ Sistema de autenticación completo (login, registro multi-paso, JWT)
-- ✅ Gestión de perfiles de usuario (edición, visualización, estadísticas)
-- ✅ Gestión completa de mascotas (CRUD, perfiles, galería de fotos)
-- ✅ Registros de salud de mascotas (vacunas, desparasitación, recordatorios)
-- ✅ Sistema de publicaciones (crear, ver, feed, me gusta, comentarios)
-- ✅ Sistema de historias (crear, ver, 24h duración, interacciones)
-- ✅ Sistema social completo (seguir, seguidores, likes, comentarios)
-- ✅ Notificaciones (sistema de eventos backend listo para push)
-- ✅ Sistema de bloqueo de usuarios (completo)
-- ✅ Sistema de reportes en perfiles (frontend implementado)
-- ✅ Servicios marketplace (CRUD completo, mapa, filtros)
-- ✅ Eventos (CRUD completo, mapa, visualización)
-- ✅ Mensajería/Chat (conversaciones, mensajes en tiempo real)
-- ✅ Dark mode (claro, oscuro, automático)
-- ✅ Seguridad robusta (rate limiting, sanitización, audit logging)
-
----
-
-### 4.2 🚨 Problemas Críticos Detectados
-
-#### 4.2.1 Navegación Profunda Excesiva (CRÍTICO)
-
-**Problema**: El usuario puede quedar "atrapado" en stacks de navegación de 6-7+ niveles sin forma fácil de volver al inicio.
-
-**Ejemplos problemáticos reales**:
-```
-Home → Tap Avatar → Perfil Usuario → Tap Mascota → Perfil Mascota
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="language">plaintext</span>
+                        <button class="copy-button" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <pre><code class="hljs language-plaintext">Home → Tap Avatar → Perfil Usuario → Tap Mascota → Perfil Mascota
     → Tap Post → Detalle Post → Tap Avatar → Perfil Usuario
-    → Seguidores → Tap Usuario → Perfil Usuario → ... (∞)
-```
-
-**Flujos afectados**:
-1. **Feed → Perfiles** (5-7 niveles)
-   - Home Feed → Perfil Usuario → Perfil Mascota → Posts → Usuario → Seguidores → Usuario → ...
-
-2. **Explorar → Matching → Perfiles** (6+ niveles)
-   - Explorar → Matching → Mascota → Posts → Usuario → Mascota → ...
-
-3. **Comentarios → Perfiles** (Confusión visual)
-   - Home → Modal Comentarios → Perfil Usuario (navegación desde modal crea ambigüedad)
-
-4. **Mi Perfil → Seguidores → Perfiles** (7+ niveles)
-   - Mi Perfil → Seguidores → Usuario → Mascota → Posts → Usuario → ...
-
-**Impacto UX**:
-- ❌ Usuario no sabe cómo volver al inicio
-- ❌ Botón back requiere 6-7+ taps para volver
-- ❌ Confusión sobre contexto actual
-- ❌ Stack de memoria crece excesivamente
-
-**Soluciones propuestas** (ver [CLAUDE.md](../CLAUDE.md) - Tareas de Navegación):
-1. Botón "Home" (escape hatch) cuando stack > 3 niveles
-2. Cerrar modales antes de navegar a perfiles
-3. Quick View Sheets para mascotas/usuarios (vista rápida sin navegación profunda)
-4. Usar `fullscreenDialog: true` cuando stack > 3
-5. Agregar `preventDuplicates: true` en todas las navegaciones
-
-**Estado**: 🔴 Sin implementar - 6 tareas pendientes (ver CLAUDE.md)
-
----
-
-#### 4.2.2 Servicios: Carga Lenta del Mapa
-
-**Problema**: La pantalla de Mapa tarda excesivamente en cargar los servicios (~3-5 segundos).
-
-**Causas identificadas**:
-- Posible falta de paginación en endpoint de servicios
-- Carga de todos los servicios de una vez sin límite geográfico
-- Falta de caché de datos
-
-**Impacto UX**:
-- ❌ Loading prolongado frustra al usuario
-- ❌ Mal rendimiento percibido de la app
-
-**Solución propuesta**:
-- Implementar paginación/lazy loading por área visible
-- Agregar caché de servicios por región
-- Optimizar query del backend con índices geoespaciales
-
-**Estado**: 🟡 Identificado, pendiente de optimización
-
----
-
-### 4.3 ⚠️ Funcionalidades Faltantes (Requisitos para App Store/Play Store)
-
-#### 4.3.1 Sistema de Reportes/Denuncias (Parcial)
-
-**Estado actual**:
-- ✅ Frontend: Botón "Denunciar" en perfiles de usuario implementado
-- ✅ Frontend: Botón "Denunciar" en publicaciones implementado
-- ✅ Frontend: Botón "Denunciar" en historias implementado
-- ❌ Frontend: Botón "Denunciar" en comentarios **FALTA**
-- ❌ Backend: Panel de gestión de reportes para admins **FALTA**
-- ❌ Backend: Notificación automática cuando se recibe reporte **FALTA**
-
-**Prioridad**: 🔴 CRÍTICA (requerido para App Store/Play Store)
-
-**Tareas pendientes**:
-1. Agregar botón "Denunciar" en `post_comments_modal.dart` y `story_comments_modal.dart`
-2. Crear panel de admin para revisar reportes
-3. Implementar sistema de notificación automática a admins
-
----
-
-#### 4.3.2 Eliminación de Comentarios Propios (Parcial)
-
-**Estado actual**:
-- ✅ Backend: Servicios `deleteComment()` implementados en `post_comment_service.dart` y `story_comment_service.dart`
-- ❌ Frontend: Botón UI para eliminar comentarios propios **FALTA**
-
-**Prioridad**: 🟡 MEDIA (buena práctica UX)
-
-**Tarea pendiente**:
-- Agregar botón de eliminar (icono papelera) en comentarios propios en modals
-- Mostrar solo si el usuario es el autor del comentario
-- Agregar confirmación antes de eliminar
-
----
-
-#### 4.3.3 Control de Privacidad (No Implementado)
-
-**Estado actual**:
-- ❌ Perfil público/privado **FALTA**
-- ❌ Control de quién puede ver historias **FALTA**
-- ❌ Control de quién puede comentar posts **FALTA**
-
-**Prioridad**: 🟡 MEDIA (diferenciador de producto)
-
-**Impacto**: Funcionalidad esperada en redes sociales modernas, aumenta confianza del usuario
-
----
-
-#### 4.3.4 Búsqueda de Usuarios/Mascotas/Hashtags (No Implementado)
-
-**Estado actual**:
-- ❌ Búsqueda de usuarios por nombre/username **FALTA**
-- ❌ Búsqueda de mascotas **FALTA**
-- ❌ Búsqueda por hashtags **FALTA**
-- ✅ Lupa en pantalla de inicio **OCULTA** (implementación pendiente)
-
-**Prioridad**: 🟢 BAJA (post-MVP)
-
-**Nota**: La lupa en Home fue intencionalmente ocultada hasta implementar búsqueda funcional
-
----
-
-### 4.4 ❌ Funcionalidades Redundantes/Eliminadas
-
-#### 4.4.1 Galería de Fotos de Usuario (ELIMINADO)
-
-**Razón de eliminación**: Funcionalidad completamente redundante con el sistema de publicaciones.
-
-**Archivos eliminados**:
-- `gallery_controller.dart`
-- `gallery_view.dart`
-- `gallery_service.dart`
-- `user_gallery_models.dart`
-
-**Impacto**:
-- ✅ Reduce complejidad del código
-- ✅ Evita confusión del usuario (¿galería vs publicaciones?)
-- ✅ Backend sigue existiendo pero no se usa en frontend
-
-**Estado**: ✅ COMPLETADO - Tab "Galería" eliminado del perfil de usuario
-
----
-
-### 4.5 🐛 Bugs y Problemas Conocidos
-
-#### 4.5.1 Funcionalidad "Copiar enlace" y "Compartir" No Funcionan
-
-**Afectado**: Publicaciones e historias
-
-**Problema**: Los botones existen en la UI pero no ejecutan ninguna acción
-
-**Prioridad**: 🟡 MEDIA
-
-**Solución propuesta**: Implementar `share_plus` package para compartir contenido
-
----
-
-#### 4.5.2 Swipe en Notificaciones No Funciona Correctamente
-
-**Problema**: La funcionalidad de swipe para eliminar o marcar como leída no responde bien
-
-**Prioridad**: 🟡 MEDIA
-
-**Solución propuesta**:
-- Opción 1: Eliminar funcionalidad de swipe (recomendado - simplicidad)
-- Opción 2: Refactorizar con `flutter_slidable` package
-
----
-
-#### 4.5.3 Panel de Notificaciones No Ocupa Pantalla Completa
-
-**Problema**: El recuadro de notificaciones no abarcar toda la pantalla, dejando espacios en blanco
-
-**Prioridad**: 🟢 BAJA (estético)
-
-**Solución propuesta**: Ajustar layout para fullscreen
-
----
-
-### 4.6 📊 Evaluación de Requisitos Funcionales
-
-**Estado de Requisitos Funcionales** (RF-001 a RF-094):
-
-| Categoría | Total RFs | Implementados | Parciales | Faltantes | % Completado |
-|-----------|-----------|---------------|-----------|-----------|--------------|
-| Autenticación (RF-001 a RF-007) | 7 | 7 | 0 | 0 | 100% ✅ |
-| Perfil Usuario (RF-008 a RF-013) | 6 | 6 | 0 | 0 | 100% ✅ |
-| Mascotas (RF-014 a RF-020) | 7 | 7 | 0 | 0 | 100% ✅ |
-| Salud Mascotas (RF-021 a RF-025) | 5 | 5 | 0 | 0 | 100% ✅ |
-| Publicaciones (RF-026 a RF-035) | 10 | 9 | 1 | 0 | 95% ✅ |
-| Historias (RF-036 a RF-042) | 7 | 7 | 0 | 0 | 100% ✅ |
-| Servicios (RF-043 a RF-050) | 8 | 8 | 0 | 0 | 100% ✅ |
-| Eventos (RF-051 a RF-058) | 8 | 8 | 0 | 0 | 100% ✅ |
-| Notificaciones (RF-059 a RF-064) | 6 | 6 | 0 | 0 | 100% ✅ |
-| Mensajería (RF-065 a RF-069) | 5 | 5 | 0 | 0 | 100% ✅ |
-| Reportes (RF-070 a RF-073) | 4 | 3 | 1 | 0 | 85% ⚠️ |
-| Bloqueo (RF-074 a RF-077) | 4 | 4 | 0 | 0 | 100% ✅ |
-| Configuración (RF-078 a RF-083) | 6 | 6 | 0 | 0 | 100% ✅ |
-| Seguridad (RF-084 a RF-089) | 6 | 6 | 0 | 0 | 100% ✅ |
-| Multimedia (RF-090 a RF-094) | 5 | 5 | 0 | 0 | 100% ✅ |
-| **TOTAL** | **94** | **92** | **2** | **0** | **98%** ✅ |
-
-**Requisitos Parcialmente Implementados**:
-1. **RF-033**: "El usuario debe poder eliminar comentarios en sus propias publicaciones" - Backend ✅, Frontend UI ❌
-2. **RF-072**: "El sistema debe categorizar reportes" - Frontend ✅, Panel Admin ❌
-
----
-
-### 4.7 🎯 Análisis de Pantallas Implementadas
-
-**Total de pantallas/vistas documentadas**: 25
-**Estado de implementación**: 25/25 (100%) ✅
-
-Todas las pantallas principales están completamente implementadas y funcionales. Los problemas detectados son de UX/navegación, no de falta de implementación.
-
----
-
-### 4.8 🔄 Flujos de Navegación - Evaluación
-
-**Flujos documentados en sección 3**: 9 flujos principales
-
-**Evaluación por flujo**:
-
-| Flujo | Estado | Problemas |
-|-------|--------|-----------|
-| 3.1 Autenticación | ✅ Perfecto | Ninguno |
-| 3.2 Principal (Bottom Nav) | ⚠️ Funcional con problemas | Navegación profunda excesiva |
-| 3.3 Gestión de Mascotas | ✅ Perfecto | Ninguno |
-| 3.4 Historias | ✅ Perfecto | Ninguno |
-| 3.5 Configuración | ✅ Perfecto | Ninguno |
-| 3.6 Notificaciones | ⚠️ Funcional con bugs menores | Swipe no funciona bien |
-| 3.7 Crear Publicación | ✅ Perfecto | Ninguno |
-| 3.8 Perfil de Otro Usuario | ⚠️ Funcional con problemas | Navegación profunda excesiva |
-| 3.9 Rutas Principales | ✅ Todas implementadas | Ninguno |
-
-**Problemas de navegación identificados**: Ver sección 4.2.1
-
----
-
-### 4.9 📝 Conclusiones y Recomendaciones
-
-#### ✅ Fortalezas de la App
-
-1. **Funcionalidad Core Completa**: 98% de requisitos funcionales implementados
-2. **Seguridad Robusta**: Rate limiting, sanitización, audit logging, JWT
-3. **Sistema Social Completo**: Follows, likes, comentarios, notificaciones funcionan perfectamente
-4. **UX Moderna**: Animaciones, dark mode, micro-interacciones implementadas
-5. **Arquitectura Sólida**: GetX + Atomic Design + Reactive Forms bien aplicados
-
-#### 🚨 Áreas Críticas que Requieren Atención Inmediata
-
-1. **Navegación profunda** (6 tareas documentadas en CLAUDE.md)
-2. **Sistema de reportes para admins** (requerido para app stores)
-3. **Performance del mapa de servicios** (optimización backend)
-
-#### 🟡 Mejoras Recomendadas para Pre-Lanzamiento
-
-1. Completar sistema de reportes (backend admin panel)
-2. Agregar eliminación de comentarios propios (UI)
-3. Implementar navegación con escape hatch
-4. Fix funcionalidad de compartir
-
-#### 🟢 Features Post-MVP (No Bloqueantes)
-
-1. Búsqueda de usuarios/mascotas/hashtags
-2. Control de privacidad avanzado
-3. Verificación de cuentas (badges)
-4. Deep linking para notificaciones push
-
-#### 📊 Estado General del Proyecto
-
-**Evaluación final**: **Petos está en excelente estado para lanzamiento MVP** (98% completado).
-
-Los problemas identificados son:
-- **UX/navegación** (solucionables en 1-2 sprints)
-- **Features faltantes** (requeridos por app stores, priorizables)
-- **Bugs menores** (no bloqueantes)
-
-**Recomendación**: Priorizar las 6 tareas de navegación + sistema de reportes admin antes del lanzamiento oficial.
-
----
-
-**Fin del Documento**
+    → Seguidores → Tap Usuario → Perfil Usuario → ... (∞)</code></pre>
+                </div>
+            <p><strong>Flujos afectados</strong>:</p>
+<ol>
+<li><p><strong>Feed → Perfiles</strong> (5-7 niveles)</p>
+<ul>
+<li>Home Feed → Perfil Usuario → Perfil Mascota → Posts → Usuario → Seguidores → Usuario → ...</li>
+</ul>
+</li>
+<li><p><strong>Explorar → Matching → Perfiles</strong> (6+ niveles)</p>
+<ul>
+<li>Explorar → Matching → Mascota → Posts → Usuario → Mascota → ...</li>
+</ul>
+</li>
+<li><p><strong>Comentarios → Perfiles</strong> (Confusión visual)</p>
+<ul>
+<li>Home → Modal Comentarios → Perfil Usuario (navegación desde modal crea ambigüedad)</li>
+</ul>
+</li>
+<li><p><strong>Mi Perfil → Seguidores → Perfiles</strong> (7+ niveles)</p>
+<ul>
+<li>Mi Perfil → Seguidores → Usuario → Mascota → Posts → Usuario → ...</li>
+</ul>
+</li>
+</ol>
+<p><strong>Impacto UX</strong>:</p>
+<ul>
+<li>❌ Usuario no sabe cómo volver al inicio</li>
+<li>❌ Botón back requiere 6-7+ taps para volver</li>
+<li>❌ Confusión sobre contexto actual</li>
+<li>❌ Stack de memoria crece excesivamente</li>
+</ul>
+<p><strong>Soluciones propuestas</strong> (ver <a href="../CLAUDE.md">CLAUDE.md</a> - Tareas de Navegación):</p>
+<ol>
+<li>Botón &quot;Home&quot; (escape hatch) cuando stack &gt; 3 niveles</li>
+<li>Cerrar modales antes de navegar a perfiles</li>
+<li>Quick View Sheets para mascotas/usuarios (vista rápida sin navegación profunda)</li>
+<li>Usar <code>fullscreenDialog: true</code> cuando stack &gt; 3</li>
+<li>Agregar <code>preventDuplicates: true</code> en todas las navegaciones</li>
+</ol>
+<p><strong>Estado</strong>: 🔴 Sin implementar - 6 tareas pendientes (ver CLAUDE.md)</p>
+<hr>
+<h4>4.2.2 Servicios: Carga Lenta del Mapa</h4>
+<p><strong>Problema</strong>: La pantalla de Mapa tarda excesivamente en cargar los servicios (~3-5 segundos).</p>
+<p><strong>Causas identificadas</strong>:</p>
+<ul>
+<li>Posible falta de paginación en endpoint de servicios</li>
+<li>Carga de todos los servicios de una vez sin límite geográfico</li>
+<li>Falta de caché de datos</li>
+</ul>
+<p><strong>Impacto UX</strong>:</p>
+<ul>
+<li>❌ Loading prolongado frustra al usuario</li>
+<li>❌ Mal rendimiento percibido de la app</li>
+</ul>
+<p><strong>Solución propuesta</strong>:</p>
+<ul>
+<li>Implementar paginación/lazy loading por área visible</li>
+<li>Agregar caché de servicios por región</li>
+<li>Optimizar query del backend con índices geoespaciales</li>
+</ul>
+<p><strong>Estado</strong>: 🟡 Identificado, pendiente de optimización</p>
+<hr>
+<h3>4.3 ⚠️ Funcionalidades Faltantes (Requisitos para App Store/Play Store)</h3>
+<h4>4.3.1 Sistema de Reportes/Denuncias (Parcial)</h4>
+<p><strong>Estado actual</strong>:</p>
+<ul>
+<li>✅ Frontend: Botón &quot;Denunciar&quot; en perfiles de usuario implementado</li>
+<li>✅ Frontend: Botón &quot;Denunciar&quot; en publicaciones implementado</li>
+<li>✅ Frontend: Botón &quot;Denunciar&quot; en historias implementado</li>
+<li>❌ Frontend: Botón &quot;Denunciar&quot; en comentarios <strong>FALTA</strong></li>
+<li>❌ Backend: Panel de gestión de reportes para admins <strong>FALTA</strong></li>
+<li>❌ Backend: Notificación automática cuando se recibe reporte <strong>FALTA</strong></li>
+</ul>
+<p><strong>Prioridad</strong>: 🔴 CRÍTICA (requerido para App Store/Play Store)</p>
+<p><strong>Tareas pendientes</strong>:</p>
+<ol>
+<li>Agregar botón &quot;Denunciar&quot; en <code>post_comments_modal.dart</code> y <code>story_comments_modal.dart</code></li>
+<li>Crear panel de admin para revisar reportes</li>
+<li>Implementar sistema de notificación automática a admins</li>
+</ol>
+<hr>
+<h4>4.3.2 Eliminación de Comentarios Propios (Parcial)</h4>
+<p><strong>Estado actual</strong>:</p>
+<ul>
+<li>✅ Backend: Servicios <code>deleteComment()</code> implementados en <code>post_comment_service.dart</code> y <code>story_comment_service.dart</code></li>
+<li>❌ Frontend: Botón UI para eliminar comentarios propios <strong>FALTA</strong></li>
+</ul>
+<p><strong>Prioridad</strong>: 🟡 MEDIA (buena práctica UX)</p>
+<p><strong>Tarea pendiente</strong>:</p>
+<ul>
+<li>Agregar botón de eliminar (icono papelera) en comentarios propios en modals</li>
+<li>Mostrar solo si el usuario es el autor del comentario</li>
+<li>Agregar confirmación antes de eliminar</li>
+</ul>
+<hr>
+<h4>4.3.3 Control de Privacidad (No Implementado)</h4>
+<p><strong>Estado actual</strong>:</p>
+<ul>
+<li>❌ Perfil público/privado <strong>FALTA</strong></li>
+<li>❌ Control de quién puede ver historias <strong>FALTA</strong></li>
+<li>❌ Control de quién puede comentar posts <strong>FALTA</strong></li>
+</ul>
+<p><strong>Prioridad</strong>: 🟡 MEDIA (diferenciador de producto)</p>
+<p><strong>Impacto</strong>: Funcionalidad esperada en redes sociales modernas, aumenta confianza del usuario</p>
+<hr>
+<h4>4.3.4 Búsqueda de Usuarios/Mascotas/Hashtags (No Implementado)</h4>
+<p><strong>Estado actual</strong>:</p>
+<ul>
+<li>❌ Búsqueda de usuarios por nombre/username <strong>FALTA</strong></li>
+<li>❌ Búsqueda de mascotas <strong>FALTA</strong></li>
+<li>❌ Búsqueda por hashtags <strong>FALTA</strong></li>
+<li>✅ Lupa en pantalla de inicio <strong>OCULTA</strong> (implementación pendiente)</li>
+</ul>
+<p><strong>Prioridad</strong>: 🟢 BAJA (post-MVP)</p>
+<p><strong>Nota</strong>: La lupa en Home fue intencionalmente ocultada hasta implementar búsqueda funcional</p>
+<hr>
+<h3>4.4 ❌ Funcionalidades Redundantes/Eliminadas</h3>
+<h4>4.4.1 Galería de Fotos de Usuario (ELIMINADO)</h4>
+<p><strong>Razón de eliminación</strong>: Funcionalidad completamente redundante con el sistema de publicaciones.</p>
+<p><strong>Archivos eliminados</strong>:</p>
+<ul>
+<li><code>gallery_controller.dart</code></li>
+<li><code>gallery_view.dart</code></li>
+<li><code>gallery_service.dart</code></li>
+<li><code>user_gallery_models.dart</code></li>
+</ul>
+<p><strong>Impacto</strong>:</p>
+<ul>
+<li>✅ Reduce complejidad del código</li>
+<li>✅ Evita confusión del usuario (¿galería vs publicaciones?)</li>
+<li>✅ Backend sigue existiendo pero no se usa en frontend</li>
+</ul>
+<p><strong>Estado</strong>: ✅ COMPLETADO - Tab &quot;Galería&quot; eliminado del perfil de usuario</p>
+<hr>
+<h3>4.5 🐛 Bugs y Problemas Conocidos</h3>
+<h4>4.5.1 Funcionalidad &quot;Copiar enlace&quot; y &quot;Compartir&quot; No Funcionan</h4>
+<p><strong>Afectado</strong>: Publicaciones e historias</p>
+<p><strong>Problema</strong>: Los botones existen en la UI pero no ejecutan ninguna acción</p>
+<p><strong>Prioridad</strong>: 🟡 MEDIA</p>
+<p><strong>Solución propuesta</strong>: Implementar <code>share_plus</code> package para compartir contenido</p>
+<hr>
+<h4>4.5.2 Swipe en Notificaciones No Funciona Correctamente</h4>
+<p><strong>Problema</strong>: La funcionalidad de swipe para eliminar o marcar como leída no responde bien</p>
+<p><strong>Prioridad</strong>: 🟡 MEDIA</p>
+<p><strong>Solución propuesta</strong>:</p>
+<ul>
+<li>Opción 1: Eliminar funcionalidad de swipe (recomendado - simplicidad)</li>
+<li>Opción 2: Refactorizar con <code>flutter_slidable</code> package</li>
+</ul>
+<hr>
+<h4>4.5.3 Panel de Notificaciones No Ocupa Pantalla Completa</h4>
+<p><strong>Problema</strong>: El recuadro de notificaciones no abarcar toda la pantalla, dejando espacios en blanco</p>
+<p><strong>Prioridad</strong>: 🟢 BAJA (estético)</p>
+<p><strong>Solución propuesta</strong>: Ajustar layout para fullscreen</p>
+<hr>
+<h3>4.6 📊 Evaluación de Requisitos Funcionales</h3>
+<p><strong>Estado de Requisitos Funcionales</strong> (RF-001 a RF-094):</p>
+<table>
+<thead>
+<tr>
+<th>Categoría</th>
+<th>Total RFs</th>
+<th>Implementados</th>
+<th>Parciales</th>
+<th>Faltantes</th>
+<th>% Completado</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Autenticación (RF-001 a RF-007)</td>
+<td>7</td>
+<td>7</td>
+<td>0</td>
+<td>0</td>
+<td>100% ✅</td>
+</tr>
+<tr>
+<td>Perfil Usuario (RF-008 a RF-013)</td>
+<td>6</td>
+<td>6</td>
+<td>0</td>
+<td>0</td>
+<td>100% ✅</td>
+</tr>
+<tr>
+<td>Mascotas (RF-014 a RF-020)</td>
+<td>7</td>
+<td>7</td>
+<td>0</td>
+<td>0</td>
+<td>100% ✅</td>
+</tr>
+<tr>
+<td>Salud Mascotas (RF-021 a RF-025)</td>
+<td>5</td>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>100% ✅</td>
+</tr>
+<tr>
+<td>Publicaciones (RF-026 a RF-035)</td>
+<td>10</td>
+<td>9</td>
+<td>1</td>
+<td>0</td>
+<td>95% ✅</td>
+</tr>
+<tr>
+<td>Historias (RF-036 a RF-042)</td>
+<td>7</td>
+<td>7</td>
+<td>0</td>
+<td>0</td>
+<td>100% ✅</td>
+</tr>
+<tr>
+<td>Servicios (RF-043 a RF-050)</td>
+<td>8</td>
+<td>8</td>
+<td>0</td>
+<td>0</td>
+<td>100% ✅</td>
+</tr>
+<tr>
+<td>Eventos (RF-051 a RF-058)</td>
+<td>8</td>
+<td>8</td>
+<td>0</td>
+<td>0</td>
+<td>100% ✅</td>
+</tr>
+<tr>
+<td>Notificaciones (RF-059 a RF-064)</td>
+<td>6</td>
+<td>6</td>
+<td>0</td>
+<td>0</td>
+<td>100% ✅</td>
+</tr>
+<tr>
+<td>Mensajería (RF-065 a RF-069)</td>
+<td>5</td>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>100% ✅</td>
+</tr>
+<tr>
+<td>Reportes (RF-070 a RF-073)</td>
+<td>4</td>
+<td>3</td>
+<td>1</td>
+<td>0</td>
+<td>85% ⚠️</td>
+</tr>
+<tr>
+<td>Bloqueo (RF-074 a RF-077)</td>
+<td>4</td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>100% ✅</td>
+</tr>
+<tr>
+<td>Configuración (RF-078 a RF-083)</td>
+<td>6</td>
+<td>6</td>
+<td>0</td>
+<td>0</td>
+<td>100% ✅</td>
+</tr>
+<tr>
+<td>Seguridad (RF-084 a RF-089)</td>
+<td>6</td>
+<td>6</td>
+<td>0</td>
+<td>0</td>
+<td>100% ✅</td>
+</tr>
+<tr>
+<td>Multimedia (RF-090 a RF-094)</td>
+<td>5</td>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>100% ✅</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td><strong>94</strong></td>
+<td><strong>92</strong></td>
+<td><strong>2</strong></td>
+<td><strong>0</strong></td>
+<td><strong>98%</strong> ✅</td>
+</tr>
+</tbody></table>
+<p><strong>Requisitos Parcialmente Implementados</strong>:</p>
+<ol>
+<li><strong>RF-033</strong>: &quot;El usuario debe poder eliminar comentarios en sus propias publicaciones&quot; - Backend ✅, Frontend UI ❌</li>
+<li><strong>RF-072</strong>: &quot;El sistema debe categorizar reportes&quot; - Frontend ✅, Panel Admin ❌</li>
+</ol>
+<hr>
+<h3>4.7 🎯 Análisis de Pantallas Implementadas</h3>
+<p><strong>Total de pantallas/vistas documentadas</strong>: 25
+<strong>Estado de implementación</strong>: 25/25 (100%) ✅</p>
+<p>Todas las pantallas principales están completamente implementadas y funcionales. Los problemas detectados son de UX/navegación, no de falta de implementación.</p>
+<hr>
+<h3>4.8 🔄 Flujos de Navegación - Evaluación</h3>
+<p><strong>Flujos documentados en sección 3</strong>: 9 flujos principales</p>
+<p><strong>Evaluación por flujo</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Flujo</th>
+<th>Estado</th>
+<th>Problemas</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>3.1 Autenticación</td>
+<td>✅ Perfecto</td>
+<td>Ninguno</td>
+</tr>
+<tr>
+<td>3.2 Principal (Bottom Nav)</td>
+<td>⚠️ Funcional con problemas</td>
+<td>Navegación profunda excesiva</td>
+</tr>
+<tr>
+<td>3.3 Gestión de Mascotas</td>
+<td>✅ Perfecto</td>
+<td>Ninguno</td>
+</tr>
+<tr>
+<td>3.4 Historias</td>
+<td>✅ Perfecto</td>
+<td>Ninguno</td>
+</tr>
+<tr>
+<td>3.5 Configuración</td>
+<td>✅ Perfecto</td>
+<td>Ninguno</td>
+</tr>
+<tr>
+<td>3.6 Notificaciones</td>
+<td>⚠️ Funcional con bugs menores</td>
+<td>Swipe no funciona bien</td>
+</tr>
+<tr>
+<td>3.7 Crear Publicación</td>
+<td>✅ Perfecto</td>
+<td>Ninguno</td>
+</tr>
+<tr>
+<td>3.8 Perfil de Otro Usuario</td>
+<td>⚠️ Funcional con problemas</td>
+<td>Navegación profunda excesiva</td>
+</tr>
+<tr>
+<td>3.9 Rutas Principales</td>
+<td>✅ Todas implementadas</td>
+<td>Ninguno</td>
+</tr>
+</tbody></table>
+<p><strong>Problemas de navegación identificados</strong>: Ver sección 4.2.1</p>
+<hr>
+<h3>4.9 📝 Conclusiones y Recomendaciones</h3>
+<h4>✅ Fortalezas de la App</h4>
+<ol>
+<li><strong>Funcionalidad Core Completa</strong>: 98% de requisitos funcionales implementados</li>
+<li><strong>Seguridad Robusta</strong>: Rate limiting, sanitización, audit logging, JWT</li>
+<li><strong>Sistema Social Completo</strong>: Follows, likes, comentarios, notificaciones funcionan perfectamente</li>
+<li><strong>UX Moderna</strong>: Animaciones, dark mode, micro-interacciones implementadas</li>
+<li><strong>Arquitectura Sólida</strong>: GetX + Atomic Design + Reactive Forms bien aplicados</li>
+</ol>
+<h4>🚨 Áreas Críticas que Requieren Atención Inmediata</h4>
+<ol>
+<li><strong>Navegación profunda</strong> (6 tareas documentadas en CLAUDE.md)</li>
+<li><strong>Sistema de reportes para admins</strong> (requerido para app stores)</li>
+<li><strong>Performance del mapa de servicios</strong> (optimización backend)</li>
+</ol>
+<h4>🟡 Mejoras Recomendadas para Pre-Lanzamiento</h4>
+<ol>
+<li>Completar sistema de reportes (backend admin panel)</li>
+<li>Agregar eliminación de comentarios propios (UI)</li>
+<li>Implementar navegación con escape hatch</li>
+<li>Fix funcionalidad de compartir</li>
+</ol>
+<h4>🟢 Features Post-MVP (No Bloqueantes)</h4>
+<ol>
+<li>Búsqueda de usuarios/mascotas/hashtags</li>
+<li>Control de privacidad avanzado</li>
+<li>Verificación de cuentas (badges)</li>
+<li>Deep linking para notificaciones push</li>
+</ol>
+<h4>📊 Estado General del Proyecto</h4>
+<p><strong>Evaluación final</strong>: <strong>Petos está en excelente estado para lanzamiento MVP</strong> (98% completado).</p>
+<p>Los problemas identificados son:</p>
+<ul>
+<li><strong>UX/navegación</strong> (solucionables en 1-2 sprints)</li>
+<li><strong>Features faltantes</strong> (requeridos por app stores, priorizables)</li>
+<li><strong>Bugs menores</strong> (no bloqueantes)</li>
+</ul>
+<p><strong>Recomendación</strong>: Priorizar las 6 tareas de navegación + sistema de reportes admin antes del lanzamiento oficial.</p>
+<hr>
+<p><strong>Fin del Documento</strong></p>
+
+</div>
+</details>
+
+</div>
+</body>
+</html>
