@@ -824,6 +824,38 @@
 <td><span class="badge badge-implementado">✅ Implementado</span></td>
 <td>Alta</td>
 </tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-093</td>
+<td>Username único de usuario</td>
+<td>El nombre de usuario (handle) de cada perfil de usuario y mascota debe ser único en toda la plataforma</td>
+<td><span class="badge badge-desarrollo">🔄 En Desarrollo</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-094</td>
+<td>Validación de username</td>
+<td>El sistema debe validar en tiempo real si el username está disponible al registrarse o cambiarlo</td>
+<td><span class="badge badge-desarrollo">🔄 En Desarrollo</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-095</td>
+<td>Formato de username</td>
+<td>Los usernames deben seguir un formato específico (solo letras, números, guión bajo, mínimo 3 caracteres)</td>
+<td><span class="badge badge-desarrollo">🔄 En Desarrollo</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-096</td>
+<td>Cambio de username</td>
+<td>El usuario debe poder cambiar su username (limitado a 1 vez cada 30 días para evitar abuso)</td>
+<td><span class="badge badge-desarrollo">🔄 En Desarrollo</span></td>
+<td>Media</td>
+</tr>
 </tbody>
 </table>
 
@@ -1212,7 +1244,7 @@
 <td>Servicios</td>
 <td>RF-046</td>
 <td>Filtros de servicios</td>
-<td>El usuario debe poder filtrar servicios por categoría, rango de precio y distancia</td>
+<td>El usuario debe poder filtrar servicios por categoría</td>
 <td><span class="badge badge-implementado">✅ Implementado</span></td>
 <td>Alta</td>
 </tr>
@@ -1231,6 +1263,14 @@
 <td>El sistema debe mostrar información de contacto del proveedor del servicio</td>
 <td><span class="badge badge-implementado">✅ Implementado</span></td>
 <td>Alta</td>
+</tr>
+<tr>
+<td>Servicios</td>
+<td>RF-092</td>
+<td>Lista de servicios propios</td>
+<td>El sistema debe mostrar lista de servicios que pertenecen al usuario</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
 </tr>
 </tbody>
 </table>
@@ -1333,7 +1373,7 @@
 <td>RF-057</td>
 <td>Sistema de push notifications</td>
 <td>El sistema debe implementar push notifications para iOS y Android</td>
-<td><span class="badge badge-desarrollo">🔄 En Desarrollo</span></td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
 <td>Alta</td>
 </tr>
 <tr>
@@ -1349,7 +1389,7 @@
 <td>RF-059</td>
 <td>Push para notificaciones sociales</td>
 <td>Los usuarios deben recibir push para likes, mensajes, comentarios y nuevos seguidores</td>
-<td><span class="badge badge-desarrollo">🔄 En Desarrollo</span></td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
 <td>Alta</td>
 </tr>
 <tr>
@@ -1555,18 +1595,122 @@
 <tr>
 <td>Configuración</td>
 <td>RF-077</td>
-<td>Cerrar sesión</td>
-<td>El usuario debe poder cerrar sesión</td>
+<td>Activar/desactivar notificaciones push</td>
+<td>El usuario debe poder activar o desactivar notificaciones push en su dispositivo</td>
 <td><span class="badge badge-implementado">✅ Implementado</span></td>
 <td>Alta</td>
 </tr>
 <tr>
 <td>Configuración</td>
 <td>RF-078</td>
-<td>Eliminar cuenta</td>
-<td>El usuario debe poder eliminar su cuenta</td>
+<td>Activar/desactivar notificaciones email</td>
+<td>El usuario debe poder activar o desactivar notificaciones por correo electrónico</td>
 <td><span class="badge badge-implementado">✅ Implementado</span></td>
 <td>Media</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>RF-079</td>
+<td>Servicios de ubicación</td>
+<td>El usuario debe poder permitir o denegar acceso a su ubicación</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>RF-080</td>
+<td>Mostrar estado en línea</td>
+<td>El usuario debe poder mostrar u ocultar su estado en línea a otros usuarios</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>RF-081</td>
+<td>Permitir etiquetado</td>
+<td>El usuario debe poder permitir o bloquear que otros lo etiqueten en publicaciones</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>RF-082</td>
+<td>Perfil privado</td>
+<td>El usuario debe poder hacer su perfil privado (solo seguidores ven contenido)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>RF-083</td>
+<td>Ver usuarios bloqueados</td>
+<td>El usuario debe poder acceder a la lista de usuarios bloqueados</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>RF-084</td>
+<td>Eliminar cuenta</td>
+<td>El usuario debe poder eliminar permanentemente su cuenta con confirmación</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>RF-085</td>
+<td>Preguntas frecuentes (FAQ)</td>
+<td>El usuario debe poder acceder a la sección de preguntas frecuentes</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>RF-086</td>
+<td>Contactar soporte</td>
+<td>El usuario debe poder enviar un ticket de soporte mediante formulario de contacto</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>RF-087</td>
+<td>Email de soporte</td>
+<td>El usuario debe poder enviar email directamente a soporte (info@inventatec.com)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>RF-088</td>
+<td>Política de privacidad</td>
+<td>El usuario debe poder consultar la política de privacidad de la aplicación</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>RF-089</td>
+<td>Términos de uso</td>
+<td>El usuario debe poder consultar los términos y condiciones de la aplicación</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>RF-090</td>
+<td>Acerca de Petos</td>
+<td>El usuario debe poder ver información de la app (versión, descripción, características)</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>RF-091</td>
+<td>Restaurar configuración</td>
+<td>El usuario debe poder resetear todas las configuraciones a valores por defecto</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+<td>Baja</td>
 </tr>
 </tbody>
 </table>
@@ -1708,15 +1852,15 @@
 <td>Búsqueda</td>
 <td>RF-090</td>
 <td>Buscar usuarios</td>
-<td>Los usuarios deben poder buscar otros usuarios por nombre o ubicación</td>
-<td><span class="badge badge-desarrollo">🔄 En Desarrollo</span></td>
+<td>Los usuarios deben poder buscar otros usuarios por nombre</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
 <td>Media</td>
 </tr>
 <tr>
 <td>Búsqueda</td>
 <td>RF-091</td>
 <td>Buscar mascotas</td>
-<td>Los usuarios deben poder buscar mascotas por nombre, tipo o raza</td>
+<td>Los usuarios deben poder buscar mascotas por nombre, tipo de mascota, edad, ubicación o raza</td>
 <td><span class="badge badge-desarrollo">🔄 En Desarrollo</span></td>
 <td>Media</td>
 </tr>
@@ -1795,14 +1939,6 @@
 <tbody>
 <tr>
 <td>Historias</td>
-<td>RF-037</td>
-<td>Texto y color en historias</td>
-<td>El usuario debe poder agregar texto y color de fondo a las historias</td>
-<td><span class="badge badge-planificado">⏳ Planificado</span></td>
-<td>Media</td>
-</tr>
-<tr>
-<td>Historias</td>
 <td>RF-042</td>
 <td>Indicador de historias no vistas</td>
 <td>El sistema debe mostrar indicador de historias no vistas</td>
@@ -1832,46 +1968,6 @@
 <td>El usuario debe poder cancelar eventos</td>
 <td><span class="badge badge-planificado">⏳ Planificado</span></td>
 <td>Media</td>
-</tr>
-</tbody>
-</table>
-
-<h3>Módulo: Notificaciones</h3>
-<table>
-<thead>
-<tr>
-<th>Módulo</th>
-<th>ID</th>
-<th>Nombre del Requisito</th>
-<th>Descripción</th>
-<th>Estado</th>
-<th>Prioridad</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Notificaciones</td>
-<td>RF-059</td>
-<td>Notificación de me gusta</td>
-<td>El sistema debe notificar cuando alguien da "me gusta" a una publicación</td>
-<td><span class="badge badge-planificado">⏳ Planificado</span></td>
-<td>Alta</td>
-</tr>
-<tr>
-<td>Notificaciones</td>
-<td>RF-060</td>
-<td>Notificación de comentario</td>
-<td>El sistema debe notificar cuando alguien comenta una publicación</td>
-<td><span class="badge badge-planificado">⏳ Planificado</span></td>
-<td>Alta</td>
-</tr>
-<tr>
-<td>Notificaciones</td>
-<td>RF-061</td>
-<td>Notificación de seguidor</td>
-<td>El sistema debe notificar cuando alguien sigue al usuario</td>
-<td><span class="badge badge-planificado">⏳ Planificado</span></td>
-<td>Alta</td>
 </tr>
 </tbody>
 </table>
@@ -1912,14 +2008,6 @@
 <td>El usuario debe poder cambiar idioma de la aplicación</td>
 <td><span class="badge badge-planificado">⏳ Planificado</span></td>
 <td>Baja</td>
-</tr>
-<tr>
-<td>Configuración</td>
-<td>RF-081</td>
-<td>Gestionar notificaciones</td>
-<td>El usuario debe poder gestionar notificaciones</td>
-<td><span class="badge badge-planificado">⏳ Planificado</span></td>
-<td>Media</td>
 </tr>
 </tbody>
 </table>
@@ -1971,38 +2059,6 @@
 </tr>
 <tr>
 <td>Premium</td>
-<td>RF-099</td>
-<td>Límite de historias en plan Free</td>
-<td>Los usuarios Free deben tener un límite de 3 historias por día</td>
-<td><span class="badge badge-planificado">⏳ Planificado</span></td>
-<td>Media</td>
-</tr>
-<tr>
-<td>Premium</td>
-<td>RF-100</td>
-<td>Historias ilimitadas en Premium</td>
-<td>Los usuarios Premium deben poder crear historias ilimitadas</td>
-<td><span class="badge badge-planificado">⏳ Planificado</span></td>
-<td>Media</td>
-</tr>
-<tr>
-<td>Premium</td>
-<td>RF-101</td>
-<td>Límite de 1 mascota en plan Free</td>
-<td>Los usuarios Free deben poder tener solo 1 perfil de mascota</td>
-<td><span class="badge badge-planificado">⏳ Planificado</span></td>
-<td>Media</td>
-</tr>
-<tr>
-<td>Premium</td>
-<td>RF-102</td>
-<td>Hasta 5 mascotas en Premium</td>
-<td>Los usuarios Premium deben poder tener hasta 5 perfiles de mascotas</td>
-<td><span class="badge badge-planificado">⏳ Planificado</span></td>
-<td>Media</td>
-</tr>
-<tr>
-<td>Premium</td>
 <td>RF-103</td>
 <td>Push notifications para Premium</td>
 <td>Los usuarios Premium deben recibir notificaciones push avanzadas de recordatorios de salud</td>
@@ -2030,14 +2086,6 @@
 <td>RF-107</td>
 <td>Renovación automática</td>
 <td>Las suscripciones Premium deben renovarse automáticamente cada mes</td>
-<td><span class="badge badge-planificado">⏳ Planificado</span></td>
-<td>Alta</td>
-</tr>
-<tr>
-<td>Premium</td>
-<td>RF-108</td>
-<td>Cancelación de suscripción</td>
-<td>El usuario debe poder cancelar su suscripción Premium en cualquier momento</td>
 <td><span class="badge badge-planificado">⏳ Planificado</span></td>
 <td>Alta</td>
 </tr>
@@ -2564,78 +2612,6 @@
 </tbody>
 </table>
 
-<h3>Módulo: Búsqueda Avanzada</h3>
-<table>
-<thead>
-<tr>
-<th>Módulo</th>
-<th>ID</th>
-<th>Nombre del Requisito</th>
-<th>Descripción</th>
-<th>Estado</th>
-<th>Prioridad</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Búsqueda</td>
-<td>RF-185</td>
-<td>Filtros avanzados</td>
-<td>La búsqueda debe tener filtros avanzados (ubicación, tipo de mascota, verificado, etc.)</td>
-<td><span class="badge badge-planificado">⏳ Planificado</span></td>
-<td>Baja</td>
-</tr>
-</tbody>
-</table>
-
-<h3>Módulo: Autenticación con Terceros</h3>
-<table>
-<thead>
-<tr>
-<th>Módulo</th>
-<th>ID</th>
-<th>Nombre del Requisito</th>
-<th>Descripción</th>
-<th>Estado</th>
-<th>Prioridad</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Autenticación</td>
-<td>RF-190</td>
-<td>Login con Google</td>
-<td>El usuario debe poder iniciar sesión usando su cuenta de Google (OAuth 2.0)</td>
-<td><span class="badge badge-planificado">⏳ Planificado</span></td>
-<td>Alta</td>
-</tr>
-<tr>
-<td>Autenticación</td>
-<td>RF-191</td>
-<td>Login con Apple</td>
-<td>El usuario debe poder iniciar sesión usando Apple Sign-In</td>
-<td><span class="badge badge-planificado">⏳ Planificado</span></td>
-<td>Alta</td>
-</tr>
-<tr>
-<td>Autenticación</td>
-<td>RF-192</td>
-<td>Vincular cuenta social</td>
-<td>El usuario debe poder vincular su cuenta existente con Google/Apple desde configuración</td>
-<td><span class="badge badge-planificado">⏳ Planificado</span></td>
-<td>Media</td>
-</tr>
-<tr>
-<td>Autenticación</td>
-<td>RF-193</td>
-<td>Registro con cuenta social</td>
-<td>El usuario debe poder registrarse directamente usando Google/Apple sin email/contraseña</td>
-<td><span class="badge badge-planificado">⏳ Planificado</span></td>
-<td>Alta</td>
-</tr>
-</tbody>
-</table>
-
 <h3>Módulo: Alerta de Mascota Perdida</h3>
 <table>
 <thead>
@@ -2814,54 +2790,6 @@
 <td>RF-220</td>
 <td>Verificar compra</td>
 <td>El sistema debe verificar que el usuario ha utilizado el servicio antes de permitir valoración</td>
-<td><span class="badge badge-planificado">⏳ Planificado</span></td>
-<td>Media</td>
-</tr>
-</tbody>
-</table>
-
-<h3>Módulo: Unicidad de Nombres</h3>
-<table>
-<thead>
-<tr>
-<th>Módulo</th>
-<th>ID</th>
-<th>Nombre del Requisito</th>
-<th>Descripción</th>
-<th>Estado</th>
-<th>Prioridad</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Unicidad</td>
-<td>RF-221</td>
-<td>Username único de usuario</td>
-<td>El nombre de usuario (handle) de cada perfil de usuario y mascota debe ser único en toda la plataforma</td>
-<td><span class="badge badge-planificado">⏳ Planificado</span></td>
-<td>Alta</td>
-</tr>
-<tr>
-<td>Unicidad</td>
-<td>RF-222</td>
-<td>Validación de username</td>
-<td>El sistema debe validar en tiempo real si el username está disponible al registrarse o cambiarlo</td>
-<td><span class="badge badge-planificado">⏳ Planificado</span></td>
-<td>Alta</td>
-</tr>
-<tr>
-<td>Unicidad</td>
-<td>RF-224</td>
-<td>Formato de username</td>
-<td>Los usernames deben seguir un formato específico (solo letras, números, guión bajo, mínimo 3 caracteres)</td>
-<td><span class="badge badge-planificado">⏳ Planificado</span></td>
-<td>Media</td>
-</tr>
-<tr>
-<td>Unicidad</td>
-<td>RF-225</td>
-<td>Cambio de username</td>
-<td>El usuario debe poder cambiar su username (limitado a 1 vez cada 30 días para evitar abuso)</td>
 <td><span class="badge badge-planificado">⏳ Planificado</span></td>
 <td>Media</td>
 </tr>
@@ -3120,6 +3048,230 @@
 <td>El sistema debe generar reportes mensuales de ingresos por suscripciones y comisiones</td>
 <td><span class="badge badge-planificado">⏳ Planificado</span></td>
 <td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Sistema de Match</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-260</td>
+<td>Activar/desactivar modo match</td>
+<td>El usuario puede activar o desactivar el modo match en configuración</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-261</td>
+<td>Configurar preferencias de match</td>
+<td>El usuario puede configurar preferencias (especie, raza, edad, ubicación) para el match</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-262</td>
+<td>Swipe derecha (like)</td>
+<td>El usuario puede dar swipe derecha para indicar interés en una mascota</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-263</td>
+<td>Swipe izquierda (pasar)</td>
+<td>El usuario puede dar swipe izquierda para pasar a la siguiente mascota</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-264</td>
+<td>Notificación de match mutuo</td>
+<td>El sistema notifica cuando hay un match mutuo entre dos mascotas</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-265</td>
+<td>Chat exclusivo de match</td>
+<td>Los usuarios con match pueden iniciar un chat privado</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-266</td>
+<td>Deshacer último swipe</td>
+<td>El usuario puede deshacer el último swipe realizado</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Baja</td>
+</tr>
+<tr>
+<td>Sistema de Match</td>
+<td>RF-267</td>
+<td>Ver perfil completo antes de decidir</td>
+<td>El usuario puede ver el perfil completo de una mascota antes de hacer swipe</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Verificación de Cuenta en Registro</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Verificación</td>
+<td>RF-268</td>
+<td>Envío de código verificación email</td>
+<td>El sistema envía un código de 6 dígitos al email del usuario durante el registro</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Verificación</td>
+<td>RF-269</td>
+<td>Ingreso de código 6 dígitos</td>
+<td>El usuario debe ingresar el código de 6 dígitos recibido por email para verificar su cuenta</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Verificación</td>
+<td>RF-270</td>
+<td>Reenvío de código</td>
+<td>El usuario puede solicitar el reenvío del código de verificación si no lo recibió</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Verificación</td>
+<td>RF-271</td>
+<td>Expiración de código (15 min)</td>
+<td>El código de verificación expira después de 15 minutos por seguridad</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Autenticación con Terceros</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Autenticación</td>
+<td>RF-190</td>
+<td>Login con Google</td>
+<td>El usuario debe poder iniciar sesión usando su cuenta de Google (OAuth 2.0)</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-191</td>
+<td>Login con Apple</td>
+<td>El usuario debe poder iniciar sesión usando Apple Sign-In</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-192</td>
+<td>Vincular cuenta social</td>
+<td>El usuario debe poder vincular su cuenta existente con Google/Apple desde configuración</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>RF-193</td>
+<td>Registro con cuenta social</td>
+<td>El usuario debe poder registrarse directamente usando Google/Apple sin email/contraseña</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Módulo: Solicitudes de Mensajes</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>ID</th>
+<th>Nombre del Requisito</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mensajería</td>
+<td>RF-272</td>
+<td>Bandeja de solicitudes de mensaje</td>
+<td>El usuario tiene una bandeja separada para ver solicitudes de mensaje de usuarios no seguidos</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Mensajería</td>
+<td>RF-273</td>
+<td>Aceptar solicitud de mensaje</td>
+<td>El usuario puede aceptar una solicitud de mensaje, habilitando el chat</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Mensajería</td>
+<td>RF-274</td>
+<td>Rechazar solicitud de mensaje</td>
+<td>El usuario puede rechazar una solicitud de mensaje sin bloquear al usuario</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Mensajería</td>
+<td>RF-275</td>
+<td>Configurar quién puede enviar mensajes</td>
+<td>El usuario puede configurar si todos, solo seguidores, o nadie puede enviarle mensajes directos</td>
+<td><span class="badge badge-planificado">⏳ Planificado</span></td>
+<td>Alta</td>
 </tr>
 </tbody>
 </table>
@@ -3412,182 +3564,6 @@
 <td>RF-249</td>
 <td>Comisión de marketplace</td>
 <td>El sistema debe aplicar una comisión del 10-15% a las ventas de productos de terceros</td>
-<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
-<td>Alta</td>
-</tr>
-</tbody>
-</table>
-
-<h3>Módulo: Sistema de Match</h3>
-<table>
-<thead>
-<tr>
-<th>Módulo</th>
-<th>ID</th>
-<th>Nombre del Requisito</th>
-<th>Descripción</th>
-<th>Estado</th>
-<th>Prioridad</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Sistema de Match</td>
-<td>RF-260</td>
-<td>Activar/desactivar modo match</td>
-<td>El usuario puede activar o desactivar el modo match en configuración</td>
-<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
-<td>Media</td>
-</tr>
-<tr>
-<td>Sistema de Match</td>
-<td>RF-261</td>
-<td>Configurar preferencias de match</td>
-<td>El usuario puede configurar preferencias (especie, raza, edad, ubicación) para el match</td>
-<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
-<td>Media</td>
-</tr>
-<tr>
-<td>Sistema de Match</td>
-<td>RF-262</td>
-<td>Swipe derecha (like)</td>
-<td>El usuario puede dar swipe derecha para indicar interés en una mascota</td>
-<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
-<td>Alta</td>
-</tr>
-<tr>
-<td>Sistema de Match</td>
-<td>RF-263</td>
-<td>Swipe izquierda (pasar)</td>
-<td>El usuario puede dar swipe izquierda para pasar a la siguiente mascota</td>
-<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
-<td>Alta</td>
-</tr>
-<tr>
-<td>Sistema de Match</td>
-<td>RF-264</td>
-<td>Notificación de match mutuo</td>
-<td>El sistema notifica cuando hay un match mutuo entre dos mascotas</td>
-<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
-<td>Alta</td>
-</tr>
-<tr>
-<td>Sistema de Match</td>
-<td>RF-265</td>
-<td>Chat exclusivo de match</td>
-<td>Los usuarios con match pueden iniciar un chat privado</td>
-<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
-<td>Alta</td>
-</tr>
-<tr>
-<td>Sistema de Match</td>
-<td>RF-266</td>
-<td>Deshacer último swipe</td>
-<td>El usuario puede deshacer el último swipe realizado</td>
-<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
-<td>Baja</td>
-</tr>
-<tr>
-<td>Sistema de Match</td>
-<td>RF-267</td>
-<td>Ver perfil completo antes de decidir</td>
-<td>El usuario puede ver el perfil completo de una mascota antes de hacer swipe</td>
-<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
-<td>Media</td>
-</tr>
-</tbody>
-</table>
-
-<h3>Módulo: Verificación de Cuenta en Registro</h3>
-<table>
-<thead>
-<tr>
-<th>Módulo</th>
-<th>ID</th>
-<th>Nombre del Requisito</th>
-<th>Descripción</th>
-<th>Estado</th>
-<th>Prioridad</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Verificación</td>
-<td>RF-268</td>
-<td>Envío de código verificación email</td>
-<td>El sistema envía un código de 6 dígitos al email del usuario durante el registro</td>
-<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
-<td>Alta</td>
-</tr>
-<tr>
-<td>Verificación</td>
-<td>RF-269</td>
-<td>Ingreso de código 6 dígitos</td>
-<td>El usuario debe ingresar el código de 6 dígitos recibido por email para verificar su cuenta</td>
-<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
-<td>Alta</td>
-</tr>
-<tr>
-<td>Verificación</td>
-<td>RF-270</td>
-<td>Reenvío de código</td>
-<td>El usuario puede solicitar el reenvío del código de verificación si no lo recibió</td>
-<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
-<td>Media</td>
-</tr>
-<tr>
-<td>Verificación</td>
-<td>RF-271</td>
-<td>Expiración de código (15 min)</td>
-<td>El código de verificación expira después de 15 minutos por seguridad</td>
-<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
-<td>Alta</td>
-</tr>
-</tbody>
-</table>
-
-<h3>Módulo: Solicitudes de Mensajes</h3>
-<table>
-<thead>
-<tr>
-<th>Módulo</th>
-<th>ID</th>
-<th>Nombre del Requisito</th>
-<th>Descripción</th>
-<th>Estado</th>
-<th>Prioridad</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Mensajería</td>
-<td>RF-272</td>
-<td>Bandeja de solicitudes de mensaje</td>
-<td>El usuario tiene una bandeja separada para ver solicitudes de mensaje de usuarios no seguidos</td>
-<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
-<td>Media</td>
-</tr>
-<tr>
-<td>Mensajería</td>
-<td>RF-273</td>
-<td>Aceptar solicitud de mensaje</td>
-<td>El usuario puede aceptar una solicitud de mensaje, habilitando el chat</td>
-<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
-<td>Alta</td>
-</tr>
-<tr>
-<td>Mensajería</td>
-<td>RF-274</td>
-<td>Rechazar solicitud de mensaje</td>
-<td>El usuario puede rechazar una solicitud de mensaje sin bloquear al usuario</td>
-<td><span class="badge">⚠️ Pendiente Aprobación</span></td>
-<td>Media</td>
-</tr>
-<tr>
-<td>Mensajería</td>
-<td>RF-275</td>
-<td>Configurar quién puede enviar mensajes</td>
-<td>El usuario puede configurar si todos, solo seguidores, o nadie puede enviarle mensajes directos</td>
 <td><span class="badge">⚠️ Pendiente Aprobación</span></td>
 <td>Alta</td>
 </tr>
