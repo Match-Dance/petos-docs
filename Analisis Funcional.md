@@ -3938,7 +3938,7 @@
 </tr>
 <tr>
 <td><strong>Requisitos Funcionales</strong></td>
-<td><strong>RF-004</strong> - Mantener sesión activa con JWT</td>
+<td><strong>RF-004</strong> - Mantener sesión activa con JWT<br><strong>RF-094</strong> - Dark mode</td>
 </tr>
 <tr>
 <td><strong>Desglose de Componentes de la UI</strong></td>
@@ -3974,7 +3974,7 @@
 </tr>
 <tr>
 <td><strong>Requisitos Funcionales</strong></td>
-<td><strong>RF-001</strong> - Registro de usuarios<br><strong>RF-002</strong> - Validación de fortaleza de contraseña<br><strong>RF-003</strong> - Autenticación con email y contraseña<br><strong>RF-004</strong> - Mantener sesión activa con JWT</td>
+<td><strong>RF-001</strong> - Registro de usuarios<br><strong>RF-002</strong> - Validación de fortaleza de contraseña<br><strong>RF-003</strong> - Autenticación con email y contraseña<br><strong>RF-004</strong> - Mantener sesión activa con JWT<br><strong>RF-005</strong> - Recuperación de contraseña<br><strong>RF-083</strong> - Encriptación de contraseñas</td>
 </tr>
 <tr>
 <td><strong>Desglose de Componentes de la UI</strong></td>
@@ -4197,7 +4197,7 @@
 </tr>
 <tr>
 <td><strong>Requisitos Funcionales</strong></td>
-<td><strong>RF-012</strong> - Visualizar perfil de usuario<br><strong>RF-013</strong> - Editar perfil de usuario<br><strong>RF-014</strong> - Ver estadísticas de usuario</td>
+<td><strong>RF-012</strong> - Visualizar perfil de usuario<br><strong>RF-013</strong> - Editar perfil de usuario<br><strong>RF-014</strong> - Ver estadísticas de usuario<br><strong>RF-008</strong> - Ver y editar perfil<br><strong>RF-009</strong> - Avatar de usuario<br><strong>RF-010</strong> - Estadísticas de perfil<br><strong>RF-092</strong> - Recorte de imagen para avatares</td>
 </tr>
 <tr>
 <td><strong>Desglose de Componentes de la UI</strong></td>
@@ -4233,7 +4233,7 @@
 </tr>
 <tr>
 <td><strong>Requisitos Funcionales</strong></td>
-<td><strong>RF-012</strong> - Visualizar perfil de usuario<br><strong>RF-014</strong> - Ver estadísticas de usuario<br><strong>RF-015</strong> - Seguir/Dejar de seguir usuario<br><strong>RF-016</strong> - Ver lista de seguidores<br><strong>RF-017</strong> - Ver lista de siguiendo<br><strong>RF-073</strong> - Bloquear usuarios<br><strong>RF-076</strong> - Denunciar usuarios</td>
+<td><strong>RF-012</strong> - Visualizar perfil de usuario<br><strong>RF-014</strong> - Ver estadísticas de usuario<br><strong>RF-015</strong> - Seguir/Dejar de seguir usuario<br><strong>RF-016</strong> - Ver lista de seguidores<br><strong>RF-017</strong> - Ver lista de siguiendo<br><strong>RF-073</strong> - Bloquear usuarios<br><strong>RF-076</strong> - Denunciar usuarios<br><strong>RF-011</strong> - Ver otros perfiles<br><strong>RF-093</strong> - Prevención de navegación circular</td>
 </tr>
 <tr>
 <td><strong>Desglose de Componentes de la UI</strong></td>
@@ -4341,7 +4341,7 @@
 </tr>
 <tr>
 <td><strong>Requisitos Funcionales</strong></td>
-<td><strong>RF-024</strong> - Ver publicaciones de usuario/mascota<br><strong>RF-030</strong> - Filtrar publicaciones<br><strong>RF-034</strong> - Dar likes a publicaciones<br><strong>RF-035</strong> - Comentar publicaciones</td>
+<td><strong>RF-024</strong> - Ver publicaciones de usuario/mascota<br><strong>RF-030</strong> - Filtrar publicaciones<br><strong>RF-034</strong> - Dar likes a publicaciones<br><strong>RF-031</strong> - Comentar publicaciones</td>
 </tr>
 <tr>
 <td><strong>Desglose de Componentes de la UI</strong></td>
@@ -4377,7 +4377,7 @@
 </tr>
 <tr>
 <td><strong>Requisitos Funcionales</strong></td>
-<td><strong>RF-014</strong> - Buscar usuarios<br><strong>RF-018</strong> - Buscar mascotas<br><strong>RF-016</strong> - Ver perfil de usuarios</td>
+<td><strong>RF-014</strong> - Buscar usuarios<br><strong>RF-018</strong> - Buscar mascotas<br><strong>RF-011</strong> - Ver otros perfiles<br><strong>RF-090</strong> - Buscar usuarios<br><strong>RF-091</strong> - Buscar mascotas</td>
 </tr>
 <tr>
 <td><strong>Desglose de Componentes de la UI</strong></td>
@@ -4571,7 +4571,7 @@
 </tr>
 <tr>
 <td><strong>Requisitos Funcionales</strong></td>
-<td><strong>RF-025</strong> - Visualizar información de salud de mascota<br><strong>RF-026</strong> - Gestionar registros de salud (vacunas, desparasitación, dieta, actividad, citas vet, cirugías)<br><strong>RF-027</strong> - Seguimiento de peso con estadísticas<br><strong>RF-028</strong> - Seguimiento de actividad con estadísticas<br><strong>RF-029</strong> - Recordatorios de eventos de salud próximos</td>
+<td><strong>RF-025</strong> - Visualizar información de salud de mascota<br><strong>RF-021</strong> - Crear registro de salud (vacunas, desparasitación, dieta, actividad, citas vet, cirugías)<br><strong>RF-027</strong> - Seguimiento de peso con estadísticas<br><strong>RF-023</strong> - Seguimiento de actividad con estadísticas<br><strong>RF-024</strong> - Recordatorios de salud próximos</td>
 </tr>
 <tr>
 <td><strong>Desglose de Componentes de la UI</strong></td>
@@ -4722,7 +4722,7 @@
 </tr>
 <tr>
 <td><strong>Requisitos Funcionales</strong></td>
-<td><strong>RF-030</strong> - Listar publicaciones del feed con infinite scroll<br><strong>RF-031</strong> - Mostrar información de autor y mascota en publicación<br><strong>RF-032</strong> - Mostrar likes y comentarios de publicación<br><strong>RF-033</strong> - Permitir dar like/unlike a publicaciones<br><strong>RF-034</strong> - Permitir comentar publicaciones<br><strong>RF-035</strong> - Reproducir videos en feed<br><strong>RF-036</strong> - Mostrar barra de historias en feed<br><strong>RF-105</strong> - Navegación entre pantallas desde publicaciones<br><strong>RF-120</strong> - Validar permiso de usuario bloqueado<br><strong>RF-114</strong> - Validar seguidor/no seguidor</td>
+<td><strong>RF-030</strong> - Listar publicaciones del feed con infinite scroll<br><strong>RF-031</strong> - Mostrar información de autor y mascota en publicación<br><strong>RF-032</strong> - Mostrar likes y comentarios de publicación<br><strong>RF-033</strong> - Permitir dar like/unlike a publicaciones<br><strong>RF-034</strong> - Permitir comentar publicaciones<br><strong>RF-035</strong> - Scroll infinito<br><strong>RF-032</strong> - Reproducir videos<br><strong>RF-028</strong> - Agregar video (1)<br><strong>RF-029</strong> - Etiquetar mascotas<br><strong>RF-036</strong> - Mostrar barra de historias en feed<br><strong>RF-105</strong> - Navegación entre pantallas desde publicaciones<br><strong>RF-120</strong> - Validar permiso de usuario bloqueado<br><strong>RF-114</strong> - Validar seguidor/no seguidor<br><strong>RF-084</strong> - Validación de archivos<br><strong>RF-085</strong> - Almacenamiento en Cloudinary<br><strong>RF-086</strong> - Múltiples tamaños de imagen<br><strong>RF-087</strong> - Optimización automática<br><strong>RF-088</strong> - Soporte de videos<br><strong>RF-089</strong> - Validación de videos</td>
 </tr>
 <tr>
 <td><strong>Desglose de Componentes de la UI</strong></td>
@@ -4794,7 +4794,7 @@
 </tr>
 <tr>
 <td><strong>Requisitos Funcionales</strong></td>
-<td><strong>RF-036</strong> - Navegar entre pestañas principales<br><strong>RF-105</strong> - Mostrar perfil de usuario</td>
+<td>Infraestructura de navegación (sin RF específico)</td>
 </tr>
 <tr>
 <td><strong>Desglose de Componentes de la UI</strong></td>
@@ -4837,7 +4837,7 @@
 </tr>
 <tr>
 <td><strong>Requisitos Funcionales</strong></td>
-<td><strong>RF-038</strong> - Crear historia (foto o video)<br><strong>RF-040</strong> - Upload de historia a servidor<br><strong>RF-120</strong> - Validar permisos y autenticación<br><strong>RF-114</strong> - Validar estado de usuario</td>
+<td><strong>RF-036</strong> - Crear historia con imagen/video<br><strong>RF-038</strong> - Duración 24 horas (foto o video)<br><strong>RF-040</strong> - Upload de historia a servidor<br><strong>RF-120</strong> - Validar permisos y autenticación<br><strong>RF-114</strong> - Validar estado de usuario</td>
 </tr>
 <tr>
 <td><strong>Desglose de Componentes de la UI</strong></td>
@@ -4873,7 +4873,7 @@
 </tr>
 <tr>
 <td><strong>Requisitos Funcionales</strong></td>
-<td><strong>RF-039</strong> - Ver historias de usuarios seguidos<br><strong>RF-040</strong> - Reproducir videos de historias<br><strong>RF-041</strong> - Interactuar con historias (like, comentarios)<br><strong>RF-106</strong> - Navegar entre historias</td>
+<td><strong>RF-039</strong> - Ver historias de usuarios seguidos<br><strong>RF-040</strong> - Reproducir videos de historias<br><strong>RF-040</strong> - Interactuar con historias (like, comentarios)<br><strong>RF-106</strong> - Navegar entre historias</td>
 </tr>
 <tr>
 <td><strong>Desglose de Componentes de la UI</strong></td>
@@ -4909,7 +4909,7 @@
 </tr>
 <tr>
 <td><strong>Requisitos Funcionales</strong></td>
-<td><strong>RF-039</strong> - Ver historias de usuario específico<br><strong>RF-040</strong> - Reproducir historias de usuario</td>
+<td><strong>RF-039</strong> - Ver historias de usuario específico<br><strong>RF-040</strong> - Reproducir historias de usuario<br><strong>RF-037</strong> - Ver historias de seguidos</td>
 </tr>
 <tr>
 <td><strong>Desglose de Componentes de la UI</strong></td>
@@ -4952,7 +4952,7 @@
 </tr>
 <tr>
 <td><strong>Requisitos Funcionales</strong></td>
-<td><strong>RF-043</strong> - Editar servicio<br><strong>RF-044</strong> - Eliminar servicio<br><strong>RF-045</strong> - Mapa de servicios<br><strong>RF-046</strong> - Filtros de servicios<br><strong>RF-120</strong> - Edición básica de datos (genérico)<br><strong>RF-121</strong> - Operaciones de eliminación (genérico)</td>
+<td><strong>RF-043</strong> - Editar servicio<br><strong>RF-044</strong> - Eliminar servicio<br><strong>RF-045</strong> - Mapa de servicios<br><strong>RF-046</strong> - Filtros de servicios<br><strong>RF-120</strong> - Edición básica de datos (genérico)<br><strong>RF-121</strong> - Operaciones de eliminación (genérico)<br><strong>RF-041</strong> - Crear servicio<br><strong>RF-042</strong> - Imágenes de servicio (hasta 5)</td>
 </tr>
 <tr>
 <td><strong>Desglose de Componentes de la UI</strong></td>
@@ -5139,7 +5139,7 @@
 </tr>
 <tr>
 <td><strong>Requisitos Funcionales</strong></td>
-<td><strong>RF-052</strong> - Filtros de eventos<br><strong>RF-053</strong> - Eliminar evento<br><strong>RF-107</strong> - Mapa de eventos<br><strong>RF-055</strong> - Detalles de evento<br><strong>RF-056</strong> - Lista de eventos propios<br><strong>RF-120</strong> - Edición básica de datos (genérico)<br><strong>RF-121</strong> - Operaciones de eliminación (genérico)</td>
+<td><strong>RF-052</strong> - Filtros de eventos<br><strong>RF-053</strong> - Eliminar evento<br><strong>RF-107</strong> - Mapa de eventos<br><strong>RF-055</strong> - Detalles de evento<br><strong>RF-056</strong> - Lista de eventos propios<br><strong>RF-120</strong> - Edición básica de datos (genérico)<br><strong>RF-121</strong> - Operaciones de eliminación (genérico)<br><strong>RF-054</strong> - Mapa de eventos</td>
 </tr>
 <tr>
 <td><strong>Desglose de Componentes de la UI</strong></td>
@@ -5175,7 +5175,7 @@
 </tr>
 <tr>
 <td><strong>Requisitos Funcionales</strong></td>
-<td><strong>RF-058</strong> - Detalles de evento</td>
+<td><strong>RF-055</strong> - Ver detalles de evento</td>
 </tr>
 <tr>
 <td><strong>Desglose de Componentes de la UI</strong></td>
@@ -5290,7 +5290,7 @@
 </tr>
 <tr>
 <td><strong>Requisitos Funcionales</strong></td>
-<td><strong>RF-109</strong> - Filtrar notificaciones<br><strong>RF-110</strong> - Marcar como leída automáticamente<br><strong>RF-062</strong> - Push para recordatorios de salud<br><strong>RF-063</strong> - Configurar tipos de push<br><strong>RF-064</strong> - Horario de no molestar</td>
+<td><strong>RF-109</strong> - Filtrar notificaciones<br><strong>RF-110</strong> - Marcar como leída automáticamente<br><strong>RF-062</strong> - Push para recordatorios de salud<br><strong>RF-063</strong> - Configurar tipos de push<br><strong>RF-064</strong> - Horario de no molestar<br><strong>RF-059</strong> - Push para notificaciones sociales<br><strong>RF-058</strong> - Ver y eliminar notificaciones<br><strong>RF-060</strong> - Filtrar notificaciones<br><strong>RF-061</strong> - Marcar como leída automáticamente</td>
 </tr>
 <tr>
 <td><strong>Desglose de Componentes de la UI</strong></td>
@@ -5409,7 +5409,7 @@
 </tr>
 <tr>
 <td><strong>Requisitos Funcionales</strong></td>
-<td><strong>RF-068</strong> - Chat entre usuarios<br><strong>RF-069</strong> - Crear conversación grupal<br><strong>RF-070</strong> - Gestionar miembros de grupo<br><strong>RF-071</strong> - Enviar y recibir mensajes<br><strong>RF-072</strong> - Notificaciones de mensajes</td>
+<td><strong>RF-068</strong> - Chat entre usuarios<br><strong>RF-069</strong> - Crear conversación grupal<br><strong>RF-069</strong> - Crear grupo de chat<br><strong>RF-071</strong> - Enviar y recibir mensajes<br><strong>RF-072</strong> - Notificaciones de mensajes<br><strong>RF-066</strong> - Lista de conversaciones<br><strong>RF-067</strong> - Último mensaje</td>
 </tr>
 <tr>
 <td><strong>Desglose de Componentes de la UI</strong></td>
@@ -5445,7 +5445,7 @@
 </tr>
 <tr>
 <td><strong>Requisitos Funcionales</strong></td>
-<td><strong>RF-068</strong> - Chat entre usuarios<br><strong>RF-071</strong> - Enviar y recibir mensajes</td>
+<td><strong>RF-068</strong> - Chat entre usuarios<br><strong>RF-071</strong> - Enviar y recibir mensajes<br><strong>RF-065</strong> - Enviar mensajes directos</td>
 </tr>
 <tr>
 <td><strong>Desglose de Componentes de la UI</strong></td>
@@ -5553,7 +5553,7 @@
 </tr>
 <tr>
 <td><strong>Requisitos Funcionales</strong></td>
-<td><strong>RF-069</strong> - Crear conversación grupal<br><strong>RF-070</strong> - Gestionar miembros de grupo</td>
+<td><strong>RF-069</strong> - Crear conversación grupal<br><strong>RF-069</strong> - Gestionar miembros de grupo de grupo</td>
 </tr>
 <tr>
 <td><strong>Desglose de Componentes de la UI</strong></td>
@@ -5599,7 +5599,7 @@
 </tr>
 <tr>
 <td><strong>Requisitos Funcionales</strong></td>
-<td><strong>RF-073</strong> - Reportar usuarios<br><strong>RF-074</strong> - Reportar contenido (posts, comentarios)<br><strong>RF-075</strong> - Sistema de reportes con moderation</td>
+<td><strong>RF-073</strong> - Reportar usuarios<br><strong>RF-070</strong> - Reportar publicaciones (posts, comentarios)<br><strong>RF-075</strong> - Sistema de reportes con moderation</td>
 </tr>
 <tr>
 <td><strong>Desglose de Componentes de la UI</strong></td>
