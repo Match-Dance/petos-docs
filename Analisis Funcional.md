@@ -720,7 +720,7 @@
 <div class="container">
 
 <div class="toc">
-  <h2>📋 Tabla de Contenidos</h2>
+  <h2>📋 Tabla de Contenidos</h3>
   <ul>
     <li><a href="#seccion-1">1. Requisitos Funcionales</a>
       <ul style="list-style: none; margin-left: 20px; margin-top: 10px;">
@@ -3910,7 +3910,7 @@
 <div class="section-content">
 
 <p>Esta seccion documenta todas las pantallas de la aplicacion Petos mediante historias de usuario estructuradas, organizadas por modulos funcionales.</p>
-<p><strong>Total de Historias de Usuario Documentadas</strong>: 51 (HU-001 a HU-051)</p>
+<p><strong>Total de Historias de Usuario Documentadas</strong>: 53 (HU-001 a HU-053)</p>
 <p><strong>Total de Modulos</strong>: 11 (todos con HU documentadas e implementadas)</p>
 <p><strong>Cobertura</strong>: 100% de las pantallas principales del MVP están documentadas</p>
 <p><strong>Últimas actualizaciones</strong>: +8 HU nuevas (Navegación, Búsqueda, Mapa, Configuración, Legal, Soporte)</p>
@@ -4172,13 +4172,8 @@
 </table>
 <hr />
 
-</div>
-</details>
-<details id="seccion-3-2">
-<summary>3.2 MÓDULO 2: Perfil de Usuario</summary>
-<div class="section-content">
+<h3>HU-008: Recuperar Contraseña - Proceso Multi-paso</h3>
 
-<h3>HU-008: Mi Perfil - Perfil del Usuario Actual</h3>
 <table>
 <thead>
 <tr>
@@ -4190,6 +4185,87 @@
 <tr>
 <td><strong>ID de Historia</strong></td>
 <td>HU-008</td>
+</tr>
+<tr>
+<td><strong>Pantalla Asociada</strong></td>
+<td><code>presentation/pages/auth/forgot_password_page.dart</code></td>
+</tr>
+<tr>
+<td><strong>Requisitos Funcionales</strong></td>
+<td><strong>RF-005</strong> - Recuperación de contraseña</td>
+</tr>
+<tr>
+<td><strong>Desglose de Componentes de la UI</strong></td>
+<td>• AppBar con título "Recuperar Contraseña" y botón volver<br>• Stepper horizontal con 3 pasos (indicador visual de progreso)<br>• <strong>Paso 1: Ingreso de Email</strong><br>&nbsp;&nbsp;&nbsp;• AppTextField tipo email con validación<br>&nbsp;&nbsp;&nbsp;• Label: "Correo electrónico"<br>&nbsp;&nbsp;&nbsp;• Botón primario: "Enviar código"<br>• <strong>Paso 2: Verificación de Código</strong><br>&nbsp;&nbsp;&nbsp;• AppTextField para código de 8 caracteres (formato: A1B2C3D4)<br>&nbsp;&nbsp;&nbsp;• Label: "Código de recuperación"<br>&nbsp;&nbsp;&nbsp;• Hint: "Ej: A1B2C3D4"<br>&nbsp;&nbsp;&nbsp;• Contador de reenvío: "Reenviar código en 60s" (countdown timer)<br>&nbsp;&nbsp;&nbsp;• TextButton: "Reenviar código" (habilitado cuando countdown = 0)<br>&nbsp;&nbsp;&nbsp;• Botón primario: "Verificar código"<br>&nbsp;&nbsp;&nbsp;• Botón secundario: "Volver" (previousStep)<br>• <strong>Paso 3: Nueva Contraseña</strong><br>&nbsp;&nbsp;&nbsp;• AppTextField tipo password: "Nueva contraseña"<br>&nbsp;&nbsp;&nbsp;• AppTextField tipo password: "Confirmar contraseña"<br>&nbsp;&nbsp;&nbsp;• Lista de requisitos de contraseña (con checkmarks dinámicos):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• Mínimo 8 caracteres (hasMinLength)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• Al menos una mayúscula (hasUpperCase)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• Al menos una minúscula (hasLowerCase)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• Al menos un número (hasNumber)<br>&nbsp;&nbsp;&nbsp;• Botón primario: "Restablecer contraseña"<br>&nbsp;&nbsp;&nbsp;• Botón secundario: "Volver" (previousStep)<br>• Container de error (visible cuando errorMessage.isNotEmpty):<br>&nbsp;&nbsp;&nbsp;• Fondo rojo suave con borde<br>&nbsp;&nbsp;&nbsp;• Ícono error_outline<br>&nbsp;&nbsp;&nbsp;• Texto del error<br>• Loading overlay (CircularProgressIndicator) cuando isLoading = true</td>
+</tr>
+<tr>
+<td><strong>Lógica y Flujo de Acciones</strong></td>
+<td>1. Usuario accede desde Login → "¿Olvidaste tu contraseña?"<br>2. Se inicializa ForgotPasswordController<br>3. Se crean 3 FormGroups: emailForm, codeForm, passwordForm<br>4. Se muestra currentStep.value = 0 (Paso 1)<br><br><strong>Paso 1 - Enviar Código:</strong><br>5. Usuario ingresa email<br>6. Tap "Enviar código" → controller.sendResetCode()<br>7. Se valida emailForm (required, email format)<br>8. Si inválido: Se marca touched, muestra errores<br>9. Si válido:<br>&nbsp;&nbsp;&nbsp;• isLoading = true<br>&nbsp;&nbsp;&nbsp;• Se llama authRepository.forgotPassword(email)<br>&nbsp;&nbsp;&nbsp;• Backend envía código de 8 caracteres al correo<br>&nbsp;&nbsp;&nbsp;• Si éxito: currentStep = 1, se inicia timer de 60s, muestra SnackBar "Código enviado"<br>&nbsp;&nbsp;&nbsp;• Si error: errorMessage = "No se pudo enviar correo"<br>&nbsp;&nbsp;&nbsp;• isLoading = false<br><br><strong>Paso 2 - Verificar Código:</strong><br>10. Usuario ingresa código de 8 caracteres<br>11. Tap "Verificar código" → controller.validateCode()<br>12. Se valida codeForm (required, minLength: 8, maxLength: 8)<br>13. Si inválido: Se marca touched, muestra errores<br>14. Si válido:<br>&nbsp;&nbsp;&nbsp;• isLoading = true<br>&nbsp;&nbsp;&nbsp;• Se llama authRepository.validateResetToken(code.toUpperCase())<br>&nbsp;&nbsp;&nbsp;• Si válido: currentStep = 2<br>&nbsp;&nbsp;&nbsp;• Si inválido: errorMessage = "Código inválido o expirado"<br>&nbsp;&nbsp;&nbsp;• isLoading = false<br>15. Si tap "Reenviar código" (countdown = 0) → controller.resendCode()<br>&nbsp;&nbsp;&nbsp;• Llama nuevamente authRepository.forgotPassword(userEmail)<br>&nbsp;&nbsp;&nbsp;• Reinicia timer de 60s<br>&nbsp;&nbsp;&nbsp;• SnackBar "Código reenviado"<br>16. Si tap "Volver" → controller.previousStep() (currentStep = 0)<br><br><strong>Paso 3 - Nueva Contraseña:</strong><br>17. Usuario ingresa nueva contraseña y confirmación<br>18. Se escucha passwordForm.control('password').valueChanges<br>19. Se actualizan en tiempo real: hasMinLength, hasUpperCase, hasLowerCase, hasNumber<br>20. Tap "Restablecer contraseña" → controller.resetPassword()<br>21. Se valida passwordForm (required, minLength: 8, pattern regex, mustMatch)<br>22. Si inválido: Se marca touched, muestra errores<br>23. Si válido:<br>&nbsp;&nbsp;&nbsp;• isLoading = true<br>&nbsp;&nbsp;&nbsp;• Se llama authRepository.resetPassword(token: code, newPassword: password)<br>&nbsp;&nbsp;&nbsp;• Si éxito:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• Se muestra AlertDialog de éxito (ícono check_circle verde)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• Mensaje: "Contraseña actualizada correctamente"<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• Tap "Ir a iniciar sesión" → Get.offAllNamed('/login')<br>&nbsp;&nbsp;&nbsp;• Si error: errorMessage = texto del error<br>&nbsp;&nbsp;&nbsp;• isLoading = false<br>24. Si tap "Volver" → controller.previousStep() (currentStep = 1)<br><br><strong>Cleanup:</strong><br>25. Al cerrar pantalla: Se cancela resendTimer en onClose()</td>
+</tr>
+<tr>
+<td><strong>Criterios de Aceptación</strong></td>
+<td>✓ El stepper muestra correctamente los 3 pasos<br>✓ Paso 1: Email validado (formato correcto, required)<br>✓ Backend envía código al correo ingresado<br>✓ SnackBar "Código enviado" se muestra al enviar<br>✓ Paso 2: Código validado (8 caracteres, required)<br>✓ Backend valida que el código sea correcto y no expirado<br>✓ Countdown de 60s funciona correctamente<br>✓ Botón "Reenviar" se habilita al terminar countdown<br>✓ Reenvío de código funciona y reinicia timer<br>✓ Paso 3: Contraseña validada (min 8 chars, mayúscula, minúscula, número)<br>✓ Confirmación de contraseña valida que coincida (mustMatch)<br>✓ Checkmarks de requisitos se actualizan en tiempo real<br>✓ Backend actualiza contraseña correctamente<br>✓ AlertDialog de éxito se muestra<br>✓ Navegación a login funciona después de éxito<br>✓ Botón "Volver" en cada paso funciona correctamente<br>✓ Loading state se muestra durante operaciones asíncronas<br>✓ Errores se muestran en container rojo<br>✓ Timer se limpia correctamente al cerrar pantalla (onClose)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+<h3>HU-009: Resetear Contraseña desde Enlace de Correo</h3>
+
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID de Historia</strong></td>
+<td>HU-009</td>
+</tr>
+<tr>
+<td><strong>Pantalla Asociada</strong></td>
+<td><code>presentation/pages/auth/reset_password_page.dart</code></td>
+</tr>
+<tr>
+<td><strong>Requisitos Funcionales</strong></td>
+<td><strong>RF-005</strong> - Recuperación de contraseña</td>
+</tr>
+<tr>
+<td><strong>Desglose de Componentes de la UI</strong></td>
+<td>• AppBar con título "Restablecer Contraseña" y botón volver<br>• Texto informativo: "Ingresa el código que recibiste en tu correo y tu nueva contraseña"<br>• ReactiveForm con FormGroup único:<br>&nbsp;&nbsp;&nbsp;• AppTextField: "Código de recuperación" (formControlName: 'token')<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• Validación: required<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• Hint: "Ej: A1B2C3D4"<br>&nbsp;&nbsp;&nbsp;• AppTextField tipo password: "Nueva contraseña" (formControlName: 'password')<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• Validación: required, minLength: 8, pattern regex<br>&nbsp;&nbsp;&nbsp;• AppTextField tipo password: "Confirmar contraseña" (formControlName: 'confirmPassword')<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• Validación: required, mustMatch('password', 'confirmPassword')<br>• Lista de requisitos de contraseña (con checkmarks dinámicos):<br>&nbsp;&nbsp;&nbsp;• Mínimo 8 caracteres (hasMinLength)<br>&nbsp;&nbsp;&nbsp;• Al menos una mayúscula (hasUpperCase)<br>&nbsp;&nbsp;&nbsp;• Al menos una minúscula (hasLowerCase)<br>&nbsp;&nbsp;&nbsp;• Al menos un número (hasNumber)<br>• Container de error (visible cuando errorMessage.isNotEmpty):<br>&nbsp;&nbsp;&nbsp;• Fondo rojo suave con borde<br>&nbsp;&nbsp;&nbsp;• Ícono error_outline<br>&nbsp;&nbsp;&nbsp;• Texto del error<br>• Botón primario: "Restablecer contraseña" (width: double.infinity)<br>• Loading overlay (CircularProgressIndicator) cuando isLoading = true</td>
+</tr>
+<tr>
+<td><strong>Lógica y Flujo de Acciones</strong></td>
+<td>1. Usuario accede desde enlace en correo electrónico (deep link futuro)<br>2. Se inicializa ResetPasswordController<br>3. Se crea FormGroup con 3 campos: token, password, confirmPassword<br>4. Si hay token en Get.arguments:<br>&nbsp;&nbsp;&nbsp;• Se pre-llena form.control('token').value = token<br>5. Se escucha form.control('password').valueChanges<br>6. Al cambiar password: Se llama _checkPasswordRequirements(password)<br>7. Se actualizan en tiempo real: hasMinLength, hasUpperCase, hasLowerCase, hasNumber<br><br><strong>Reseteo de Contraseña:</strong><br>8. Usuario ingresa código (si no estaba pre-llenado)<br>9. Usuario ingresa nueva contraseña y confirmación<br>10. Tap "Restablecer contraseña" → controller.resetPassword()<br>11. Se limpia errorMessage<br>12. Se valida form completo (token required, password pattern, confirmPassword mustMatch)<br>13. Si inválido: Se marca touched, muestra errores de validación<br>14. Si campo token vacío: errorMessage = "Por favor ingresa el código"<br>15. Si válido:<br>&nbsp;&nbsp;&nbsp;• isLoading = true<br>&nbsp;&nbsp;&nbsp;• Se llama authRepository.resetPassword(token: tokenFromForm, newPassword: password)<br>&nbsp;&nbsp;&nbsp;• Si éxito:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• Se muestra AlertDialog con:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• Título: "¡Éxito!" con ícono check_circle verde<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• Contenido: "Tu contraseña ha sido actualizada correctamente. Ya puedes iniciar sesión con tu nueva contraseña."<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• Botón: "Ir a iniciar sesión"<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• Dialog no dismissible (barrierDismissible: false)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• Tap "Ir a iniciar sesión":<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• Get.back() (cierra dialog)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• Get.offAllNamed('/login') (navega a login limpiando stack)<br>&nbsp;&nbsp;&nbsp;• Si error:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• errorMessage = texto del error (limpiado de "Exception: ")<br>&nbsp;&nbsp;&nbsp;• isLoading = false<br><br><strong>Validación de Token (Opcional - Actualmente no se usa en UI):</strong><br>16. Método controller.validateToken(tokenToValidate) disponible:<br>&nbsp;&nbsp;&nbsp;• Llama authRepository.validateResetToken(tokenToValidate)<br>&nbsp;&nbsp;&nbsp;• Si inválido: errorMessage = "Código inválido o expirado"<br>&nbsp;&nbsp;&nbsp;• Si válido: errorMessage = ''</td>
+</tr>
+<tr>
+<td><strong>Criterios de Aceptación</strong></td>
+<td>✓ Pantalla accesible desde enlace en correo (deep linking futuro)<br>✓ Si hay token en argumentos, se pre-llena el campo<br>✓ Campo token validado (required)<br>✓ Campo password validado (min 8 chars, mayúscula, minúscula, número)<br>✓ Campo confirmPassword validado (required, mustMatch con password)<br>✓ Checkmarks de requisitos se actualizan en tiempo real<br>✓ Backend actualiza contraseña correctamente con token válido<br>✓ Backend rechaza token inválido o expirado<br>✓ AlertDialog de éxito se muestra con mensaje claro<br>✓ Dialog no se puede cerrar tocando fuera (barrierDismissible: false)<br>✓ Navegación a login limpia stack completo (offAllNamed)<br>✓ Errores se muestran en container rojo<br>✓ Loading state se muestra durante operación asíncrona<br>✓ Texto del error limpiado de prefijo "Exception: "<br>✓ Método validateToken funciona correctamente (aunque no esté en UI)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+</div>
+</details>
+<details id="seccion-3-2">
+<summary>3.2 MÓDULO 2: Perfil de Usuario</summary>
+<div class="section-content">
+
+<h3>HU-010: Mi Perfil - Perfil del Usuario Actual</h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID de Historia</strong></td>
+<td>HU-010</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -4214,7 +4290,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-009: Perfil de Otro Usuario</h3>
+<h3>HU-011: Perfil de Otro Usuario</h3>
 <table>
 <thead>
 <tr>
@@ -4225,7 +4301,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-009</td>
+<td>HU-011</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -4250,7 +4326,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-010: Lista de Seguidores</h3>
+<h3>HU-012: Lista de Seguidores</h3>
 <table>
 <thead>
 <tr>
@@ -4261,7 +4337,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-010</td>
+<td>HU-012</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -4286,7 +4362,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-011: Lista de Siguiendo</h3>
+<h3>HU-013: Lista de Siguiendo</h3>
 <table>
 <thead>
 <tr>
@@ -4297,7 +4373,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-011</td>
+<td>HU-013</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -4322,7 +4398,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-012: Posts del Usuario</h3>
+<h3>HU-014: Posts del Usuario</h3>
 <table>
 <thead>
 <tr>
@@ -4333,7 +4409,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-012</td>
+<td>HU-014</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -4358,7 +4434,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-013: Explorar - Búsqueda de Usuarios y Mascotas</h3>
+<h3>HU-015: Explorar - Búsqueda de Usuarios y Mascotas</h3>
 <table>
 <thead>
 <tr>
@@ -4369,7 +4445,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-013</td>
+<td>HU-015</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -4401,7 +4477,7 @@
 <summary>3.3 MÓDULO 3: Gestión de Mascotas</summary>
 <div class="section-content">
 
-<h3>HU-014: Gestión de Mascotas - Mi Lista</h3>
+<h3>HU-016: Gestión de Mascotas - Mi Lista</h3>
 <table>
 <thead>
 <tr>
@@ -4412,7 +4488,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-014</td>
+<td>HU-016</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -4437,7 +4513,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-015: Perfil de Mascota</h3>
+<h3>HU-017: Perfil de Mascota</h3>
 <table>
 <thead>
 <tr>
@@ -4448,7 +4524,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-015</td>
+<td>HU-017</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -4473,7 +4549,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-016: Galería de Fotos de Mascota</h3>
+<h3>HU-018: Galería de Fotos de Mascota</h3>
 <table>
 <thead>
 <tr>
@@ -4484,7 +4560,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-016</td>
+<td>HU-018</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -4509,7 +4585,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-017: Posts de Mascota</h3>
+<h3>HU-019: Posts de Mascota</h3>
 <table>
 <thead>
 <tr>
@@ -4520,7 +4596,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-017</td>
+<td>HU-019</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -4552,7 +4628,7 @@
 <summary>3.4 MÓDULO 4: Salud de Mascotas</summary>
 <div class="section-content">
 
-<h3>HU-018: Panel Salud - Pantalla Principal de Bienestar</h3>
+<h3>HU-020: Panel Salud - Pantalla Principal de Bienestar</h3>
 <table>
 <thead>
 <tr>
@@ -4563,7 +4639,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-018</td>
+<td>HU-020</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -4588,7 +4664,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-019: Lista de Registros de Salud - Visualización por Tipo</h3>
+<h3>HU-021: Lista de Registros de Salud - Visualización por Tipo</h3>
 <table>
 <thead>
 <tr>
@@ -4599,7 +4675,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-019</td>
+<td>HU-021</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -4624,7 +4700,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-020: Gráfico de Evolución de Peso</h3>
+<h3>HU-022: Gráfico de Evolución de Peso</h3>
 <table>
 <thead>
 <tr>
@@ -4635,7 +4711,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-020</td>
+<td>HU-022</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -4660,7 +4736,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-021: Gráfico de Evolución de Actividad</h3>
+<h3>HU-023: Gráfico de Evolución de Actividad</h3>
 <table>
 <thead>
 <tr>
@@ -4671,7 +4747,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-021</td>
+<td>HU-023</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -4703,7 +4779,7 @@
 <summary>3.5 MÓDULO 5: Publicaciones (Feed)</summary>
 <div class="section-content">
 
-<h3>HU-022: Feed Principal - Listado de Publicaciones</h3>
+<h3>HU-024: Feed Principal - Listado de Publicaciones</h3>
 <table>
 <thead>
 <tr>
@@ -4714,7 +4790,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-022</td>
+<td>HU-024</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -4739,7 +4815,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-023: Crear Publicación - Formulario Completo</h3>
+<h3>HU-025: Crear Publicación - Formulario Completo</h3>
 <table>
 <thead>
 <tr>
@@ -4750,7 +4826,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-023</td>
+<td>HU-025</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -4775,7 +4851,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-024: Contenedor Principal del Feed</h3>
+<h3>HU-026: Contenedor Principal del Feed</h3>
 <table>
 <thead>
 <tr>
@@ -4786,7 +4862,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-024</td>
+<td>HU-026</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -4818,7 +4894,7 @@
 <summary>3.6 MÓDULO 6: Historias (Stories)</summary>
 <div class="section-content">
 
-<h3>HU-025: Crear Historia - Captura y Publicación</h3>
+<h3>HU-027: Crear Historia - Captura y Publicación</h3>
 <table>
 <thead>
 <tr>
@@ -4829,7 +4905,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-025</td>
+<td>HU-027</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -4854,7 +4930,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-026: Visor de Historias - Reproductor Interactivo</h3>
+<h3>HU-028: Visor de Historias - Reproductor Interactivo</h3>
 <table>
 <thead>
 <tr>
@@ -4865,7 +4941,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-026</td>
+<td>HU-028</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -4890,7 +4966,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-027: Historias de Usuario - Visor Específico</h3>
+<h3>HU-029: Historias de Usuario - Visor Específico</h3>
 <table>
 <thead>
 <tr>
@@ -4901,7 +4977,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-027</td>
+<td>HU-029</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -4933,7 +5009,7 @@
 <summary>3.7 MÓDULO 7: Servicios (Marketplace)</summary>
 <div class="section-content">
 
-<h3>HU-028: Crear/Editar Servicio</h3>
+<h3>HU-030: Crear/Editar Servicio</h3>
 <table>
 <thead>
 <tr>
@@ -4944,7 +5020,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-028</td>
+<td>HU-030</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -4969,7 +5045,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-029: Detalles Servicio</h3>
+<h3>HU-031: Detalles Servicio</h3>
 <table>
 <thead>
 <tr>
@@ -4980,7 +5056,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-029</td>
+<td>HU-031</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5005,7 +5081,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-030: Lista Servicios</h3>
+<h3>HU-032: Lista Servicios</h3>
 <table>
 <thead>
 <tr>
@@ -5016,7 +5092,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-030</td>
+<td>HU-032</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5032,7 +5108,7 @@
 </tr>
 <tr>
 <td><strong>Lógica y Flujo de Acciones</strong></td>
-<td>1. Usuario navega a <code>/map</code> desde main navigation<br>2. Se instancia <code>MapController</code> y carga servicios<br>3. Se muestra tab switch con "Servicios" por defecto<br>4. Se cargan y muestran servicios en lista y mapa:<br>&nbsp;&nbsp;&nbsp;• GET <code>/services</code> o <code>/services?filters</code><br>&nbsp;&nbsp;&nbsp;• Se renderiza ListView con ServiceCards<br>&nbsp;&nbsp;&nbsp;• Se colocan marcadores en mini mapa<br>5. Usuario toca icono de filtros:<br>&nbsp;&nbsp;&nbsp;• Se abre FiltersModal bottom sheet<br>&nbsp;&nbsp;&nbsp;• Opciones: categoría servicio, rango precio, distancia<br>&nbsp;&nbsp;&nbsp;• Se aplican filtros a la lista y mapa<br>6. Usuario toca icono de mapa:<br>&nbsp;&nbsp;&nbsp;• Se navega a <code>/map/fullscreen</code> con vista completa<br>7. Usuario toca en ServiceCard:<br>&nbsp;&nbsp;&nbsp;• Se navega a <code>/map/service-details/{id}</code><br>8. Usuario toca FAB "Crear Servicio":<br>&nbsp;&nbsp;&nbsp;• Se navega a <code>/map/create-service</code><br>9. Usuario cambia a tab "Eventos":<br>&nbsp;&nbsp;&nbsp;• Se carga contenido de eventos (HU-032)<br>10. RefreshIndicator para recargar lista</td>
+<td>1. Usuario navega a <code>/map</code> desde main navigation<br>2. Se instancia <code>MapController</code> y carga servicios<br>3. Se muestra tab switch con "Servicios" por defecto<br>4. Se cargan y muestran servicios en lista y mapa:<br>&nbsp;&nbsp;&nbsp;• GET <code>/services</code> o <code>/services?filters</code><br>&nbsp;&nbsp;&nbsp;• Se renderiza ListView con ServiceCards<br>&nbsp;&nbsp;&nbsp;• Se colocan marcadores en mini mapa<br>5. Usuario toca icono de filtros:<br>&nbsp;&nbsp;&nbsp;• Se abre FiltersModal bottom sheet<br>&nbsp;&nbsp;&nbsp;• Opciones: categoría servicio, rango precio, distancia<br>&nbsp;&nbsp;&nbsp;• Se aplican filtros a la lista y mapa<br>6. Usuario toca icono de mapa:<br>&nbsp;&nbsp;&nbsp;• Se navega a <code>/map/fullscreen</code> con vista completa<br>7. Usuario toca en ServiceCard:<br>&nbsp;&nbsp;&nbsp;• Se navega a <code>/map/service-details/{id}</code><br>8. Usuario toca FAB "Crear Servicio":<br>&nbsp;&nbsp;&nbsp;• Se navega a <code>/map/create-service</code><br>9. Usuario cambia a tab "Eventos":<br>&nbsp;&nbsp;&nbsp;• Se carga contenido de eventos (HU-034)<br>10. RefreshIndicator para recargar lista</td>
 </tr>
 <tr>
 <td><strong>Criterios de Aceptación</strong></td>
@@ -5041,7 +5117,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-031: Mapa Servicios (Fullscreen)</h3>
+<h3>HU-033: Mapa Servicios (Fullscreen)</h3>
 <table>
 <thead>
 <tr>
@@ -5052,7 +5128,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-031</td>
+<td>HU-033</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5077,7 +5153,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-032: Lista de Servicios y Eventos (Vista Mapa)</h3>
+<h3>HU-034: Lista de Servicios y Eventos (Vista Mapa)</h3>
 <table>
 <thead>
 <tr>
@@ -5088,7 +5164,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-032</td>
+<td>HU-034</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5120,7 +5196,7 @@
 <summary>3.8 MÓDULO 8: Eventos</summary>
 <div class="section-content">
 
-<h3>HU-033: Crear/Editar Evento</h3>
+<h3>HU-035: Crear/Editar Evento</h3>
 <table>
 <thead>
 <tr>
@@ -5131,7 +5207,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-033</td>
+<td>HU-035</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5156,7 +5232,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-034: Detalles Evento</h3>
+<h3>HU-036: Detalles Evento</h3>
 <table>
 <thead>
 <tr>
@@ -5167,7 +5243,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-034</td>
+<td>HU-036</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5192,7 +5268,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-035: Lista Eventos</h3>
+<h3>HU-037: Lista Eventos</h3>
 <table>
 <thead>
 <tr>
@@ -5203,7 +5279,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-035</td>
+<td>HU-037</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5219,7 +5295,7 @@
 </tr>
 <tr>
 <td><strong>Lógica y Flujo de Acciones</strong></td>
-<td>1. Usuario navega a <code>/map</code> desde main navigation<br>2. Se instancia <code>MapController</code> y carga servicios por defecto<br>3. Usuario toca tab "Eventos":<br>&nbsp;&nbsp;&nbsp;• Se ejecuta <code>controller.switchContentType(MapContentType.events)</code><br>&nbsp;&nbsp;&nbsp;• Se cargan eventos: GET <code>/events</code> o <code>/events?filters</code><br>&nbsp;&nbsp;&nbsp;• Se ordenan por fecha (más próximos primero)<br>4. Se renderiza ListView con EventCards:<br>&nbsp;&nbsp;&nbsp;• Muestra fecha/hora próxima del evento<br>&nbsp;&nbsp;&nbsp;• Muestra tipo de evento con icono<br>&nbsp;&nbsp;&nbsp;• Muestra ubicación resumida<br>5. Se colocan marcadores en mini mapa<br>6. Usuario toca icono de filtros:<br>&nbsp;&nbsp;&nbsp;• Se abre FiltersModal bottom sheet<br>&nbsp;&nbsp;&nbsp;• Opciones: categoría evento, rango de fechas<br>&nbsp;&nbsp;&nbsp;• Se aplican filtros a lista y mapa<br>7. Usuario toca icono de mapa:<br>&nbsp;&nbsp;&nbsp;• Se navega a <code>/map/fullscreen</code> con vista completa de eventos<br>8. Usuario toca en EventCard:<br>&nbsp;&nbsp;&nbsp;• Se navega a <code>/map/event-details/{id}</code><br>9. Usuario toca FAB "Crear Evento":<br>&nbsp;&nbsp;&nbsp;• Se navega a <code>/map/create-event</code><br>10. Usuario cambia a tab "Servicios":<br>&nbsp;&nbsp;&nbsp;• Se carga contenido de servicios (HU-028)<br>11. RefreshIndicator para recargar lista de eventos</td>
+<td>1. Usuario navega a <code>/map</code> desde main navigation<br>2. Se instancia <code>MapController</code> y carga servicios por defecto<br>3. Usuario toca tab "Eventos":<br>&nbsp;&nbsp;&nbsp;• Se ejecuta <code>controller.switchContentType(MapContentType.events)</code><br>&nbsp;&nbsp;&nbsp;• Se cargan eventos: GET <code>/events</code> o <code>/events?filters</code><br>&nbsp;&nbsp;&nbsp;• Se ordenan por fecha (más próximos primero)<br>4. Se renderiza ListView con EventCards:<br>&nbsp;&nbsp;&nbsp;• Muestra fecha/hora próxima del evento<br>&nbsp;&nbsp;&nbsp;• Muestra tipo de evento con icono<br>&nbsp;&nbsp;&nbsp;• Muestra ubicación resumida<br>5. Se colocan marcadores en mini mapa<br>6. Usuario toca icono de filtros:<br>&nbsp;&nbsp;&nbsp;• Se abre FiltersModal bottom sheet<br>&nbsp;&nbsp;&nbsp;• Opciones: categoría evento, rango de fechas<br>&nbsp;&nbsp;&nbsp;• Se aplican filtros a lista y mapa<br>7. Usuario toca icono de mapa:<br>&nbsp;&nbsp;&nbsp;• Se navega a <code>/map/fullscreen</code> con vista completa de eventos<br>8. Usuario toca en EventCard:<br>&nbsp;&nbsp;&nbsp;• Se navega a <code>/map/event-details/{id}</code><br>9. Usuario toca FAB "Crear Evento":<br>&nbsp;&nbsp;&nbsp;• Se navega a <code>/map/create-event</code><br>10. Usuario cambia a tab "Servicios":<br>&nbsp;&nbsp;&nbsp;• Se carga contenido de servicios (HU-030)<br>11. RefreshIndicator para recargar lista de eventos</td>
 </tr>
 <tr>
 <td><strong>Criterios de Aceptación</strong></td>
@@ -5228,7 +5304,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-036: Mapa Eventos (Fullscreen)</h3>
+<h3>HU-038: Mapa Eventos (Fullscreen)</h3>
 <table>
 <thead>
 <tr>
@@ -5239,7 +5315,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-036</td>
+<td>HU-038</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5271,7 +5347,7 @@
 <summary>3.9 MÓDULO 9: Notificaciones</summary>
 <div class="section-content">
 
-<h3>HU-037: Pantalla Notificaciones (Completa)</h3>
+<h3>HU-039: Pantalla Notificaciones (Completa)</h3>
 <table>
 <thead>
 <tr>
@@ -5282,7 +5358,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-037</td>
+<td>HU-039</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5307,7 +5383,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-038: Panel Notificaciones (Mini)</h3>
+<h3>HU-040: Panel Notificaciones (Mini)</h3>
 <table>
 <thead>
 <tr>
@@ -5318,7 +5394,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-038</td>
+<td>HU-040</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5334,7 +5410,7 @@
 </tr>
 <tr>
 <td><strong>Lógica y Flujo de Acciones</strong></td>
-<td>1. Usuario toca icono de notificaciones en main navigation<br>2. Se instancia <code>NotificationsController</code> si no existe<br>3. Se ejecuta <code>controller.showNotificationPanel()</code><br>4. Panel se anima desde arriba con SlideTransition<br>5. Se cargan notificaciones: GET <code>/activities?limit=10</code> (últimas 10)<br>6. Se muestra header con contador "X sin leer"<br>7. Se renderiza ListView de notificaciones recientes<br>8. Usuario puede cambiar filtro con chips:<br>&nbsp;&nbsp;&nbsp;• Se filtran notificaciones en el panel<br>9. Usuario toca NotificationTile:<br>&nbsp;&nbsp;&nbsp;• Se marca como leída (RF-110)<br>&nbsp;&nbsp;&nbsp;• Se cierra el panel<br>&nbsp;&nbsp;&nbsp;• Se navega al contenido relacionado<br>10. Usuario toca "Ver Todas":<br>&nbsp;&nbsp;&nbsp;• Se cierra panel<br>&nbsp;&nbsp;&nbsp;• Se navega a <code>/notifications</code> (HU-034)<br>11. Usuario toca botón close o "Cerrar":<br>&nbsp;&nbsp;&nbsp;• Panel se anima hacia arriba y desaparece<br>12. Panel permite scroll interno para más notificaciones</td>
+<td>1. Usuario toca icono de notificaciones en main navigation<br>2. Se instancia <code>NotificationsController</code> si no existe<br>3. Se ejecuta <code>controller.showNotificationPanel()</code><br>4. Panel se anima desde arriba con SlideTransition<br>5. Se cargan notificaciones: GET <code>/activities?limit=10</code> (últimas 10)<br>6. Se muestra header con contador "X sin leer"<br>7. Se renderiza ListView de notificaciones recientes<br>8. Usuario puede cambiar filtro con chips:<br>&nbsp;&nbsp;&nbsp;• Se filtran notificaciones en el panel<br>9. Usuario toca NotificationTile:<br>&nbsp;&nbsp;&nbsp;• Se marca como leída (RF-110)<br>&nbsp;&nbsp;&nbsp;• Se cierra el panel<br>&nbsp;&nbsp;&nbsp;• Se navega al contenido relacionado<br>10. Usuario toca "Ver Todas":<br>&nbsp;&nbsp;&nbsp;• Se cierra panel<br>&nbsp;&nbsp;&nbsp;• Se navega a <code>/notifications</code> (HU-036)<br>11. Usuario toca botón close o "Cerrar":<br>&nbsp;&nbsp;&nbsp;• Panel se anima hacia arriba y desaparece<br>12. Panel permite scroll interno para más notificaciones</td>
 </tr>
 <tr>
 <td><strong>Criterios de Aceptación</strong></td>
@@ -5343,7 +5419,7 @@
 </tbody>
 </table>
 <hr />
-<h3>HU-039: Vista Actividades</h3>
+<h3>HU-041: Vista Actividades</h3>
 <table>
 <thead>
 <tr>
@@ -5354,7 +5430,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-039</td>
+<td>HU-041</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5390,7 +5466,7 @@
 <summary>3.10 MÓDULO 10: Mensajería (Chat)</summary>
 <div class="section-content">
 
-<h2>HU-040: Lista de Conversaciones</h2>
+<h3>HU-042: Lista de Conversaciones</h3>
 <table>
 <thead>
 <tr>
@@ -5401,7 +5477,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-040</td>
+<td>HU-042</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5426,7 +5502,7 @@
 </tbody>
 </table>
 <hr />
-<h2>HU-041: Chat Individual</h2>
+<h3>HU-043: Chat Individual</h3>
 <table>
 <thead>
 <tr>
@@ -5437,7 +5513,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-041</td>
+<td>HU-043</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5462,7 +5538,7 @@
 </tbody>
 </table>
 <hr />
-<h2>HU-042: Nueva Conversación</h2>
+<h3>HU-044: Nueva Conversación</h3>
 <table>
 <thead>
 <tr>
@@ -5473,7 +5549,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-042</td>
+<td>HU-044</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5498,7 +5574,7 @@
 </tbody>
 </table>
 <hr />
-<h2>HU-043: Crear Grupo</h2>
+<h3>HU-045: Crear Grupo</h3>
 <table>
 <thead>
 <tr>
@@ -5509,7 +5585,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-043</td>
+<td>HU-045</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5534,7 +5610,7 @@
 </tbody>
 </table>
 <hr />
-<h2>HU-044: Información de Conversación</h2>
+<h3>HU-046: Información de Conversación</h3>
 <table>
 <thead>
 <tr>
@@ -5545,7 +5621,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-044</td>
+<td>HU-046</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5580,7 +5656,7 @@
 <summary>3.11 MÓDULO 11: Reportes y Configuración</summary>
 <div class="section-content">
 
-<h2>HU-045: Modal de Reporte</h2>
+<h3>HU-047: Modal de Reporte</h3>
 <table>
 <thead>
 <tr>
@@ -5591,7 +5667,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-045</td>
+<td>HU-047</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5616,7 +5692,7 @@
 </tbody>
 </table>
 <hr />
-<h2>HU-046: Usuarios Bloqueados</h2>
+<h3>HU-048: Usuarios Bloqueados</h3>
 <table>
 <thead>
 <tr>
@@ -5627,7 +5703,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-046</td>
+<td>HU-048</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5652,7 +5728,7 @@
 </tbody>
 </table>
 <hr />
-<h2>HU-047: Configuración - Ajustes de la Aplicación</h2>
+<h3>HU-049: Configuración - Ajustes de la Aplicación</h3>
 <table>
 <thead>
 <tr>
@@ -5663,7 +5739,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-047</td>
+<td>HU-049</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5689,7 +5765,7 @@
 </table>
 <hr />
 
-<h2>HU-048: Política de Privacidad</h2>
+<h3>HU-050: Política de Privacidad</h3>
 <table>
 <thead>
 <tr>
@@ -5700,7 +5776,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-048</td>
+<td>HU-050</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5726,7 +5802,7 @@
 </table>
 <hr />
 
-<h2>HU-049: Términos de Servicio</h2>
+<h3>HU-051: Términos de Servicio</h3>
 <table>
 <thead>
 <tr>
@@ -5737,7 +5813,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-049</td>
+<td>HU-051</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5763,7 +5839,7 @@
 </table>
 <hr />
 
-<h2>HU-050: Formulario de Contacto - Soporte Técnico</h2>
+<h3>HU-052: Formulario de Contacto - Soporte Técnico</h3>
 <table>
 <thead>
 <tr>
@@ -5774,7 +5850,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-050</td>
+<td>HU-052</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5800,7 +5876,7 @@
 </table>
 <hr />
 
-<h2>HU-051: Preguntas Frecuentes - Centro de Ayuda</h2>
+<h3>HU-053: Preguntas Frecuentes - Centro de Ayuda</h3>
 <table>
 <thead>
 <tr>
@@ -5811,7 +5887,7 @@
 <tbody>
 <tr>
 <td><strong>ID de Historia</strong></td>
-<td>HU-051</td>
+<td>HU-053</td>
 </tr>
 <tr>
 <td><strong>Pantalla Asociada</strong></td>
@@ -5843,54 +5919,372 @@
 </div>
 </details>
 
-<!-- SECCIÓN 4: FLUJO DE NAVEGACIÓN -->
-
-
-</div>
-</details>
 <details id="seccion-3-12">
 <summary>3.12 RESUMEN FINAL</summary>
 <div class="section-content">
 
-<h3>Resumen de Pantallas y Funcionalidades</h3>
+<h3>Tabla Detallada de Historias de Usuario</h3>
 
 <table>
+<colgroup>
+<col style="width: 18%;"><!-- Módulo -->
+<col style="width: 10%;"><!-- HU-ID (aumentado) -->
+<col style="width: 25%;"><!-- Pantalla -->
+<col style="width: 22%;"><!-- RF (reducido) -->
+<col style="width: 25%;"><!-- Estado (aumentado) -->
+</colgroup>
 <thead>
 <tr>
 <th>Módulo</th>
-<th>Historias de Usuario</th>
-<th>Cantidad de Pantallas</th>
+<th>HU-ID</th>
+<th>Pantalla</th>
+<th>Requisitos Funcionales</th>
 <th>Estado</th>
 </tr>
 </thead>
 <tbody>
-<tr><td>Módulo 1: Autenticación y Registro</td><td>HU-001 a HU-007 (7 HU)</td><td>7 pantallas</td><td>✅ Implementado</td></tr>
-<tr><td>Módulo 2: Perfil de Usuario</td><td>HU-008 a HU-013 (6 HU)</td><td>6 pantallas</td><td>✅ Implementado</td></tr>
-<tr><td>Módulo 3: Gestión de Mascotas</td><td>HU-014 a HU-017 (4 HU)</td><td>4 pantallas</td><td>✅ Implementado</td></tr>
-<tr><td>Módulo 4: Salud de Mascotas</td><td>HU-018 a HU-021 (4 HU)</td><td>4 pantallas</td><td>✅ Implementado</td></tr>
-<tr><td>Módulo 5: Publicaciones (Feed)</td><td>HU-022 a HU-024 (3 HU)</td><td>3 pantallas</td><td>✅ Implementado</td></tr>
-<tr><td>Módulo 6: Historias (Stories)</td><td>HU-025 a HU-027 (3 HU)</td><td>3 pantallas</td><td>✅ Implementado</td></tr>
-<tr><td>Módulo 7: Servicios (Marketplace)</td><td>HU-028 a HU-032 (5 HU)</td><td>5 pantallas</td><td>✅ Implementado</td></tr>
-<tr><td>Módulo 8: Eventos</td><td>HU-033 a HU-036 (4 HU)</td><td>4 pantallas</td><td>✅ Implementado</td></tr>
-<tr><td>Módulo 9: Notificaciones</td><td>HU-037 a HU-039 (3 HU)</td><td>3 pantallas</td><td>✅ Implementado</td></tr>
-<tr><td>Módulo 10: Mensajería (Chat)</td><td>HU-040 a HU-044 (5 HU)</td><td>5 pantallas</td><td>✅ Implementado</td></tr>
-<tr><td>Módulo 11: Reportes y Configuración</td><td>HU-045 a HU-051 (7 HU)</td><td>7 pantallas</td><td>✅ Implementado</td></tr>
+<tr>
+<td rowspan="9" style="vertical-align: middle; font-weight: 600;">Módulo 1: Autenticación y Registro</td>
+<td>HU-001</td>
+<td>Pantalla de Splash</td>
+<td>RF-004, RF-094</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-002</td>
+<td>Pantalla de Login</td>
+<td>RF-001, RF-002, RF-003, RF-004, RF-005, RF-083</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-003</td>
+<td>Pantalla de Registro - Inicio</td>
+<td>RF-001, RF-006</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-004</td>
+<td>Pantalla de Registro Paso 1 - Datos Personales</td>
+<td>RF-001, RF-002, RF-006</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-005</td>
+<td>Pantalla de Registro Paso 3 - Perfiles de Mascotas</td>
+<td>RF-007, RF-018, RF-019</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-006</td>
+<td>Pantalla de Registro Paso 4 - Confirmación y Finalización</td>
+<td>RF-006</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-007</td>
+<td>Navegación Principal (Bottom Navigation Bar)</td>
+<td>RF-001, RF-004</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-008</td>
+<td>Recuperar Contraseña - Proceso Multi-paso</td>
+<td>RF-005</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-009</td>
+<td>Resetear Contraseña desde Enlace de Correo</td>
+<td>RF-005</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td rowspan="6" style="vertical-align: middle; font-weight: 600;">Módulo 2: Perfil de Usuario</td>
+<td>HU-010</td>
+<td>Mi Perfil - Perfil del Usuario Actual</td>
+<td>RF-012, RF-013, RF-014, RF-008, RF-009, RF-010, RF-092</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-011</td>
+<td>Perfil de Otro Usuario</td>
+<td>RF-012, RF-014, RF-015, RF-016, RF-017, RF-073, RF-076, RF-011, RF-093</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-012</td>
+<td>Lista de Seguidores</td>
+<td>RF-014, RF-016, RF-017</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-013</td>
+<td>Lista de Siguiendo</td>
+<td>RF-014, RF-016, RF-017</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-014</td>
+<td>Posts del Usuario</td>
+<td>RF-024, RF-030, RF-034, RF-031</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-015</td>
+<td>Explorar - Búsqueda de Usuarios y Mascotas</td>
+<td>RF-014, RF-018, RF-011, RF-090, RF-091</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td rowspan="4" style="vertical-align: middle; font-weight: 600;">Módulo 3: Gestión de Mascotas</td>
+<td>HU-016</td>
+<td>Gestión de Mascotas - Mi Lista</td>
+<td>RF-018, RF-019, RF-020, RF-021, RF-022</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-017</td>
+<td>Perfil de Mascota</td>
+<td>RF-018, RF-019, RF-023, RF-024</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-018</td>
+<td>Galería de Fotos de Mascota</td>
+<td>RF-019, RF-023</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-019</td>
+<td>Posts de Mascota</td>
+<td>RF-024, RF-033</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td rowspan="4" style="vertical-align: middle; font-weight: 600;">Módulo 4: Salud de Mascotas</td>
+<td>HU-020</td>
+<td>Panel Salud - Pantalla Principal de Bienestar</td>
+<td>RF-025, RF-021, RF-027, RF-023, RF-024</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-021</td>
+<td>Lista de Registros de Salud - Visualización por Tipo</td>
+<td>RF-025, RF-026, RF-027</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-022</td>
+<td>Gráfico de Evolución de Peso</td>
+<td>RF-025</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-023</td>
+<td>Gráfico de Evolución de Actividad</td>
+<td>RF-025</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td rowspan="3" style="vertical-align: middle; font-weight: 600;">Módulo 5: Publicaciones (Feed)</td>
+<td>HU-024</td>
+<td>Feed Principal - Listado de Publicaciones</td>
+<td>RF-030, RF-031, RF-032, RF-033, RF-034, RF-035, RF-032, RF-028, RF-029, RF-036, RF-105, RF-120, RF-114, RF-084, RF-085, RF-086, RF-087, RF-088, RF-089</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-025</td>
+<td>Crear Publicación - Formulario Completo</td>
+<td>RF-030, RF-031, RF-032, RF-033, RF-120, RF-121, RF-122, RF-114, RF-123</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-026</td>
+<td>Contenedor Principal del Feed</td>
+<td>N/A</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td rowspan="3" style="vertical-align: middle; font-weight: 600;">Módulo 6: Historias (Stories)</td>
+<td>HU-027</td>
+<td>Crear Historia - Captura y Publicación</td>
+<td>RF-036, RF-038, RF-040, RF-120, RF-114</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-028</td>
+<td>Visor de Historias - Reproductor Interactivo</td>
+<td>RF-039, RF-040, RF-040, RF-106</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-029</td>
+<td>Historias de Usuario - Visor Específico</td>
+<td>RF-039, RF-040, RF-037</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td rowspan="5" style="vertical-align: middle; font-weight: 600;">Módulo 7: Servicios (Marketplace)</td>
+<td>HU-030</td>
+<td>Crear/Editar Servicio</td>
+<td>RF-043, RF-044, RF-045, RF-046, RF-120, RF-121, RF-041, RF-042</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-031</td>
+<td>Detalles Servicio</td>
+<td>RF-049, RF-050</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-032</td>
+<td>Lista Servicios</td>
+<td>RF-047, RF-048, RF-051</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-033</td>
+<td>Mapa Servicios (Fullscreen)</td>
+<td>RF-047, RF-048</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-034</td>
+<td>Lista de Servicios y Eventos (Vista Mapa)</td>
+<td>RF-043, RF-047, RF-052, RF-120</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td rowspan="4" style="vertical-align: middle; font-weight: 600;">Módulo 8: Eventos</td>
+<td>HU-035</td>
+<td>Crear/Editar Evento</td>
+<td>RF-052, RF-053, RF-107, RF-055, RF-056, RF-120, RF-121, RF-054</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-036</td>
+<td>Detalles Evento</td>
+<td>RF-055</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-037</td>
+<td>Lista Eventos</td>
+<td>RF-055, RF-057, RF-108</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-038</td>
+<td>Mapa Eventos (Fullscreen)</td>
+<td>RF-057, RF-055</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td rowspan="3" style="vertical-align: middle; font-weight: 600;">Módulo 9: Notificaciones</td>
+<td>HU-039</td>
+<td>Pantalla Notificaciones (Completa)</td>
+<td>RF-109, RF-110, RF-062, RF-063, RF-064, RF-059, RF-058, RF-060, RF-061</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-040</td>
+<td>Panel Notificaciones (Mini)</td>
+<td>RF-109, RF-062</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-041</td>
+<td>Vista Actividades</td>
+<td>RF-062</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td rowspan="5" style="vertical-align: middle; font-weight: 600;">Módulo 10: Mensajería (Chat)</td>
+<td>HU-042</td>
+<td>Lista de Conversaciones</td>
+<td>RF-068, RF-069, RF-069, RF-071, RF-072, RF-066, RF-067</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-043</td>
+<td>Chat Individual</td>
+<td>RF-068, RF-071, RF-065</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-044</td>
+<td>Nueva Conversación</td>
+<td>RF-068</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-045</td>
+<td>Crear Grupo</td>
+<td>RF-068</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-046</td>
+<td>Información de Conversación</td>
+<td>RF-069, RF-069</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td rowspan="7" style="vertical-align: middle; font-weight: 600;">Módulo 11: Reportes y Configuración</td>
+<td>HU-047</td>
+<td>Modal de Reporte</td>
+<td>RF-073, RF-070, RF-075</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-048</td>
+<td>Usuarios Bloqueados</td>
+<td>RF-073, RF-074, RF-075, RF-076</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-049</td>
+<td>Configuración - Ajustes de la Aplicación</td>
+<td>RF-001, RF-062, RF-073, RF-120</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-050</td>
+<td>Política de Privacidad</td>
+<td>RF-077, RF-078</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-051</td>
+<td>Términos de Servicio</td>
+<td>RF-079, RF-078</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-052</td>
+<td>Formulario de Contacto - Soporte Técnico</td>
+<td>RF-080, RF-081</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
+<tr>
+<td>HU-053</td>
+<td>Preguntas Frecuentes - Centro de Ayuda</td>
+<td>RF-082, RF-080</td>
+<td><span class="badge badge-implementado">✅ Implementado</span></td>
+</tr>
 </tbody>
 </table>
 
-<p><strong>Total</strong>: 51 Historias de Usuario documentadas distribuidas en 11 módulos funcionales</p>
+<h3>Estadísticas del Proyecto</h3>
 
-<p><strong>Estadísticas</strong>:</p>
 <ul>
-<li>✅ 51 pantallas principales documentadas con HU completas</li>
-<li>✅ Todos los módulos tienen HU documentadas e implementadas</li>
-<li>✅ Cobertura 100% de las pantallas del MVP actual</li>
-<li>✅ 8 nuevas HU agregadas: Navegación, Búsqueda, Mapa, Configuración, Legal (x2), Soporte (x2)</li>
+<li>✅ <strong>53 HU Implementadas</strong> (100% del MVP)</li>
+<li>✅ <strong>94 RF totales</strong> cubiertos (ver Sección 1.1)</li>
+<li>✅ <strong>53 pantallas documentadas</strong> en 11 módulos funcionales</li>
 </ul>
-
 </div>
 </details>
-</div>
+
 </details>
 
 <details id="seccion-4" open>
