@@ -747,8 +747,7 @@
   </ul>
 </li>
     <li><a href="#seccion-4">4. Flujo de Navegación</a></li>
-    <li><a href="#seccion-5">5. Características Especiales de Navegación</a></li>
-    <li><a href="#seccion-6">6. Análisis del Estado Real de la App</a></li>
+    <li><a href="#seccion-5">5. Análisis del Estado Real de la App</a></li>
   </ul>
 </div>
 
@@ -3827,7 +3826,7 @@
 <td>RNF-025</td>
 <td>Bottom navigation</td>
 <td>La navegación principal debe ser intuitiva y accesible</td>
-<td>Bottom navigation bar con 5 tabs principales (Home, Explorar, Crear, Notificaciones, Perfil)</td>
+<td>Bottom navigation bar con 4 tabs principales (Home, Explorar, Crear, Notificaciones, Perfil)</td>
 </tr>
 <tr>
 <td>RNF-026</td>
@@ -6291,288 +6290,8 @@
 <summary>4. FLUJO DE NAVEGACIÓN DE LA APLICACIÓN</summary>
 <div class="section-content">
 
-<h3>4. FLUJO DE NAVEGACIÓN DE LA APLICACIÓN</h3>
 
-<div style="background: #f8f9fa; padding: 30px; border-radius: 12px; margin: 20px 0;">
-
-<!-- Autenticación -->
-<div style="margin-bottom: 40px;">
-<h4 style="color: #6c757d; margin-bottom: 20px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">🔐 Autenticación e Inicio</h4>
-<div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">
-<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Splash Screen
-</div>
-<span style="font-size: 24px; color: #6c757d;">→</span>
-<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Login
-</div>
-<span style="font-size: 24px; color: #6c757d;">→</span>
-<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Registro Multi-paso
-</div>
-<span style="font-size: 24px; color: #6c757d;">→</span>
-<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Recuperar Contraseña
-</div>
-</div>
-</div>
-
-<!-- Muro/Feed Social -->
-<div style="margin-bottom: 40px;">
-<h4 style="color: #6c757d; margin-bottom: 20px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">📱 Muro / Feed Social</h4>
-<div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">
-<div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Home Feed
-</div>
-<div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Crear Publicación
-</div>
-<div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Detalle Publicación
-</div>
-<div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Modal Comentarios
-</div>
-</div>
-</div>
-
-<!-- Historias (Stories) -->
-<div style="margin-bottom: 40px;">
-<h4 style="color: #6c757d; margin-bottom: 20px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">📸 Historias / Stories</h4>
-<div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">
-<div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(250, 112, 154, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Barra de Historias
-</div>
-<div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(250, 112, 154, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Crear Historia
-</div>
-<div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(250, 112, 154, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Visor de Historias
-</div>
-<div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(250, 112, 154, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Comentarios Historia
-</div>
-</div>
-</div>
-
-<!-- Explorar / Descubrir -->
-<div style="margin-bottom: 40px;">
-<h4 style="color: #6c757d; margin-bottom: 20px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">🔍 Explorar / Descubrir</h4>
-<div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">
-<div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Explorar Comunidad
-</div>
-<div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Explorar Mascotas
-</div>
-<div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Detalle Publicación
-</div>
-</div>
-</div>
-
-<!-- Matching / Conexiones -->
-<div style="margin-bottom: 40px;">
-<h4 style="color: #6c757d; margin-bottom: 20px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">💚 Matching / Conexiones</h4>
-<div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">
-<div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(67, 233, 123, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Swipeable Cards
-</div>
-<div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(67, 233, 123, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Modal Match
-</div>
-<div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(67, 233, 123, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Perfil de Mascota
-</div>
-</div>
-</div>
-
-<!-- Perfiles -->
-<div style="margin-bottom: 40px;">
-<h4 style="color: #6c757d; margin-bottom: 20px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">👤 Perfiles (Usuario y Mascotas)</h4>
-<div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">
-<div style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(168, 237, 234, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Perfil Propio
-</div>
-<div style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(168, 237, 234, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Perfil Otro Usuario
-</div>
-<div style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(168, 237, 234, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Editar Perfil
-</div>
-<div style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(168, 237, 234, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Lista Seguidores
-</div>
-<div style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(168, 237, 234, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Lista Seguidos
-</div>
-</div>
-</div>
-
-<!-- Gestión de Mascotas -->
-<div style="margin-bottom: 40px;">
-<h4 style="color: #6c757d; margin-bottom: 20px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">🐾 Gestión de Mascotas</h4>
-<div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">
-<div style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(252, 182, 159, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Mis Mascotas
-</div>
-<div style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(252, 182, 159, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Agregar Mascota
-</div>
-<div style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(252, 182, 159, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Editar Mascota
-</div>
-<div style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(252, 182, 159, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Perfil de Mascota
-</div>
-<div style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(252, 182, 159, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Galería de Fotos
-</div>
-<div style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(252, 182, 159, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Posts de Mascota
-</div>
-</div>
-</div>
-
-<!-- Salud de Mascotas -->
-<div style="margin-bottom: 40px;">
-<h4 style="color: #6c757d; margin-bottom: 20px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">🏥 Salud de Mascotas</h4>
-<div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">
-<div style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(255, 154, 158, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Tab Salud
-</div>
-<div style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(255, 154, 158, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Datos Médicos
-</div>
-<div style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(255, 154, 158, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Registros de Salud
-</div>
-<div style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(255, 154, 158, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Agregar Registro
-</div>
-<div style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(255, 154, 158, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Editar Registro
-</div>
-</div>
-</div>
-
-<!-- Mapa: Servicios y Eventos -->
-<div style="margin-bottom: 40px;">
-<h4 style="color: #6c757d; margin-bottom: 20px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">📍 Mapa: Servicios y Eventos</h4>
-<div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">
-<div style="background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(255, 216, 155, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Mapa de Servicios
-</div>
-<div style="background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(255, 216, 155, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Detalle Servicio
-</div>
-<div style="background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(255, 216, 155, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Crear Servicio
-</div>
-<div style="background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(255, 216, 155, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Mapa de Eventos
-</div>
-<div style="background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(255, 216, 155, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Detalle Evento
-</div>
-<div style="background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(255, 216, 155, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Crear Evento
-</div>
-</div>
-</div>
-
-<!-- Mensajería / Chat -->
-<div style="margin-bottom: 40px;">
-<h4 style="color: #6c757d; margin-bottom: 20px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">💬 Mensajería / Chat</h4>
-<div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">
-<div style="background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(161, 196, 253, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Lista Conversaciones
-</div>
-<div style="background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(161, 196, 253, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Chat con Usuario
-</div>
-<div style="background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(161, 196, 253, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Nueva Conversación
-</div>
-<div style="background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(161, 196, 253, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Buscar Usuarios
-</div>
-</div>
-</div>
-
-<!-- Notificaciones / Actividad -->
-<div style="margin-bottom: 40px;">
-<h4 style="color: #6c757d; margin-bottom: 20px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">🔔 Notificaciones / Actividad</h4>
-<div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">
-<div style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Panel Notificaciones
-</div>
-<div style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Notif. de Like
-</div>
-<div style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Notif. de Comentario
-</div>
-<div style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Notif. de Seguidor
-</div>
-</div>
-</div>
-
-<!-- Configuración -->
-<div style="margin-bottom: 40px;">
-<h4 style="color: #6c757d; margin-bottom: 20px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">⚙️ Configuración</h4>
-<div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">
-<div style="background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(224, 195, 252, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Configuración
-</div>
-<div style="background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(224, 195, 252, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Cambiar Contraseña
-</div>
-<div style="background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(224, 195, 252, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Usuarios Bloqueados
-</div>
-<div style="background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(224, 195, 252, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Centro de Ayuda
-</div>
-<div style="background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(224, 195, 252, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Reportar Problema
-</div>
-</div>
-</div>
-
-<!-- Reportes y Moderación -->
-<div style="margin-bottom: 40px;">
-<h4 style="color: #6c757d; margin-bottom: 20px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">⚠️ Reportes y Moderación</h4>
-<div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">
-<div style="background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(251, 194, 235, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Reportar Publicación
-</div>
-<div style="background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(251, 194, 235, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Reportar Historia
-</div>
-<div style="background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(251, 194, 235, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Reportar Comentario
-</div>
-<div style="background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); color: #333; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(251, 194, 235, 0.3); min-width: 150px; text-align: center; font-weight: 600;">
-Bloquear Usuario
-</div>
-</div>
-</div>
-
-</div>
-
-<div style="margin-top: 30px; padding: 20px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 8px;">
-<p style="margin: 0; color: #856404; font-weight: 600;">📌 Navegación Principal</p>
-<p style="margin: 10px 0 0 0; color: #856404;">La aplicación utiliza un <strong>Bottom Navigation Bar</strong> con 5 tabs principales: <strong>Inicio</strong> (Feed), <strong>Explorar</strong>, <strong>Mapa</strong> (Servicios/Eventos), <strong>Chats</strong>, y <strong>Perfil</strong>. Todas las funcionalidades están organizadas jerárquicamente bajo estas 5 secciones principales.</p>
-</div>
-
-
-<hr style="margin: 40px 0; border: none; border-top: 2px solid #e9ecef;">
-
-<h3 style="margin-top: 40px; margin-bottom: 20px; color: #495057;">📋 Flujos Detallados de Navegación</h3>
-
-<h3>3.1 Flujo de Autenticación</h3>
+<h3>4.1 Flujo de Autenticación</h3>
 
                 <div class="code-block">
                     <div class="code-header">
@@ -6602,7 +6321,7 @@ Bloquear Usuario
      |
      └─→ (Autenticado) → [Home Feed]</code></pre>
                 </div>
-            <h3>3.2 Flujo Principal (Bottom Navigation)</h3>
+            <h3>4.2 Flujo Principal (Bottom Navigation)</h3>
 
                 <div class="code-block">
                     <div class="code-header">
@@ -6675,7 +6394,7 @@ Bloquear Usuario
                             |
                             └─→ Tap # Seguidores/Seguidos → [Lista Seguidores/Seguidos]</code></pre>
                 </div>
-            <h3>3.3 Flujo de Gestión de Mascotas</h3>
+            <h3>4.3 Flujo de Gestión de Mascotas</h3>
 
                 <div class="code-block">
                     <div class="code-header">
@@ -6728,7 +6447,7 @@ Bloquear Usuario
                                    |
                                    └─→ [Gestión de Mascotas] (actualizada)</code></pre>
                 </div>
-            <h3>3.4 Flujo de Historias (Stories)</h3>
+            <h3>4.4 Flujo de Historias (Stories)</h3>
 
                 <div class="code-block">
                     <div class="code-header">
@@ -6759,7 +6478,7 @@ Bloquear Usuario
                                                                |
                                                                └─→ (sin más historias) → [Home Feed]</code></pre>
                 </div>
-            <h3>3.5 Flujo de Configuración</h3>
+            <h3>4.5 Flujo de Configuración</h3>
 
                 <div class="code-block">
                     <div class="code-header">
@@ -6797,7 +6516,7 @@ Bloquear Usuario
                                                                       |
                                                                       └─→ (confirmado) → [Login]</code></pre>
                 </div>
-            <h3>3.6 Flujo de Notificaciones</h3>
+            <h3>4.6 Flujo de Notificaciones</h3>
 
                 <div class="code-block">
                     <div class="code-header">
@@ -6827,7 +6546,7 @@ Bloquear Usuario
                                     |
                                     └─→ [Perfil del Usuario que siguió]</code></pre>
                 </div>
-            <h3>3.7 Flujo de Crear Publicación</h3>
+            <h3>4.7 Flujo de Crear Publicación</h3>
 
                 <div class="code-block">
                     <div class="code-header">
@@ -6862,7 +6581,7 @@ Bloquear Usuario
                                                         ├─→ (sin medios) → Error
                                                         └─→ (válido) → Subir → [Home Feed] (actualizado)</code></pre>
                 </div>
-            <h3>3.8 Flujo de Perfil de Otro Usuario</h3>
+            <h3>4.8 Flujo de Perfil de Otro Usuario</h3>
 
                 <div class="code-block">
                     <div class="code-header">
@@ -6895,7 +6614,7 @@ Bloquear Usuario
                                                           |
                                                           └─→ Tap Post → [Detalle Publicación]</code></pre>
                 </div>
-            <h3>3.9 Rutas Principales de la Aplicación</h3>
+            <h3>4.9 Rutas Principales de la Aplicación</h3>
 
                 <div class="code-block">
                     <div class="code-header">
@@ -6909,42 +6628,48 @@ Bloquear Usuario
                     </div>
                     <pre><code class="hljs language-plaintext">Ruta                          | Pantalla
 ------------------------------|------------------------------------------
-/                             | SplashScreen
+/splash                       | SplashScreen
 /login                        | LoginView
-/register                     | RegisterView
-/forgot-password              | ForgotPasswordView
-/home                         | HomeView (Feed principal)
+/register                     | RegisterView (inicio)
+/register/step1               | RegisterStep1View (Datos personales)
+/register/step2               | RegisterStep2View (Tipo de mascota)
+/register/step3               | RegisterStep3View (Perfiles de mascotas)
+/register/step4               | RegisterStep4View (Resumen y confirmación)
+/register/complete            | RegisterCompleteView (Bienvenida)
+/forgot-password              | ForgotPasswordPage
+/main                         | MainNavigationView (Bottom navigation)
+/home                         | HomeContentView (Feed principal)
 /create-post                  | CreatePostView
-/post/:id                     | PostDetailView
-/notifications                | NotificationView
-/stories/:userId              | StoriesView
+/notifications                | ActivityView (Notificaciones)
+/stories/:userId              | UserStoriesView (Historias de usuario)
 /create-story                 | CreateStoryView
-/explore                      | ExploreView
-/map                          | MapView
+/explore                      | ExploreView (Búsqueda de usuarios/mascotas)
+/map                          | ServicesEventsListView (Mapa de servicios/eventos)
 /create-service               | CreateServiceView
-/edit-service/:id             | CreateServiceView (modo edición)
 /create-event                 | CreateEventView
-/edit-event/:id               | CreateEventView (modo edición)
-/chats                        | ChatsView
-/chat/:userId                 | ChatPage
-/profile                      | UserProfileView (perfil propio)
-/profile/:userId              | UserProfileView (perfil de otro usuario)
-/edit-profile                 | EditProfileView
-/pets                         | PetManagementView
-/pet/:petId                   | PetProfileView
-/settings                     | SettingsView
-/settings/blocked-users       | BlockedUsersView
-/settings/change-password     | ChangePasswordView</code></pre>
+/conversations                | ConversationsListPage (Lista de conversaciones)
+/chat                         | ChatPage (Chat individual)
+/new-conversation             | NewConversationPage (Seleccionar usuario)
+/create-group                 | CreateGroupPage (Crear grupo)
+/conversation-info            | ConversationInfoPage (Info de conversación)
+/profile                      | UserProfileView (Perfil propio)
+/profile/:userId              | UserProfileView (Perfil de otro usuario)
+/pets                         | PetManagementView (Gestión de mascotas)
+/pet/:petId                   | PetProfileView (Perfil de mascota)
+/pet-images/:petId            | PetImagesView (Galería de fotos de mascota)
+/pet-health/:petId            | PetHealthView (Salud de mascota)
+/health-log-list/:petId/:type | HealthLogListView (Lista de registros)
+/settings                     | SettingsView (Configuración)
+/settings/blocked-users       | BlockedUsersView (Usuarios bloqueados)
+/faq                          | FaqView (Preguntas frecuentes)
+/contact-form                 | ContactFormView (Contactar soporte)</code></pre>
                 </div>
-            <hr>
 
-</div>
-</details>
+<hr>
 
-<!-- SECCIÓN 5: CARACTERÍSTICAS ESPECIALES DE NAVEGACIÓN (Notas Finales) -->
-<details id="seccion-5">
-<summary>5. CARACTERÍSTICAS ESPECIALES DE NAVEGACIÓN</summary>
-<div class="section-content">
+
+<hr>
+
 <h3>Características Especiales de Navegación</h3>
 <ol>
 <li><p><strong>Persistencia de Estado en Bottom Navigation</strong>:</p>
@@ -6982,17 +6707,30 @@ Bloquear Usuario
 </ul>
 </li>
 </ol>
-<hr>
+
+
 </div>
 </details>
 
+
+
 <!-- SECCIÓN 5: ANÁLISIS DEL ESTADO REAL -->
-<details id="seccion-6">
-<summary>6. ANÁLISIS DEL ESTADO REAL DE LA APP</summary>
+<details id="seccion-5">
+<summary>5. ANÁLISIS DEL ESTADO REAL DE LA APP</summary>
 <div class="section-content">
 <p><strong>Fecha de análisis</strong>: Noviembre 2024
+<strong>Versión analizada</strong>: MVP Pre-producción</p>
+
+<!-- Subsección: Lo que ya está -->
+<details open>
+<summary style="font-size: 1.1em; font-weight: 600; color: #2e7d32; cursor: pointer; padding: 10px; background: #e8f5e9; border-radius: 5px; margin: 20px 0;">
+✅ Lo que ya está implementado
+</summary>
+<div style="padding: 15px; border-left: 3px solid #2e7d32; margin-left: 10px;">
+
+<p><strong>Fecha de análisis</strong>: Noviembre 2024
 <strong>Versión analizada</strong>: MVP Pre-producción (94 RFs implementados - 100%)</p>
-<h3>4.1 Estado General</h3>
+<h3>5.1 Estado General</h3>
 <p><strong>✅ Funcionalidades Core Completamente Implementadas</strong> (100% del MVP - 94/94 RFs):</p>
 <ul>
 <li>✅ Sistema de autenticación completo (login, registro multi-paso, JWT)</li>
@@ -7012,7 +6750,7 @@ Bloquear Usuario
 <li>✅ Seguridad robusta (rate limiting, sanitización, audit logging)</li>
 </ul>
 <hr>
-<h3>4.2 🚨 Problemas Críticos Detectados</h3>
+<h3>5.2 🚨 Problemas Críticos Detectados</h3>
 <h4>4.2.1 Fix de Navegación - Prevenir Loops Circulares (✅ COMPLETADO)</h4>
 <p><strong>Problema original</strong>: El usuario podía quedar &quot;atrapado&quot; en loops circulares de navegación al navegar entre perfiles de usuarios que se siguen mutuamente.</p>
 
@@ -7056,7 +6794,7 @@ Bloquear Usuario
 </ul>
 <p><strong>Estado</strong>: 🟡 Identificado, pendiente de optimización</p>
 <hr>
-<h3>4.3 ⚠️ Funcionalidades Faltantes (Requisitos para App Store/Play Store)</h3>
+<h3>5.3 ⚠️ Funcionalidades Faltantes (Requisitos para App Store/Play Store)</h3>
 <h4>4.3.1 Sistema de Reportes/Denuncias (Parcial)</h4>
 <p><strong>Estado actual</strong>:</p>
 <ul>
@@ -7117,7 +6855,7 @@ Bloquear Usuario
 </ul>
 <p><strong>Estado</strong>: ✅ COMPLETADO - Sistema de búsqueda funcional y listo para producción</p>
 <hr>
-<h3>4.4 ❌ Funcionalidades Redundantes/Eliminadas</h3>
+<h3>5.4 ❌ Funcionalidades Redundantes/Eliminadas</h3>
 <h4>4.4.1 Galería de Fotos de Usuario (ELIMINADO)</h4>
 <p><strong>Razón de eliminación</strong>: Funcionalidad completamente redundante con el sistema de publicaciones.</p>
 <p><strong>Archivos eliminados</strong>:</p>
@@ -7135,7 +6873,7 @@ Bloquear Usuario
 </ul>
 <p><strong>Estado</strong>: ✅ COMPLETADO - Tab &quot;Galería&quot; eliminado del perfil de usuario</p>
 <hr>
-<h3>4.5 🐛 Bugs y Problemas Conocidos</h3>
+<h3>5.5 🐛 Bugs y Problemas Conocidos</h3>
 <h4>4.5.1 Funcionalidad &quot;Copiar enlace&quot; y &quot;Compartir&quot; No Funcionan</h4>
 <p><strong>Afectado</strong>: Publicaciones e historias</p>
 <p><strong>Problema</strong>: Los botones existen en la UI pero no ejecutan ninguna acción</p>
@@ -7156,7 +6894,7 @@ Bloquear Usuario
 <p><strong>Prioridad</strong>: 🟢 BAJA (estético)</p>
 <p><strong>Solución propuesta</strong>: Ajustar layout para fullscreen</p>
 <hr>
-<h3>4.6 📊 Evaluación de Requisitos Funcionales</h3>
+<h3>5.6 📊 Evaluación de Requisitos Funcionales</h3>
 <p><strong>Estado de Requisitos Funcionales</strong> (RF-001 a RF-094):</p>
 <table>
 <thead>
@@ -7319,12 +7057,12 @@ Bloquear Usuario
 <li><strong>RF-072</strong>: &quot;El sistema debe categorizar reportes&quot; - Frontend ✅, Panel Admin ❌</li>
 </ol>
 <hr>
-<h3>4.7 🎯 Análisis de Pantallas Implementadas</h3>
+<h3>5.7 🎯 Análisis de Pantallas Implementadas</h3>
 <p><strong>Total de pantallas/vistas documentadas</strong>: 25
 <strong>Estado de implementación</strong>: 25/25 (100%) ✅</p>
 <p>Todas las pantallas principales están completamente implementadas y funcionales. Los problemas detectados son de UX/navegación, no de falta de implementación.</p>
 <hr>
-<h3>4.8 🔄 Flujos de Navegación - Evaluación</h3>
+<h3>5.8 🔄 Flujos de Navegación - Evaluación</h3>
 <p><strong>Flujos documentados en sección 3</strong>: 9 flujos principales</p>
 <p><strong>Evaluación por flujo</strong>:</p>
 <table>
@@ -7383,7 +7121,7 @@ Bloquear Usuario
 </tbody></table>
 <p><strong>Problemas de navegación identificados</strong>: Ver sección 4.2.1</p>
 <hr>
-<h3>4.9 📝 Conclusiones y Recomendaciones</h3>
+<h3>5.9 📝 Conclusiones y Recomendaciones</h3>
 <h4>✅ Fortalezas de la App</h4>
 <ol>
 <li><strong>Funcionalidad Core Completa</strong>: 98% de requisitos funcionales implementados</li>
@@ -7392,6 +7130,16 @@ Bloquear Usuario
 <li><strong>UX Moderna</strong>: Animaciones, dark mode, micro-interacciones implementadas</li>
 <li><strong>Arquitectura Sólida</strong>: GetX + Atomic Design + Reactive Forms bien aplicados</li>
 </ol>
+
+</div>
+</details>
+
+<!-- Subsección: Lo que falta -->
+<details open>
+<summary style="font-size: 1.1em; font-weight: 600; color: #d32f2f; cursor: pointer; padding: 10px; background: #ffebee; border-radius: 5px; margin: 20px 0;">
+⚠️ Lo que falta por completar
+</summary>
+<div style="padding: 15px; border-left: 3px solid #d32f2f; margin-left: 10px;">
 <h4>🚨 Áreas Críticas que Requieren Atención Inmediata</h4>
 <ol>
 <li><strong>Navegación profunda</strong> (6 tareas documentadas en CLAUDE.md)</li>
@@ -7424,6 +7172,9 @@ Bloquear Usuario
 <hr>
 <p><strong>Fin del Documento</strong></p>
 
+
+</div>
+</details>
 </div>
 </details>
 
