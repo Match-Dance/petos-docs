@@ -756,13 +756,7 @@
 <summary>1. REQUISITOS FUNCIONALES</summary>
 <div class="section-content">
 
-<p>Los requisitos funcionales definen las funcionalidades específicas que debe implementar Petos App para satisfacer las necesidades de los usuarios. Se dividen en dos categorías:</p>
 
-<ul>
-<li><strong>MVP (Implementados)</strong>: Requisitos funcionales RF-001 a RF-094 (94 RFs) completamente implementados y en producción.</li>
-<li><strong>V2.0 (Planificados - Febrero 2026)</strong>: Requisitos funcionales RF-095 a RF-222 (128 RFs) planificados para la version de monetizacion.</li>
-<li><strong>Pendientes de Aprobacion</strong>: Requisitos funcionales RF-223 a RF-265 (43 RFs) identificados que requieren evaluacion adicional antes de incluirlos en el roadmap oficial.</li>
-</ul>
 
 <!-- ========== SUB-SECCIÓN 1.1: RF MVP ========== -->
 <details id="seccion-1-1" open>
@@ -3644,7 +3638,7 @@
 <summary>2. REQUISITOS NO FUNCIONALES</summary>
 <div class="section-content">
 
-<p>Los requisitos no funcionales definen las características de calidad del sistema que no están directamente relacionadas con funcionalidades específicas, sino con aspectos como seguridad, rendimiento, usabilidad y mantenibilidad.</p>
+
 
 <table>
 <thead>
@@ -3908,11 +3902,7 @@
 <summary>3. PANTALLAS Y FUNCIONALIDADES</summary>
 <div class="section-content">
 
-<p>Esta seccion documenta todas las pantallas de la aplicacion Petos mediante historias de usuario estructuradas, organizadas por modulos funcionales.</p>
-<p><strong>Total de Historias de Usuario Documentadas</strong>: 53 (HU-001 a HU-053)</p>
-<p><strong>Total de Modulos</strong>: 11 (todos con HU documentadas e implementadas)</p>
-<p><strong>Cobertura</strong>: 100% de las pantallas principales del MVP están documentadas</p>
-<p><strong>Últimas actualizaciones</strong>: +8 HU nuevas (Navegación, Búsqueda, Mapa, Configuración, Legal, Soporte)</p>
+
 
 <details id="seccion-3-1" open>
 <summary>3.1 MÓDULO 1: Autenticación y Registro</summary>
@@ -6665,10 +6655,6 @@
 /contact-form                 | ContactFormView (Contactar soporte)</code></pre>
                 </div>
 
-<hr>
-
-
-<hr>
 
 <h3>Características Especiales de Navegación</h3>
 <ol>
