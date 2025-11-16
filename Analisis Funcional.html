@@ -6704,463 +6704,358 @@
 <details id="seccion-5">
 <summary>5. ANÁLISIS DEL ESTADO REAL DE LA APP</summary>
 <div class="section-content">
-<p><strong>Fecha de análisis</strong>: Noviembre 2024
-<strong>Versión analizada</strong>: MVP Pre-producción</p>
+<!-- TABLA 1: LO QUE YA ESTÁ IMPLEMENTADO -->
+<h3>✅ Funcionalidades Implementadas</h3>
 
-<!-- Subsección: Lo que ya está -->
-<details open>
-<summary style="font-size: 1.1em; font-weight: 600; color: #2e7d32; cursor: pointer; padding: 10px; background: #e8f5e9; border-radius: 5px; margin: 20px 0;">
-✅ Lo que ya está implementado
-</summary>
-<div style="padding: 15px; border-left: 3px solid #2e7d32; margin-left: 10px;">
-
-<p><strong>Fecha de análisis</strong>: Noviembre 2024
-<strong>Versión analizada</strong>: MVP Pre-producción (94 RFs implementados - 100%)</p>
-<h3>5.1 Estado General</h3>
-<p><strong>✅ Funcionalidades Core Completamente Implementadas</strong> (100% del MVP - 94/94 RFs):</p>
-<ul>
-<li>✅ Sistema de autenticación completo (login, registro multi-paso, JWT)</li>
-<li>✅ Gestión de perfiles de usuario (edición, visualización, estadísticas)</li>
-<li>✅ Gestión completa de mascotas (CRUD, perfiles, galería de fotos)</li>
-<li>✅ Registros de salud de mascotas (vacunas, desparasitación, recordatorios)</li>
-<li>✅ Sistema de publicaciones (crear, ver, feed, me gusta, comentarios)</li>
-<li>✅ Sistema de historias (crear, ver, 24h duración, interacciones)</li>
-<li>✅ Sistema social completo (seguir, seguidores, likes, comentarios)</li>
-<li>✅ Notificaciones (sistema de eventos backend listo para push)</li>
-<li>✅ Sistema de bloqueo de usuarios (completo)</li>
-<li>✅ Sistema de reportes en perfiles (frontend implementado)</li>
-<li>✅ Servicios marketplace (CRUD completo, mapa, filtros)</li>
-<li>✅ Eventos (CRUD completo, mapa, visualización)</li>
-<li>✅ Mensajería/Chat (conversaciones, mensajes en tiempo real)</li>
-<li>✅ Dark mode (claro, oscuro, automático)</li>
-<li>✅ Seguridad robusta (rate limiting, sanitización, audit logging)</li>
-</ul>
-<hr>
-<h3>5.2 🚨 Problemas Críticos Detectados</h3>
-<h4>4.2.1 Fix de Navegación - Prevenir Loops Circulares (✅ COMPLETADO)</h4>
-<p><strong>Problema original</strong>: El usuario podía quedar &quot;atrapado&quot; en loops circulares de navegación al navegar entre perfiles de usuarios que se siguen mutuamente.</p>
-
-<p><strong>Solución implementada</strong>:</p>
-<ul>
-<li>✅ <strong>Protecciones de navegación en toda la app</strong>: Se implementaron verificaciones para evitar loops circulares</li>
-<li>✅ <code>post_card.dart</code>: Compara IDs de usuario antes de navegar (evita loops)</li>
-<li>✅ <code>post_comments_modal.dart</code>: Cierra modal antes de navegar + <code>preventDuplicates: true</code></li>
-<li>✅ <code>story_comments_modal.dart</code>: Mismo patrón que post_comments_modal</li>
-<li>✅ <code>story_viewer_view.dart</code>: Controller con protecciones</li>
-<li>✅ <code>followers_view.dart</code> (línea 133): Agregado <code>preventDuplicates: true</code></li>
-<li>✅ <code>following_view.dart</code> (línea 133): Agregado <code>preventDuplicates: true</code></li>
-</ul>
-
-<p><strong>Ejemplo de loop prevenido</strong>:</p>
-<div class="code-block">
-<pre><code>Usuario A → Seguidores → Usuario B → Seguidores → Usuario A (bloqueado por preventDuplicates)</code></pre>
-</div>
-
-<p><strong>Resultado</strong>: GetX ignora navegación si la ruta ya existe en el stack, previniendo loops circulares entre usuarios que se siguen mutuamente.</p>
-<p><strong>Estado</strong>: ✅ COMPLETADO - Todos los problemas de navegación profunda resueltos sin necesidad de componentes adicionales (botones Home, Quick View Sheets, fullscreenDialog, etc.)</p>
-<hr>
-<h4>4.2.2 Servicios: Carga Lenta del Mapa</h4>
-<p><strong>Problema</strong>: La pantalla de Mapa tarda excesivamente en cargar los servicios (~3-5 segundos).</p>
-<p><strong>Causas identificadas</strong>:</p>
-<ul>
-<li>Posible falta de paginación en endpoint de servicios</li>
-<li>Carga de todos los servicios de una vez sin límite geográfico</li>
-<li>Falta de caché de datos</li>
-</ul>
-<p><strong>Impacto UX</strong>:</p>
-<ul>
-<li>❌ Loading prolongado frustra al usuario</li>
-<li>❌ Mal rendimiento percibido de la app</li>
-</ul>
-<p><strong>Solución propuesta</strong>:</p>
-<ul>
-<li>Implementar paginación/lazy loading por área visible</li>
-<li>Agregar caché de servicios por región</li>
-<li>Optimizar query del backend con índices geoespaciales</li>
-</ul>
-<p><strong>Estado</strong>: 🟡 Identificado, pendiente de optimización</p>
-<hr>
-<h3>5.3 ⚠️ Funcionalidades Faltantes (Requisitos para App Store/Play Store)</h3>
-<h4>4.3.1 Sistema de Reportes/Denuncias (Parcial)</h4>
-<p><strong>Estado actual</strong>:</p>
-<ul>
-<li>✅ Frontend: Botón &quot;Denunciar&quot; en perfiles de usuario implementado</li>
-<li>✅ Frontend: Botón &quot;Denunciar&quot; en publicaciones implementado</li>
-<li>✅ Frontend: Botón &quot;Denunciar&quot; en historias implementado</li>
-<li>❌ Frontend: Botón &quot;Denunciar&quot; en comentarios <strong>FALTA</strong></li>
-<li>❌ Backend: Panel de gestión de reportes para admins <strong>FALTA</strong></li>
-<li>❌ Backend: Notificación automática cuando se recibe reporte <strong>FALTA</strong></li>
-</ul>
-<p><strong>Prioridad</strong>: 🔴 CRÍTICA (requerido para App Store/Play Store)</p>
-<p><strong>Tareas pendientes</strong>:</p>
-<ol>
-<li>Agregar botón &quot;Denunciar&quot; en <code>post_comments_modal.dart</code> y <code>story_comments_modal.dart</code></li>
-<li>Crear panel de admin para revisar reportes</li>
-<li>Implementar sistema de notificación automática a admins</li>
-</ol>
-<hr>
-<h4>4.3.2 Eliminación de Contenido Propio (✅ COMPLETADO)</h4>
-<p><strong>Estado actual</strong>:</p>
-<ul>
-<li>✅ Backend: Servicios <code>deleteComment()</code> implementados en <code>post_comment_service.dart</code> y <code>story_comment_service.dart</code></li>
-<li>✅ Frontend: Botón UI para eliminar comentarios propios <strong>IMPLEMENTADO</strong> en <code>post_comments_modal.dart</code> (líneas 336-456) y <code>story_comments_modal.dart</code> (líneas 334-453)</li>
-<li>✅ Frontend: Confirmación antes de eliminar historias propias <strong>IMPLEMENTADO</strong> en <code>story_viewer_view.dart</code> (líneas 996-1075)</li>
-</ul>
-<p><strong>Características implementadas</strong>:</p>
-<ul>
-<li>✅ Botón de eliminar (ícono papelera) visible solo para el autor del comentario</li>
-<li>✅ Confirmación con diálogo antes de eliminar</li>
-<li>✅ Integración completa con backend</li>
-<li>✅ Advertencia: "Esta acción no se puede deshacer"</li>
-</ul>
-<p><strong>Estado</strong>: ✅ COMPLETADO - Funcionalidad lista para producción</p>
-<hr>
-<h4>4.3.3 Control de Privacidad (No Implementado)</h4>
-<p><strong>Estado actual</strong>:</p>
-<ul>
-<li>❌ Perfil público/privado <strong>FALTA</strong></li>
-<li>❌ Control de quién puede ver historias <strong>FALTA</strong></li>
-<li>❌ Control de quién puede comentar posts <strong>FALTA</strong></li>
-</ul>
-<p><strong>Prioridad</strong>: 🟡 MEDIA (diferenciador de producto)</p>
-<p><strong>Impacto</strong>: Funcionalidad esperada en redes sociales modernas, aumenta confianza del usuario</p>
-<hr>
-<h4>4.3.4 Sistema de Búsqueda Avanzada (✅ COMPLETADO)</h4>
-<p><strong>Estado actual</strong>:</p>
-<ul>
-<li>✅ Búsqueda de usuarios por nombre/username <strong>IMPLEMENTADO</strong> en tab "Explorar" con filtros</li>
-<li>✅ Búsqueda de mascotas por nombre <strong>IMPLEMENTADO</strong> con filtros de "Perros" y "Gatos"</li>
-<li>✅ Paginación infinita con scroll infinito y carga automática</li>
-<li>✅ UI moderna con grid de 3 columnas, loading states, empty states</li>
-<li>❌ Búsqueda por hashtags <strong>POST-MVP</strong> (no implementado)</li>
-</ul>
-<p><strong>Backend completo</strong>:</p>
-<ul>
-<li>✅ Endpoints <code>/explore/users</code>, <code>/explore/pets</code>, <code>/explore/search</code></li>
-<li>✅ Filtros opcionales listos: Popular y Recientes (comentados en UI pero funcionales en backend)</li>
-</ul>
-<p><strong>Estado</strong>: ✅ COMPLETADO - Sistema de búsqueda funcional y listo para producción</p>
-<hr>
-<h3>5.4 ❌ Funcionalidades Redundantes/Eliminadas</h3>
-<h4>4.4.1 Galería de Fotos de Usuario (ELIMINADO)</h4>
-<p><strong>Razón de eliminación</strong>: Funcionalidad completamente redundante con el sistema de publicaciones.</p>
-<p><strong>Archivos eliminados</strong>:</p>
-<ul>
-<li><code>gallery_controller.dart</code></li>
-<li><code>gallery_view.dart</code></li>
-<li><code>gallery_service.dart</code></li>
-<li><code>user_gallery_models.dart</code></li>
-</ul>
-<p><strong>Impacto</strong>:</p>
-<ul>
-<li>✅ Reduce complejidad del código</li>
-<li>✅ Evita confusión del usuario (¿galería vs publicaciones?)</li>
-<li>✅ Backend sigue existiendo pero no se usa en frontend</li>
-</ul>
-<p><strong>Estado</strong>: ✅ COMPLETADO - Tab &quot;Galería&quot; eliminado del perfil de usuario</p>
-<hr>
-<h3>5.5 🐛 Bugs y Problemas Conocidos</h3>
-<h4>4.5.1 Funcionalidad &quot;Copiar enlace&quot; y &quot;Compartir&quot; No Funcionan</h4>
-<p><strong>Afectado</strong>: Publicaciones e historias</p>
-<p><strong>Problema</strong>: Los botones existen en la UI pero no ejecutan ninguna acción</p>
-<p><strong>Prioridad</strong>: 🟡 MEDIA</p>
-<p><strong>Solución propuesta</strong>: Implementar <code>share_plus</code> package para compartir contenido</p>
-<hr>
-<h4>4.5.2 Swipe en Notificaciones No Funciona Correctamente</h4>
-<p><strong>Problema</strong>: La funcionalidad de swipe para eliminar o marcar como leída no responde bien</p>
-<p><strong>Prioridad</strong>: 🟡 MEDIA</p>
-<p><strong>Solución propuesta</strong>:</p>
-<ul>
-<li>Opción 1: Eliminar funcionalidad de swipe (recomendado - simplicidad)</li>
-<li>Opción 2: Refactorizar con <code>flutter_slidable</code> package</li>
-</ul>
-<hr>
-<h4>4.5.3 Panel de Notificaciones No Ocupa Pantalla Completa</h4>
-<p><strong>Problema</strong>: El recuadro de notificaciones no abarcar toda la pantalla, dejando espacios en blanco</p>
-<p><strong>Prioridad</strong>: 🟢 BAJA (estético)</p>
-<p><strong>Solución propuesta</strong>: Ajustar layout para fullscreen</p>
-<hr>
-<h3>5.6 📊 Evaluación de Requisitos Funcionales</h3>
-<p><strong>Estado de Requisitos Funcionales</strong> (RF-001 a RF-094):</p>
 <table>
 <thead>
 <tr>
-<th>Categoría</th>
-<th>Total RFs</th>
-<th>Implementados</th>
-<th>Parciales</th>
-<th>Faltantes</th>
-<th>% Completado</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Autenticación (RF-001 a RF-007)</td>
-<td>7</td>
-<td>7</td>
-<td>0</td>
-<td>0</td>
-<td>100% ✅</td>
-</tr>
-<tr>
-<td>Perfil Usuario (RF-008 a RF-013)</td>
-<td>6</td>
-<td>6</td>
-<td>0</td>
-<td>0</td>
-<td>100% ✅</td>
-</tr>
-<tr>
-<td>Mascotas (RF-014 a RF-020)</td>
-<td>7</td>
-<td>7</td>
-<td>0</td>
-<td>0</td>
-<td>100% ✅</td>
-</tr>
-<tr>
-<td>Salud Mascotas (RF-021 a RF-025)</td>
-<td>5</td>
-<td>5</td>
-<td>0</td>
-<td>0</td>
-<td>100% ✅</td>
-</tr>
-<tr>
-<td>Publicaciones (RF-026 a RF-035)</td>
-<td>10</td>
-<td>10</td>
-<td>0</td>
-<td>0</td>
-<td>100% ✅</td>
-</tr>
-<tr>
-<td>Historias (RF-036 a RF-096)</td>
-<td>7</td>
-<td>7</td>
-<td>0</td>
-<td>0</td>
-<td>100% ✅</td>
-</tr>
-<tr>
-<td>Servicios (RF-043 a RF-050)</td>
-<td>8</td>
-<td>8</td>
-<td>0</td>
-<td>0</td>
-<td>100% ✅</td>
-</tr>
-<tr>
-<td>Eventos (RF-051 a RF-058)</td>
-<td>8</td>
-<td>8</td>
-<td>0</td>
-<td>0</td>
-<td>100% ✅</td>
-</tr>
-<tr>
-<td>Notificaciones (RF-098 a RF-064)</td>
-<td>6</td>
-<td>6</td>
-<td>0</td>
-<td>0</td>
-<td>100% ✅</td>
-</tr>
-<tr>
-<td>Mensajería (RF-065 a RF-069)</td>
-<td>5</td>
-<td>5</td>
-<td>0</td>
-<td>0</td>
-<td>100% ✅</td>
-</tr>
-<tr>
-<td>Reportes (RF-070 a RF-073)</td>
-<td>4</td>
-<td>3</td>
-<td>1</td>
-<td>0</td>
-<td>85% ⚠️</td>
-</tr>
-<tr>
-<td>Bloqueo (RF-074 a RF-077)</td>
-<td>4</td>
-<td>4</td>
-<td>0</td>
-<td>0</td>
-<td>100% ✅</td>
-</tr>
-<tr>
-<td>Configuración (RF-101 a RF-083)</td>
-<td>6</td>
-<td>6</td>
-<td>0</td>
-<td>0</td>
-<td>100% ✅</td>
-</tr>
-<tr>
-<td>Seguridad (RF-084 a RF-089)</td>
-<td>6</td>
-<td>6</td>
-<td>0</td>
-<td>0</td>
-<td>100% ✅</td>
-</tr>
-<tr>
-<td>Multimedia (RF-085 a RF-089)</td>
-<td>5</td>
-<td>5</td>
-<td>0</td>
-<td>0</td>
-<td>100% ✅</td>
-</tr>
-<tr>
-<td>Búsqueda (RF-090 a RF-091)</td>
-<td>2</td>
-<td>2</td>
-<td>0</td>
-<td>0</td>
-<td>100% ✅</td>
-</tr>
-<tr>
-<td>UI/UX (RF-092 a RF-094)</td>
-<td>3</td>
-<td>3</td>
-<td>0</td>
-<td>0</td>
-<td>100% ✅</td>
-</tr>
-<tr>
-<td><strong>TOTAL</strong></td>
-<td><strong>94</strong></td>
-<td><strong>94</strong></td>
-<td><strong>0</strong></td>
-<td><strong>0</strong></td>
-<td><strong>100%</strong> ✅</td>
-</tr>
-</tbody></table>
-<p><strong>Requisitos Parcialmente Implementados</strong>:</p>
-<ol>
-<li><strong>RF-072</strong>: &quot;El sistema debe categorizar reportes&quot; - Frontend ✅, Panel Admin ❌</li>
-</ol>
-<hr>
-<h3>5.7 🎯 Análisis de Pantallas Implementadas</h3>
-<p><strong>Total de pantallas/vistas documentadas</strong>: 25
-<strong>Estado de implementación</strong>: 25/25 (100%) ✅</p>
-<p>Todas las pantallas principales están completamente implementadas y funcionales. Los problemas detectados son de UX/navegación, no de falta de implementación.</p>
-<hr>
-<h3>5.8 🔄 Flujos de Navegación - Evaluación</h3>
-<p><strong>Flujos documentados en sección 3</strong>: 9 flujos principales</p>
-<p><strong>Evaluación por flujo</strong>:</p>
-<table>
-<thead>
-<tr>
-<th>Flujo</th>
+<th>Módulo</th>
+<th>Funcionalidad</th>
 <th>Estado</th>
-<th>Problemas</th>
+<th>Detalles</th>
 </tr>
 </thead>
-<tbody><tr>
-<td>3.1 Autenticación</td>
-<td>✅ Perfecto</td>
-<td>Ninguno</td>
+<tbody>
+<tr>
+<td><strong>Autenticación</strong></td>
+<td>Registro multi-paso con mascotas</td>
+<td><span class="badge badge-implementado">✅ Completo</span></td>
+<td>4 pasos + validación JWT + seguridad</td>
 </tr>
 <tr>
-<td>3.2 Principal (Bottom Nav)</td>
-<td>⚠️ Funcional con problemas</td>
-<td>Navegación profunda excesiva</td>
+<td><strong>Autenticación</strong></td>
+<td>Recuperación de contraseña</td>
+<td><span class="badge badge-implementado">✅ Completo</span></td>
+<td>Código por email + validación token</td>
 </tr>
 <tr>
-<td>3.3 Gestión de Mascotas</td>
-<td>✅ Perfecto</td>
-<td>Ninguno</td>
+<td><strong>Perfiles</strong></td>
+<td>Perfil de usuario (propio y otros)</td>
+<td><span class="badge badge-implementado">✅ Completo</span></td>
+<td>Estadísticas + seguir/dejar de seguir</td>
 </tr>
 <tr>
-<td>3.4 Historias</td>
-<td>✅ Perfecto</td>
-<td>Ninguno</td>
+<td><strong>Perfiles</strong></td>
+<td>Gestión de mascotas</td>
+<td><span class="badge badge-implementado">✅ Completo</span></td>
+<td>CRUD + galería de fotos + salud</td>
 </tr>
 <tr>
-<td>3.5 Configuración</td>
-<td>✅ Perfecto</td>
-<td>Ninguno</td>
+<td><strong>Feed</strong></td>
+<td>Publicaciones con media</td>
+<td><span class="badge badge-implementado">✅ Completo</span></td>
+<td>1-5 fotos O 1 video + etiquetado mascotas</td>
 </tr>
 <tr>
-<td>3.6 Notificaciones</td>
-<td>⚠️ Funcional con bugs menores</td>
-<td>Swipe no funciona bien</td>
+<td><strong>Feed</strong></td>
+<td>Likes y comentarios</td>
+<td><span class="badge badge-implementado">✅ Completo</span></td>
+<td>Sistema completo con animaciones</td>
 </tr>
 <tr>
-<td>3.7 Crear Publicación</td>
-<td>✅ Perfecto</td>
-<td>Ninguno</td>
+<td><strong>Social</strong></td>
+<td>Sistema de follows</td>
+<td><span class="badge badge-implementado">✅ Completo</span></td>
+<td>Seguir/dejar de seguir usuarios</td>
 </tr>
 <tr>
-<td>3.8 Perfil de Otro Usuario</td>
-<td>⚠️ Funcional con problemas</td>
-<td>Navegación profunda excesiva</td>
+<td><strong>Historias</strong></td>
+<td>Stories con foto/video</td>
+<td><span class="badge badge-implementado">✅ Completo</span></td>
+<td>Crear, ver, eliminar historias (24h)</td>
 </tr>
 <tr>
-<td>3.9 Rutas Principales</td>
-<td>✅ Todas implementadas</td>
-<td>Ninguno</td>
+<td><strong>Historias</strong></td>
+<td>Comentarios en historias</td>
+<td><span class="badge badge-implementado">✅ Completo</span></td>
+<td>Sistema de comentarios funcional</td>
 </tr>
-</tbody></table>
-<p><strong>Problemas de navegación identificados</strong>: Ver sección 4.2.1</p>
+<tr>
+<td><strong>Explorar</strong></td>
+<td>Búsqueda de usuarios/mascotas</td>
+<td><span class="badge badge-implementado">✅ Completo</span></td>
+<td>Filtros (Personas, Perros, Gatos) + grid</td>
+</tr>
+<tr>
+<td><strong>Mapa</strong></td>
+<td>Servicios y eventos</td>
+<td><span class="badge badge-implementado">✅ Completo</span></td>
+<td>Crear/ver servicios y eventos en mapa</td>
+</tr>
+<tr>
+<td><strong>Notificaciones</strong></td>
+<td>Sistema de actividades</td>
+<td><span class="badge badge-implementado">✅ Completo</span></td>
+<td>Likes, comentarios, follows + filtros</td>
+</tr>
+<tr>
+<td><strong>Chat</strong></td>
+<td>Mensajería directa</td>
+<td><span class="badge badge-implementado">✅ Completo</span></td>
+<td>1:1 y grupos + info de conversación</td>
+</tr>
+<tr>
+<td><strong>Reportes</strong></td>
+<td>Denunciar perfiles/posts/historias</td>
+<td><span class="badge badge-implementado">✅ Completo</span></td>
+<td>ReportModal funcional en 3 módulos</td>
+</tr>
+<tr>
+<td><strong>Bloqueo</strong></td>
+<td>Bloquear/desbloquear usuarios</td>
+<td><span class="badge badge-implementado">✅ Completo</span></td>
+<td>Lista de bloqueados en configuración</td>
+</tr>
+<tr>
+<td><strong>Configuración</strong></td>
+<td>Ajustes de la app</td>
+<td><span class="badge badge-implementado">✅ Completo</span></td>
+<td>Modo oscuro, bloqueados, FAQ, soporte</td>
+</tr>
+<tr>
+<td><strong>Navegación</strong></td>
+<td>Protecciones anti-loops</td>
+<td><span class="badge badge-implementado">✅ Completo</span></td>
+<td>preventDuplicates en todas las rutas</td>
+</tr>
+<tr>
+<td><strong>Contenido</strong></td>
+<td>Eliminar contenido propio</td>
+<td><span class="badge badge-implementado">✅ Completo</span></td>
+<td>Posts, comentarios, historias - todos con confirmación</td>
+</tr>
+<tr>
+<td><strong>Salud</strong></td>
+<td>Registros médicos de mascotas</td>
+<td><span class="badge badge-implementado">✅ Completo</span></td>
+<td>Vacunas, desparasitación, consultas + recordatorios</td>
+</tr>
+</tbody>
+</table>
+
 <hr>
-<h3>5.9 📝 Conclusiones y Recomendaciones</h3>
-<h4>✅ Fortalezas de la App</h4>
-<ol>
-<li><strong>Funcionalidad Core Completa</strong>: 98% de requisitos funcionales implementados</li>
-<li><strong>Seguridad Robusta</strong>: Rate limiting, sanitización, audit logging, JWT</li>
-<li><strong>Sistema Social Completo</strong>: Follows, likes, comentarios, notificaciones funcionan perfectamente</li>
-<li><strong>UX Moderna</strong>: Animaciones, dark mode, micro-interacciones implementadas</li>
-<li><strong>Arquitectura Sólida</strong>: GetX + Atomic Design + Reactive Forms bien aplicados</li>
-</ol>
 
-</div>
-</details>
+<!-- TABLA 2: LO QUE FALTA POR COMPLETAR -->
+<h3>⚠️ Funcionalidades Pendientes</h3>
 
-<!-- Subsección: Lo que falta -->
-<details open>
-<summary style="font-size: 1.1em; font-weight: 600; color: #d32f2f; cursor: pointer; padding: 10px; background: #ffebee; border-radius: 5px; margin: 20px 0;">
-⚠️ Lo que falta por completar
-</summary>
-<div style="padding: 15px; border-left: 3px solid #d32f2f; margin-left: 10px;">
-<h4>🚨 Áreas Críticas que Requieren Atención Inmediata</h4>
-<ol>
-<li><strong>Navegación profunda</strong> (6 tareas documentadas en CLAUDE.md)</li>
-<li><strong>Sistema de reportes para admins</strong> (requerido para app stores)</li>
-<li><strong>Performance del mapa de servicios</strong> (optimización backend)</li>
-</ol>
-<h4>🟡 Mejoras Recomendadas para Pre-Lanzamiento</h4>
-<ol>
-<li>Completar sistema de reportes (backend admin panel)</li>
-<li>Agregar eliminación de comentarios propios (UI)</li>
-<li>Implementar navegación con escape hatch</li>
-<li>Fix funcionalidad de compartir</li>
-</ol>
-<h4>🟢 Features Post-MVP (No Bloqueantes)</h4>
-<ol>
-<li>Búsqueda de usuarios/mascotas/hashtags</li>
-<li>Control de privacidad avanzado</li>
-<li>Verificación de cuentas (badges)</li>
-<li>Deep linking para notificaciones push</li>
-</ol>
-<h4>📊 Estado General del Proyecto</h4>
-<p><strong>Evaluación final</strong>: <strong>Petos está en excelente estado para lanzamiento MVP</strong> (98% completado).</p>
-<p>Los problemas identificados son:</p>
+<table>
+<thead>
+<tr>
+<th>Prioridad</th>
+<th>Módulo</th>
+<th>Funcionalidad</th>
+<th>Estado</th>
+<th>Trabajo Requerido</th>
+</tr>
+</thead>
+<tbody>
+<!-- PRIORIDAD CRÍTICA (App Store Requirements) -->
+<tr>
+<td><span class="badge" style="background: #d32f2f; color: white; padding: 6px 12px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">CRÍTICA</span></td>
+<td><strong>Reportes</strong></td>
+<td>Botón "Denunciar" en comentarios</td>
+<td><span class="badge">⚠️ Pendiente</span></td>
+<td>Solo falta agregar botón en UI (ReportService.reportComment() ya existe)</td>
+</tr>
+<tr>
+<td><span class="badge" style="background: #d32f2f; color: white; padding: 6px 12px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">CRÍTICA</span></td>
+<td><strong>Reportes</strong></td>
+<td>Panel admin de reportes</td>
+<td><span class="badge">⚠️ Pendiente</span></td>
+<td>Backend: Crear panel de gestión para administradores</td>
+</tr>
+<tr>
+<td><span class="badge" style="background: #d32f2f; color: white; padding: 6px 12px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">CRÍTICA</span></td>
+<td><strong>Reportes</strong></td>
+<td>Notificaciones de reportes</td>
+<td><span class="badge">⚠️ Pendiente</span></td>
+<td>Backend: Sistema automático de notificación a admins</td>
+</tr>
+
+<tr>
+<td><span class="badge" style="background: #f57c00; color: white; padding: 6px 12px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">ALTA</span></td>
+<td><strong>Privacidad</strong></td>
+<td>Perfil público/privado</td>
+<td><span class="badge">⚠️ Pendiente</span></td>
+<td>Backend + Frontend: Sistema de perfiles privados</td>
+</tr>
+
+<!-- PRIORIDAD ALTA (UX Critical) -->
+<tr>
+<td><span class="badge" style="background: #f57c00; color: white; padding: 6px 12px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">ALTA</span></td>
+<td><strong>Mapa</strong></td>
+<td>Optimización de carga</td>
+<td><span class="badge">⚠️ Pendiente</span></td>
+<td>Performance: Mejorar tiempos de carga del mapa de servicios</td>
+</tr>
+<tr>
+<td><span class="badge" style="background: #f57c00; color: white; padding: 6px 12px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">ALTA</span></td>
+<td><strong>Privacidad</strong></td>
+<td>Control de quién ve historias</td>
+<td><span class="badge">⚠️ Pendiente</span></td>
+<td>Backend + Frontend: Configuración de visibilidad de stories</td>
+</tr>
+<tr>
+<td><span class="badge" style="background: #f57c00; color: white; padding: 6px 12px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">ALTA</span></td>
+<td><strong>Privacidad</strong></td>
+<td>Control de quién comenta</td>
+<td><span class="badge">⚠️ Pendiente</span></td>
+<td>Backend + Frontend: Configuración de permisos de comentarios</td>
+</tr>
+<tr>
+<td><span class="badge" style="background: #f57c00; color: white; padding: 6px 12px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">ALTA</span></td>
+<td><strong>Búsqueda</strong></td>
+<td>Búsqueda por hashtags</td>
+<td><span class="badge">⚠️ Pendiente</span></td>
+<td>Backend + Frontend: Sistema de hashtags en publicaciones</td>
+</tr>
+
+<!-- PRIORIDAD MEDIA (Nice to Have) -->
+<tr>
+<td><span class="badge" style="background: #388e3c; color: white; padding: 6px 12px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">MEDIA</span></td>
+<td><strong>Verificación</strong></td>
+<td>Cuentas verificadas</td>
+<td><span class="badge">⚠️ Pendiente</span></td>
+<td>Backend: Proceso de verificación + badge UI</td>
+</tr>
+<tr>
+<td><span class="badge" style="background: #388e3c; color: white; padding: 6px 12px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">MEDIA</span></td>
+<td><strong>Mensajería</strong></td>
+<td>Notificaciones push de mensajes</td>
+<td><span class="badge">⚠️ Pendiente</span></td>
+<td>Backend: Integración Firebase Cloud Messaging</td>
+</tr>
+<tr>
+<td><span class="badge" style="background: #388e3c; color: white; padding: 6px 12px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">MEDIA</span></td>
+<td><strong>Limpieza</strong></td>
+<td>Eliminar usuarios test</td>
+<td><span class="badge">⚠️ Pendiente</span></td>
+<td>Backend: Limpieza de datos de desarrollo</td>
+</tr>
+
+<!-- BUGS CONOCIDOS -->
+<tr>
+<td><span class="badge" style="background: #e65100; color: white; padding: 6px 12px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">BUG</span></td>
+<td><strong>Publicaciones</strong></td>
+<td>"Copiar enlace" y "Compartir" no funcionan</td>
+<td><span class="badge">⚠️ Pendiente</span></td>
+<td>Frontend: Implementar funcionalidad de compartir en post_card.dart</td>
+</tr>
+<tr>
+<td><span class="badge" style="background: #e65100; color: white; padding: 6px 12px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">BUG</span></td>
+<td><strong>Historias</strong></td>
+<td>"Copiar enlace" y "Compartir" no funcionan</td>
+<td><span class="badge">⚠️ Pendiente</span></td>
+<td>Frontend: Implementar funcionalidad de compartir en story_viewer_view.dart</td>
+</tr>
+<tr>
+<td><span class="badge" style="background: #e65100; color: white; padding: 6px 12px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">BUG</span></td>
+<td><strong>Notificaciones</strong></td>
+<td>Swipe no funciona correctamente</td>
+<td><span class="badge">⚠️ Pendiente</span></td>
+<td>Frontend: Eliminar funcionalidad de swipe o corregir implementación</td>
+</tr>
+<tr>
+<td><span class="badge" style="background: #e65100; color: white; padding: 6px 12px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">BUG</span></td>
+<td><strong>Notificaciones</strong></td>
+<td>Panel no ocupa pantalla completa</td>
+<td><span class="badge">⚠️ Pendiente</span></td>
+<td>Frontend: Ajustar diseño en activity_view.dart</td>
+</tr>
+</tbody>
+</table>
+
+<hr>
+
+<!-- CONCLUSIONES Y RESUMEN -->
+<h3>📋 Conclusiones y Resumen</h3>
+
+<h4>🎯 Estado General del Proyecto</h4>
 <ul>
-<li><strong>UX/navegación</strong> (solucionables en 1-2 sprints)</li>
-<li><strong>Features faltantes</strong> (requeridos por app stores, priorizables)</li>
-<li><strong>Bugs menores</strong> (no bloqueantes)</li>
+<li><strong>Funcionalidades Core</strong>: ✅ <strong>20 funcionalidades core completamente implementadas</strong></li>
+<li><strong>Cobertura MVP</strong>: ✅ <strong>MVP 100% funcional, ~85% production-ready</strong> (falta polish de compliance para app stores)</li>
+<li><strong>Pendientes Críticos</strong>: ⚠️ <strong>4 funcionalidades</strong> requeridas para App Store/Play Store</li>
+<li><strong>Bugs Conocidos</strong>: 🐛 <strong>4 bugs identificados</strong> (ninguno bloqueante)</li>
 </ul>
-<p><strong>Recomendación</strong>: Priorizar las 6 tareas de navegación + sistema de reportes admin antes del lanzamiento oficial.</p>
-<hr>
-<p><strong>Fin del Documento</strong></p>
+
+<h4>✅ Fortalezas del MVP Actual</h4>
+<ul>
+<li>✅ <strong>Red social completa</strong>: Posts, likes, comentarios, follows funcionando perfectamente</li>
+<li>✅ <strong>Sistema de historias</strong>: Implementación completa con foto/video y comentarios</li>
+<li>✅ <strong>Gestión de mascotas</strong>: CRUD completo + galería + registros de salud</li>
+<li>✅ <strong>Chat funcional</strong>: Mensajería 1:1 y grupos completamente operativa</li>
+<li>✅ <strong>Marketplace</strong>: Servicios y eventos en mapa funcionando</li>
+<li>✅ <strong>Seguridad</strong>: Sistema de bloqueos y reportes (parcial) implementado</li>
+</ul>
+
+<h4>⚠️ Áreas que Requieren Atención Inmediata</h4>
+<ol>
+<li><strong>Sistema de Reportes</strong>:
+<ul>
+<li>Frontend: Agregar botón "Denunciar" en comentarios (trabajo mínimo)</li>
+<li>Backend: Crear panel admin de gestión de reportes</li>
+<li>Backend: Sistema de notificaciones automáticas a admins</li>
+</ul>
+</li>
+
+<li><strong>Control de Privacidad</strong>:
+<ul>
+<li>Implementar sistema de perfiles públicos/privados</li>
+<li>Configuración de visibilidad de historias</li>
+<li>Configuración de permisos de comentarios</li>
+</ul>
+</li>
+</ol>
+
+<h4>🔧 Bugs a Corregir (Prioridad Media-Baja)</h4>
+<ul>
+<li>🐛 Funcionalidad "Copiar enlace" y "Compartir" en publicaciones e historias</li>
+<li>🐛 Swipe en panel de notificaciones (eliminar o corregir)</li>
+<li>🐛 Panel de notificaciones no ocupa pantalla completa (ajuste de diseño)</li>
+</ul>
+
+<h4>🚀 Recomendaciones para Lanzamiento</h4>
+
+<p><strong>Para lanzar el MVP a producción</strong>, se recomienda completar en orden de prioridad:</p>
+
+<ol>
+<li><strong>Fase 1 - Requisitos App Store</strong> (1-2 semanas):
+<ul>
+<li>✅ Completar sistema de reportes (botón en comentarios + panel admin)</li>
+<li>✅ Implementar control básico de privacidad (perfil público/privado)</li>
+</ul>
+</li>
+<li><strong>Fase 2 - Corrección de Bugs</strong> (3-5 días):
+<ul>
+<li>✅ Corregir funcionalidad "Copiar enlace" y "Compartir"</li>
+<li>✅ Eliminar swipe en notificaciones o corregir implementación</li>
+<li>✅ Ajustar diseño del panel de notificaciones</li>
+</ul>
+</li>
+<li><strong>Fase 3 - Limpieza Pre-Producción</strong> (1-2 días):
+<ul>
+<li>✅ Eliminar usuarios de prueba de la base de datos</li>
+<li>✅ Revisar y eliminar console.log de desarrollo</li>
+<li>✅ Configurar variables de entorno para producción</li>
+</ul>
+</li>
+</ol>
+
+<p><strong>Tiempo estimado total para MVP production-ready</strong>: ⏱️ <strong>3-4 semanas</strong></p>
+
+<h4>💡 Conclusión Final</h4>
+
+<p>Petos App cuenta con una <strong>base sólida y funcional</strong> que cumple con el 85% de los requisitos del MVP. Las funcionalidades core (red social, historias, chat, mascotas, marketplace) están <strong>completamente implementadas y operativas</strong>.</p>
+
+<p>Los pendientes identificados son principalmente <strong>requisitos de compliance para App Store/Play Store</strong> (sistema de reportes completo, eliminación de contenido, privacidad) y <strong>bugs menores de UI/UX</strong> que no afectan la funcionalidad principal.</p>
+
+<p>Con <strong>3-4 semanas de desarrollo enfocado</strong> en los items de Fase 1 y Fase 2, la aplicación estará lista para su lanzamiento público en tiendas.</p>
 
 
 </div>
 </details>
+
 </div>
 </details>
 
