@@ -1254,71 +1254,404 @@ Mascota 3: "Rocky" - Perro - Bulldog - 5 años
 </tr>
 </tbody>
 </table>
+
+<p><strong>Descripción</strong>:</p>
+<p>Este caso prueba el Paso 1 del registro multi-paso, donde el usuario ingresa sus datos personales (nombre, apellido, email, contraseña). Incluye validaciones de frontend y backend, manejo de errores y flujos alternativos.</p>
+
 <p><strong>Precondiciones</strong>:</p>
 <ul>
 <li>App abierta en pantalla de registro</li>
 <li>Paso 1 visible (Datos de Usuario)</li>
+<li>Usuario NO está autenticado</li>
 </ul>
+
+<h5>📋 ESCENARIO 1: Flujo Exitoso (Happy Path)</h5>
+
 <p><strong>Pasos</strong>:</p>
 <ol>
-<li>Ingresar nombre: <code>Nuevo</code></li>
-<li>Ingresar apellido: <code>Usuario</code></li>
-<li>Ingresar email: <code>nuevo.usuario@petos.com</code></li>
-<li>Ingresar password: <code>NuevoUser123!</code></li>
-<li>Confirmar password: <code>NuevoUser123!</code></li>
+<li>Ingresar nombre: <code>Juan</code></li>
+<li>Ingresar apellido: <code>Pérez</code></li>
+<li>Ingresar email: <code>juan.perez@petos.com</code></li>
+<li>Ingresar password: <code>JuanPerez123!</code></li>
+<li>Confirmar password: <code>JuanPerez123!</code></li>
 <li>Tocar botón "Siguiente"</li>
 </ol>
+
 <p><strong>Resultado Esperado</strong>:</p>
 <ul>
-<li>✅ Todos los campos validan correctamente</li>
-<li>✅ Indicador de progreso muestra "1/3"</li>
-<li>✅ Usuario es llevado a Paso 2 (Ubicación)</li>
-<li>✅ Datos del Paso 1 se mantienen en memoria (si vuelve atrás)</li>
+<li>✅ Todos los campos validan correctamente (sin errores rojos)</li>
+<li>✅ Botón "Siguiente" se habilita</li>
+<li>✅ Indicador de progreso muestra "Paso 1/3"</li>
+<li>✅ Usuario es llevado a Paso 2 (Datos de Ubicación)</li>
+<li>✅ Datos del Paso 1 se mantienen en memoria</li>
+<li>✅ Si regresa con botón "Atrás", los datos persisten en los campos</li>
 </ul>
-<p><strong>Validación de Contraseña</strong>:</p>
-<ul>
-<li>✅ Mínimo 8 caracteres</li>
-<li>✅ Al menos 1 mayúscula</li>
-<li>✅ Al menos 1 minúscula</li>
-<li>✅ Al menos 1 número</li>
-<li>✅ Opcional: 1 carácter especial</li>
-</ul>
-<p><strong>Casos Extremos</strong>:</p>
+
+<h5>❌ ESCENARIO 2: Validaciones de Campos Requeridos</h5>
+
+<p><strong>Caso 2.1: Campos vacíos</strong></p>
 <table class="table-responsive">
 <thead>
 <tr>
-<th>Password</th>
-<th>Debe Validar Como</th>
+<th>Acción</th>
+<th>Resultado Esperado</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>123456</code></td>
-<td>❌ Muy corta (< 8)</td>
+<td>Dejar nombre vacío + tocar "Siguiente"</td>
+<td>❌ Error: "El nombre es requerido"</td>
 </tr>
 <tr>
-<td><code>abcdefgh</code></td>
-<td>❌ Sin mayúsculas ni números</td>
+<td>Dejar apellido vacío + tocar "Siguiente"</td>
+<td>❌ Error: "El apellido es requerido"</td>
 </tr>
 <tr>
-<td><code>ABCDEFGH</code></td>
-<td>❌ Sin minúsculas ni números</td>
+<td>Dejar email vacío + tocar "Siguiente"</td>
+<td>❌ Error: "El email es requerido"</td>
 </tr>
 <tr>
-<td><code>Abcdefgh</code></td>
-<td>❌ Sin números</td>
+<td>Dejar password vacío + tocar "Siguiente"</td>
+<td>❌ Error: "La contraseña es requerida"</td>
 </tr>
 <tr>
-<td><code>Abcdefg1</code></td>
-<td>✅ Válida</td>
-</tr>
-<tr>
-<td><code>Abc123!@#</code></td>
-<td>✅ Válida</td>
+<td>Todos los campos vacíos + tocar "Siguiente"</td>
+<td>❌ Muestra todos los errores simultáneamente</td>
 </tr>
 </tbody>
 </table>
+
+<p><strong>Validación</strong>:</p>
+<ul>
+<li>✅ Botón "Siguiente" debe estar deshabilitado si hay errores</li>
+<li>✅ Campos con error deben tener borde rojo</li>
+<li>✅ Mensaje de error debe aparecer debajo del campo</li>
+</ul>
+
+<h5>❌ ESCENARIO 3: Validación de Formato de Email</h5>
+
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Email Ingresado</th>
+<th>Resultado Esperado</th>
+<th>Mensaje de Error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>emailsinformato</code></td>
+<td>❌ Inválido</td>
+<td>"Formato de email inválido"</td>
+</tr>
+<tr>
+<td><code>email@</code></td>
+<td>❌ Inválido</td>
+<td>"Formato de email inválido"</td>
+</tr>
+<tr>
+<td><code>@dominio.com</code></td>
+<td>❌ Inválido</td>
+<td>"Formato de email inválido"</td>
+</tr>
+<tr>
+<td><code>email@dominio</code></td>
+<td>❌ Inválido</td>
+<td>"Formato de email inválido"</td>
+</tr>
+<tr>
+<td><code>email..doble@dominio.com</code></td>
+<td>❌ Inválido</td>
+<td>"Formato de email inválido"</td>
+</tr>
+<tr>
+<td><code>email @dominio.com</code></td>
+<td>❌ Inválido</td>
+<td>"Formato de email inválido"</td>
+</tr>
+<tr>
+<td><code>email@dominio.com</code></td>
+<td>✅ Válido</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>email+tag@dominio.com</code></td>
+<td>✅ Válido</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>email_123@dominio.co.uk</code></td>
+<td>✅ Válido</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+<h5>❌ ESCENARIO 4: Validación de Contraseña</h5>
+
+<p><strong>Requisitos de contraseña</strong>:</p>
+<ul>
+<li>✅ Mínimo 8 caracteres</li>
+<li>✅ Al menos 1 letra mayúscula (A-Z)</li>
+<li>✅ Al menos 1 letra minúscula (a-z)</li>
+<li>✅ Al menos 1 número (0-9)</li>
+<li>✅ Al menos 1 carácter especial (!@#$%^&*)</li>
+</ul>
+
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Contraseña</th>
+<th>Resultado</th>
+<th>Mensaje de Error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>123</code></td>
+<td>❌ Inválida</td>
+<td>"Mínimo 8 caracteres"</td>
+</tr>
+<tr>
+<td><code>abcdefgh</code></td>
+<td>❌ Inválida</td>
+<td>"Debe contener al menos 1 mayúscula, 1 número y 1 carácter especial"</td>
+</tr>
+<tr>
+<td><code>ABCDEFGH</code></td>
+<td>❌ Inválida</td>
+<td>"Debe contener al menos 1 minúscula, 1 número y 1 carácter especial"</td>
+</tr>
+<tr>
+<td><code>Abcdefgh</code></td>
+<td>❌ Inválida</td>
+<td>"Debe contener al menos 1 número y 1 carácter especial"</td>
+</tr>
+<tr>
+<td><code>Abcdefg1</code></td>
+<td>❌ Inválida</td>
+<td>"Debe contener al menos 1 carácter especial (!@#$%^&*)"</td>
+</tr>
+<tr>
+<td><code>12345678</code></td>
+<td>❌ Inválida</td>
+<td>"Debe contener al menos 1 letra mayúscula, 1 minúscula y 1 carácter especial"</td>
+</tr>
+<tr>
+<td><code>Abc123!@</code></td>
+<td>✅ Válida</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>MiPassword123!</code></td>
+<td>✅ Válida</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>S3gur@2024</code></td>
+<td>✅ Válida</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Indicador visual de fortaleza</strong>:</p>
+<ul>
+<li>🔴 Débil: Solo cumple 1-2 requisitos</li>
+<li>🟡 Media: Cumple 3-4 requisitos</li>
+<li>🟢 Fuerte: Cumple todos los requisitos (5/5)</li>
+</ul>
+
+<h5>❌ ESCENARIO 5: Confirmación de Contraseña</h5>
+
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Contraseña</th>
+<th>Confirmar Contraseña</th>
+<th>Resultado</th>
+<th>Mensaje</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Password123!</code></td>
+<td><code>Password123!</code></td>
+<td>✅ Coinciden</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>Password123!</code></td>
+<td><code>Password456!</code></td>
+<td>❌ No coinciden</td>
+<td>"Las contraseñas no coinciden"</td>
+</tr>
+<tr>
+<td><code>Password123!</code></td>
+<td><code>password123!</code></td>
+<td>❌ No coinciden</td>
+<td>"Las contraseñas no coinciden" (case sensitive)</td>
+</tr>
+<tr>
+<td><code>Password123!</code></td>
+<td>(vacío)</td>
+<td>❌ Error</td>
+<td>"Debes confirmar la contraseña"</td>
+</tr>
+</tbody>
+</table>
+
+<h5>❌ ESCENARIO 6: Validación de Longitud de Campos</h5>
+
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Valor</th>
+<th>Resultado</th>
+<th>Mensaje</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nombre</td>
+<td>Un nombre extremadamente largo con más de 50 caracteres...</td>
+<td>❌ Rechazado</td>
+<td>"Máximo 50 caracteres"</td>
+</tr>
+<tr>
+<td>Apellido</td>
+<td>Un apellido extremadamente largo con más de 50 caracteres...</td>
+<td>❌ Rechazado</td>
+<td>"Máximo 50 caracteres"</td>
+</tr>
+<tr>
+<td>Email</td>
+<td>emailmuylargoqueexcedeellimite@dominiomuylargo.com...</td>
+<td>❌ Rechazado</td>
+<td>"Máximo 100 caracteres"</td>
+</tr>
+<tr>
+<td>Password</td>
+<td>ContraseñaMuyLargaConMásDe128Caracteres...</td>
+<td>❌ Rechazado</td>
+<td>"Máximo 128 caracteres"</td>
+</tr>
+</tbody>
+</table>
+
+<h5>❌ ESCENARIO 7: Email Ya Registrado (Backend)</h5>
+
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Completar todos los campos correctamente</li>
+<li>Usar email que YA existe en BD: <code>existente@petos.com</code></li>
+<li>Tocar "Siguiente"</li>
+<li>Backend valida y detecta email duplicado</li>
+</ol>
+
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend responde: <code>409 Conflict</code></li>
+<li>✅ App muestra error en campo email: "Este email ya está registrado"</li>
+<li>✅ Usuario permanece en Paso 1</li>
+<li>✅ Sugerencia: "¿Ya tienes cuenta? <strong>Inicia sesión</strong>" (con link)</li>
+<li>✅ Otros campos mantienen sus valores</li>
+</ul>
+
+<p><strong>Validación Backend</strong>:</p>
+<pre><code class="language-json">
+POST /auth/validate-email
+Request: { "email": "existente@petos.com" }
+Response: {
+  "statusCode": 409,
+  "message": "Email already registered",
+  "error": "Conflict"
+}
+</code></pre>
+
+<h5>❌ ESCENARIO 8: Caracteres Especiales en Nombre/Apellido</h5>
+
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo</th>
+<th>Valor</th>
+<th>Resultado</th>
+<th>Notas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nombre</td>
+<td><code>Juan José</code></td>
+<td>✅ Permitido</td>
+<td>Espacios permitidos</td>
+</tr>
+<tr>
+<td>Nombre</td>
+<td><code>María-Carmen</code></td>
+<td>✅ Permitido</td>
+<td>Guiones permitidos</td>
+</tr>
+<tr>
+<td>Nombre</td>
+<td><code>José María</code></td>
+<td>✅ Permitido</td>
+<td>Acentos permitidos</td>
+</tr>
+<tr>
+<td>Nombre</td>
+<td><code>Juan123</code></td>
+<td>❌ Rechazado</td>
+<td>"Solo letras, espacios y guiones"</td>
+</tr>
+<tr>
+<td>Nombre</td>
+<td><code>Juan@Pedro</code></td>
+<td>❌ Rechazado</td>
+<td>"Solo letras, espacios y guiones"</td>
+</tr>
+</tbody>
+</table>
+
+<h5>🔄 ESCENARIO 9: Navegación Entre Pasos</h5>
+
+<p><strong>Flujo de navegación</strong>:</p>
+<ol>
+<li>Usuario completa Paso 1 correctamente</li>
+<li>Tocar "Siguiente" → Va a Paso 2</li>
+<li>Tocar botón "Atrás" (Android) o swipe (iOS)</li>
+</ol>
+
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Regresa a Paso 1</li>
+<li>✅ Datos ingresados previamente persisten en los campos</li>
+<li>✅ NO se pierde información</li>
+<li>✅ Indicador muestra "Paso 1/3" nuevamente</li>
+</ul>
+
+<h5>⚠️ ESCENARIO 10: Sin Conexión a Internet</h5>
+
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Desactivar WiFi y datos móviles</li>
+<li>Completar todos los campos del Paso 1</li>
+<li>Tocar "Siguiente"</li>
+</ol>
+
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ App detecta falta de conexión</li>
+<li>✅ Muestra mensaje: "Sin conexión a internet"</li>
+<li>✅ Usuario permanece en Paso 1</li>
+<li>✅ Datos ingresados NO se pierden</li>
+<li>✅ Al recuperar conexión, puede reintentar</li>
+</ul>
+
 <hr>
+
 <h4>CP-AUTH-005: Registro Multi-Paso - Paso 3 (Primera Mascota)</h4>
 <table class="table-responsive">
 <thead>
@@ -1346,48 +1679,496 @@ Mascota 3: "Rocky" - Perro - Bulldog - 5 años
 </tr>
 </tbody>
 </table>
+
+<p><strong>Descripción</strong>:</p>
+<p>Este caso prueba el Paso 3 (final) del registro multi-paso, donde el usuario registra su primera mascota. Al finalizar, se crea el usuario en backend, se guarda el token JWT y se redirige al Home Feed.</p>
+
 <p><strong>Precondiciones</strong>:</p>
 <ul>
-<li>Usuario completó Paso 1 y Paso 2</li>
+<li>Usuario completó Paso 1 (Datos de Usuario)</li>
+<li>Usuario completó Paso 2 (Ubicación)</li>
 <li>Paso 3 visible (Registrar Primera Mascota)</li>
+<li>Indicador de progreso muestra "Paso 3/3"</li>
 </ul>
+
+<h5>📋 ESCENARIO 1: Flujo Exitoso (Happy Path)</h5>
+
 <p><strong>Pasos</strong>:</p>
 <ol>
-<li>Tocar avatar para agregar foto (opcional)</li>
-<li>Ingresar nombre: <code>Firulais</code></li>
-<li>Seleccionar tipo: <code>Perro</code></li>
-<li>Seleccionar raza: <code>Golden Retriever</code></li>
-<li>Seleccionar fecha de nacimiento: <code>01/01/2020</code></li>
+<li>Tocar ícono de avatar para agregar foto (opcional - puede omitirse)</li>
+<li>Seleccionar foto desde galería o tomar con cámara</li>
+<li>Ingresar nombre de mascota: <code>Firulais</code></li>
+<li>Seleccionar tipo/especie: <code>Perro</code></li>
+<li>Seleccionar raza: <code>Golden Retriever</code> (dropdown filtrado por tipo)</li>
+<li>Seleccionar fecha de nacimiento: <code>15/03/2020</code> (date picker)</li>
 <li>Seleccionar sexo: <code>Macho</code></li>
-<li>Ingresar biografía (opcional): <code>Mi primer amigo peludo</code></li>
+<li>Ingresar biografía (opcional): <code>Mi mejor amigo peludo</code></li>
 <li>Tocar botón "Finalizar Registro"</li>
 </ol>
+
 <p><strong>Resultado Esperado</strong>:</p>
 <ul>
 <li>✅ Loading indicator se muestra</li>
-<li>✅ Backend crea usuario nuevo (status 201 Created)</li>
+<li>✅ Backend: <code>POST /auth/register</code></li>
+<li>✅ Backend crea usuario nuevo (status <code>201 Created</code>)</li>
 <li>✅ Backend crea mascota asociada al usuario</li>
+<li>✅ Backend sube foto de mascota a Cloudinary (si se seleccionó)</li>
 <li>✅ Backend genera JWT token</li>
-<li>✅ App guarda token en storage</li>
-<li>✅ Usuario es redirigido a Home Feed</li>
-<li>✅ Mensaje de bienvenida se muestra (opcional)</li>
+<li>✅ App guarda token en storage local (SecureStorage)</li>
+<li>✅ Usuario es redirigido a <strong>Home Feed</strong></li>
+<li>✅ Mensaje de bienvenida: "¡Bienvenido a Petos, [Nombre]!"</li>
+<li>✅ Bottom Navigation Bar es visible</li>
 </ul>
-<p><strong>Validaciones Backend</strong>:</p>
+
+<p><strong>Validación Backend</strong>:</p>
 <pre><code class="language-json">
 POST /auth/register
-Status: 201 Created
-Response: {
-  "user": { "id": 1, "email": "...", ... },
-  "access_token": "eyJhbGc...",
-  "pet": { "id": 1, "name": "Firulais", ... }
+Request Body: {
+  "user": {
+    "firstName": "Juan",
+    "lastName": "Pérez",
+    "email": "juan.perez@petos.com",
+    "password": "JuanPerez123!",
+    "location": {
+      "city": "Madrid",
+      "country": "España",
+      "coordinates": { "lat": 40.4168, "lng": -3.7038 }
+    }
+  },
+  "pet": {
+    "name": "Firulais",
+    "species": "dog",
+    "breed": "Golden Retriever",
+    "birthDate": "2020-03-15",
+    "gender": "male",
+    "bio": "Mi mejor amigo peludo",
+    "avatarFile": <multipart-file> (opcional)
+  }
+}
+
+Response 201 Created:
+{
+  "user": {
+    "id": 123,
+    "email": "juan.perez@petos.com",
+    "firstName": "Juan",
+    "lastName": "Pérez",
+    "fullName": "Juan Pérez",
+    "avatarUrl": null,
+    "location": { "city": "Madrid", "country": "España" }
+  },
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "pet": {
+    "id": 456,
+    "name": "Firulais",
+    "species": "dog",
+    "breed": "Golden Retriever",
+    "birthDate": "2020-03-15",
+    "age": 4,
+    "gender": "male",
+    "bio": "Mi mejor amigo peludo",
+    "avatarUrl": "https://res.cloudinary.com/.../firulais.jpg",
+    "ownerId": 123
+  }
 }
 </code></pre>
-<p><strong>Casos Extremos</strong>:</p>
+
+<h5>❌ ESCENARIO 2: Validaciones de Campos Requeridos</h5>
+
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Campo Faltante</th>
+<th>Acción</th>
+<th>Resultado Esperado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nombre de mascota</td>
+<td>Dejar vacío + "Finalizar"</td>
+<td>❌ Error: "El nombre de la mascota es requerido"</td>
+</tr>
+<tr>
+<td>Tipo/Especie</td>
+<td>No seleccionar + "Finalizar"</td>
+<td>❌ Error: "Selecciona el tipo de mascota"</td>
+</tr>
+<tr>
+<td>Raza</td>
+<td>No seleccionar + "Finalizar"</td>
+<td>❌ Error: "Selecciona la raza"</td>
+</tr>
+<tr>
+<td>Fecha de nacimiento</td>
+<td>No seleccionar + "Finalizar"</td>
+<td>❌ Error: "Selecciona la fecha de nacimiento"</td>
+</tr>
+<tr>
+<td>Sexo</td>
+<td>No seleccionar + "Finalizar"</td>
+<td>❌ Error: "Selecciona el sexo"</td>
+</tr>
+<tr>
+<td>Foto (avatar)</td>
+<td>No seleccionar</td>
+<td>✅ Permitido (campo opcional)</td>
+</tr>
+<tr>
+<td>Biografía</td>
+<td>Dejar vacío</td>
+<td>✅ Permitido (campo opcional)</td>
+</tr>
+</tbody>
+</table>
+
+<h5>❌ ESCENARIO 3: Validación de Nombre de Mascota</h5>
+
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Nombre Ingresado</th>
+<th>Resultado</th>
+<th>Mensaje</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(vacío)</td>
+<td>❌ Inválido</td>
+<td>"El nombre es requerido"</td>
+</tr>
+<tr>
+<td><code>Fi</code></td>
+<td>❌ Inválido</td>
+<td>"Mínimo 2 caracteres"</td>
+</tr>
+<tr>
+<td><code>NombreMuyLargoQueExcedeElLímiteDeCaracteres...</code></td>
+<td>❌ Inválido</td>
+<td>"Máximo 30 caracteres"</td>
+</tr>
+<tr>
+<td><code>Firulais123</code></td>
+<td>❌ Inválido</td>
+<td>"Solo letras, espacios y guiones"</td>
+</tr>
+<tr>
+<td><code>Firu@</code></td>
+<td>❌ Inválido</td>
+<td>"Solo letras, espacios y guiones"</td>
+</tr>
+<tr>
+<td><code>Firulais</code></td>
+<td>✅ Válido</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>Max</code></td>
+<td>✅ Válido</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>Princesa Luna</code></td>
+<td>✅ Válido</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>Bobby-Jr</code></td>
+<td>✅ Válido</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+<h5>❌ ESCENARIO 4: Validación de Fecha de Nacimiento</h5>
+
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Fecha Seleccionada</th>
+<th>Resultado</th>
+<th>Mensaje</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fecha futura (ej: 01/01/2026)</td>
+<td>❌ Inválida</td>
+<td>"La fecha no puede ser futura"</td>
+</tr>
+<tr>
+<td>Más de 50 años atrás (ej: 01/01/1970)</td>
+<td>❌ Inválida</td>
+<td>"Fecha no válida (máximo 50 años)"</td>
+</tr>
+<tr>
+<td>Hoy (fecha actual)</td>
+<td>✅ Válida</td>
+<td>Edad: "0 años (recién nacido)"</td>
+</tr>
+<tr>
+<td>Hace 2 años (ej: 19/01/2023)</td>
+<td>✅ Válida</td>
+<td>Edad: "2 años"</td>
+</tr>
+<tr>
+<td>Hace 15 años (ej: 01/01/2010)</td>
+<td>✅ Válida</td>
+<td>Edad: "15 años"</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Cálculo de Edad</strong>:</p>
 <ul>
-<li>⚠️ <strong>Email ya existe</strong>: Backend responde 409 Conflict, mostrar "Email ya registrado"</li>
-<li>⚠️ <strong>Sin conexión durante registro</strong>: Mostrar error, no guardar datos localmente</li>
-<li>⚠️ <strong>Falla upload de foto</strong>: Continuar registro sin foto, reintentable después</li>
+<li>✅ App calcula edad automáticamente al seleccionar fecha</li>
+<li>✅ Muestra edad debajo del date picker: "Edad: X años"</li>
+<li>✅ Backend también calcula edad y la guarda en BD</li>
 </ul>
+
+<h5>❌ ESCENARIO 5: Selección de Tipo y Raza</h5>
+
+<p><strong>Flujo de selección</strong>:</p>
+<ol>
+<li>Usuario toca dropdown "Tipo de Mascota"</li>
+<li>Opciones: <code>Perro</code>, <code>Gato</code>, <code>Otro</code></li>
+<li>Usuario selecciona <code>Perro</code></li>
+<li>Dropdown "Raza" se habilita y filtra solo razas de perros</li>
+</ol>
+
+<p><strong>Validación de dependencia</strong>:</p>
+<ul>
+<li>✅ Dropdown "Raza" está deshabilitado hasta que se seleccione "Tipo"</li>
+<li>✅ Al cambiar "Tipo", dropdown "Raza" se resetea</li>
+<li>✅ Razas mostradas dependen del tipo seleccionado</li>
+</ul>
+
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Tipo Seleccionado</th>
+<th>Razas Disponibles</th>
+<th>Cantidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Perro</td>
+<td>Golden Retriever, Labrador, Bulldog, Chihuahua, Pastor Alemán, etc.</td>
+<td>~50 razas</td>
+</tr>
+<tr>
+<td>Gato</td>
+<td>Persa, Siamés, Maine Coon, Bengalí, Ragdoll, etc.</td>
+<td>~30 razas</td>
+</tr>
+<tr>
+<td>Otro</td>
+<td>Hamster, Conejo, Loro, Tortuga, Pez, etc.</td>
+<td>~20 opciones</td>
+</tr>
+</tbody>
+</table>
+
+<h5>📷 ESCENARIO 6: Subida de Foto de Mascota</h5>
+
+<p><strong>Caso 6.1: Seleccionar foto desde galería</strong></p>
+<ol>
+<li>Tocar ícono de avatar (círculo con cámara)</li>
+<li>Seleccionar "Galería"</li>
+<li>Elegir foto de la galería</li>
+<li>Recortar imagen (crop 1:1)</li>
+<li>Confirmar</li>
+</ol>
+
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Foto se muestra en el avatar circular</li>
+<li>✅ Archivo se mantiene en memoria hasta finalizar registro</li>
+<li>✅ Al finalizar, se sube a Cloudinary</li>
+</ul>
+
+<p><strong>Caso 6.2: Tomar foto con cámara</strong></p>
+<ol>
+<li>Tocar ícono de avatar</li>
+<li>Seleccionar "Cámara"</li>
+<li>Tomar foto</li>
+<li>Recortar imagen (crop 1:1)</li>
+<li>Confirmar</li>
+</ol>
+
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Foto se muestra en el avatar circular</li>
+<li>✅ Archivo se mantiene en memoria</li>
+</ul>
+
+<p><strong>Caso 6.3: Sin foto (omitir)</strong></p>
+<ul>
+<li>✅ Usuario puede continuar sin foto</li>
+<li>✅ Avatar muestra ícono de placeholder (huella de mascota)</li>
+<li>✅ Backend guarda <code>avatarUrl: null</code></li>
+</ul>
+
+<p><strong>Validación de archivo</strong>:</p>
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Archivo</th>
+<th>Resultado</th>
+<th>Mensaje</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Imagen .jpg (2 MB)</td>
+<td>✅ Aceptado</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Imagen .png (1.5 MB)</td>
+<td>✅ Aceptado</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Imagen .heic (iOS)</td>
+<td>✅ Aceptado</td>
+<td>Convertido a .jpg</td>
+</tr>
+<tr>
+<td>Imagen .webp</td>
+<td>✅ Aceptado</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Archivo .pdf</td>
+<td>❌ Rechazado</td>
+<td>"Solo se permiten imágenes"</td>
+</tr>
+<tr>
+<td>Video .mp4</td>
+<td>❌ Rechazado</td>
+<td>"Solo se permiten imágenes"</td>
+</tr>
+<tr>
+<td>Imagen > 10 MB</td>
+<td>❌ Rechazado</td>
+<td>"La imagen es muy pesada (máx 10 MB)"</td>
+</tr>
+</tbody>
+</table>
+
+<h5>❌ ESCENARIO 7: Validación de Biografía</h5>
+
+<table class="table-responsive">
+<thead>
+<tr>
+<th>Biografía Ingresada</th>
+<th>Resultado</th>
+<th>Mensaje</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(vacío)</td>
+<td>✅ Permitido</td>
+<td>Campo opcional</td>
+</tr>
+<tr>
+<td><code>Mi mejor amigo</code></td>
+<td>✅ Válido</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Texto con más de 200 caracteres...</td>
+<td>❌ Rechazado</td>
+<td>"Máximo 200 caracteres"</td>
+</tr>
+<tr>
+<td>Contador visible</td>
+<td>✅ Funcional</td>
+<td>"45/200" debajo del campo</td>
+</tr>
+</tbody>
+</table>
+
+<h5>❌ ESCENARIO 8: Email Ya Registrado Durante Registro Final</h5>
+
+<p><strong>Situación</strong>: Usuario completa los 3 pasos, pero entre Paso 1 y Paso 3, otro usuario se registró con el mismo email.</p>
+
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Completar Paso 1, Paso 2 y Paso 3</li>
+<li>Tocar "Finalizar Registro"</li>
+<li>Backend intenta crear usuario</li>
+<li>Backend detecta email duplicado</li>
+</ol>
+
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Backend responde <code>409 Conflict</code></li>
+<li>✅ Response: <code>{ "message": "Email already registered", "statusCode": 409 }</code></li>
+<li>✅ App muestra modal de error: "Este email ya está registrado"</li>
+<li>✅ Sugerencia: "¿Ya tienes cuenta? Inicia sesión"</li>
+<li>✅ Usuario puede volver a Paso 1 para cambiar email</li>
+<li>✅ Datos de Paso 2 y Paso 3 se mantienen</li>
+</ul>
+
+<h5>❌ ESCENARIO 9: Error de Subida de Imagen</h5>
+
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Completar todos los campos + seleccionar foto</li>
+<li>Tocar "Finalizar Registro"</li>
+<li>Backend crea usuario correctamente</li>
+<li>Upload a Cloudinary FALLA (timeout, servidor caído, etc.)</li>
+</ol>
+
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ Usuario se crea en BD (NO se hace rollback)</li>
+<li>✅ Mascota se crea con <code>avatarUrl: null</code></li>
+<li>✅ Token JWT se genera y guarda</li>
+<li>✅ Usuario es redirigido a Home Feed</li>
+<li>✅ Mensaje: "Registro exitoso. La foto se subirá en segundo plano"</li>
+<li>✅ App reintenta subir foto en background</li>
+<li>✅ Usuario puede cambiar foto después desde perfil</li>
+</ul>
+
+<h5>⚠️ ESCENARIO 10: Sin Conexión al Finalizar</h5>
+
+<p><strong>Pasos</strong>:</p>
+<ol>
+<li>Completar todos los campos</li>
+<li>Desactivar WiFi y datos</li>
+<li>Tocar "Finalizar Registro"</li>
+</ol>
+
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ App detecta falta de conexión</li>
+<li>✅ Muestra mensaje: "Sin conexión a internet. Verifica tu conexión e intenta nuevamente"</li>
+<li>✅ Usuario permanece en Paso 3</li>
+<li>✅ Datos NO se pierden</li>
+<li>✅ Al recuperar conexión, puede reintentar</li>
+<li>✅ Botón "Finalizar" se habilita nuevamente</li>
+</ul>
+
+<h5>⚠️ ESCENARIO 11: Error 500 del Backend</h5>
+
+<p><strong>Situación</strong>: Backend tiene un error interno inesperado</p>
+
+<p><strong>Resultado Esperado</strong>:</p>
+<ul>
+<li>✅ App captura el error 500</li>
+<li>✅ Muestra mensaje genérico: "Ocurrió un error. Por favor intenta nuevamente"</li>
+<li>✅ NO muestra detalles técnicos al usuario</li>
+<li>✅ Logs del error se envían a sistema de monitoreo (Sentry, etc.)</li>
+<li>✅ Usuario puede reintentar</li>
+</ul>
+
+<hr>
 <hr>
 
 <h4>CP-AUTH-006: Solicitar Recuperación de Contraseña - Email Válido</h4>
